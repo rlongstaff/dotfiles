@@ -19,11 +19,21 @@ set statusline=
 set statusline +=%5*[%{&ff}]%*          "file format
 set statusline +=%3*%y%*                "file type
 set statusline +=%4*\ %<%F%*            "full path
+
+set statusline +=%#warningmsg#
+set statusline +=%{SyntasticStatuslineFlag()}
+set statusline +=%*
+
 set statusline +=%2*%m%*                "modified flag
 set statusline +=%1*%=%5l%*             "current line
 set statusline +=%2*/%L%*               "total lines
 set statusline +=%1*%4c\ %*             "column number
 set statusline +=%2*0x%04B\ %*          "character under cursor
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 set number
 set numberwidth=5
@@ -37,3 +47,5 @@ syntax enable
 
 set list
 set listchars=tab:>~,trail:~
+
+execute pathogen#infect()
