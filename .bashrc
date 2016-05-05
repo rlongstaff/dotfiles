@@ -1,6 +1,9 @@
 source ~/.bash/git-completion.bash
 source ~/.bash/git-prompt.sh
-eval $(docker-machine env)
+DOCKER_ENV=`docker-machine env 2>/dev/null`
+if [ $? == 0 ]; then
+    eval $DOCKER_ENV
+fi
 
 export PATH=$PATH:$HOME/bin:$HOME/Library/Android/sdk/platform-tools/
 
