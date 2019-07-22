@@ -1,5 +1,5 @@
 [user]
-	name = Rob Longstaff
+	name = rlongstaff
 	email = rob@longstaff.us
 [alias]
 	st = status
@@ -8,3 +8,7 @@
 	co = checkout
 	df = diff
 	lg = log -p
+[push]
+	default = simple
+[credential "https://source.developers.google.com"]
+	helper = gcloud.sh
