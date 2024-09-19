@@ -1,6 +1,7 @@
 #!/bin/sh
 
-set -e 
+set -e
+set -x
 
 if [ -f ${HOME}/.homeconf_installed ]; then
 	echo "homeconf already installed: ${HOME}/.homeconf_installed"
@@ -10,12 +11,14 @@ fi
 DIR=$(dirname $0)
 
 OLD_CFG=".bash_profile
-.bsahrc
+.bashrc
 .profile
 "
 
 for i in ${OLD_CFG}; do
-	mv ${HOME}/${i} ${HOME}/${i}.orig
+	if [ -f ${HOME}/${i} ];then
+		mv ${HOME}/${i} ${HOME}/${i}.orig
+	fi
 done
 
 CFG=".bash
@@ -30,7 +33,7 @@ for i in ${CFG}; do
 done
 
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-	WINUSER = $(perl -e 'use Env; ($_) = ${PATH} =~ /Users\/([^\/]+)\/AppData/; print;')
+	WINUSER=$(perl -e 'use Env; ($_) = ${PATH} =~ /Users\/([^\/]+)\/AppData/; print;')
 	ln -s /mnt/c/Users/${WINUSER}/Documents ${HOME}/docs
 	mkdir -p ${HOME}/docs/notes
 else
@@ -38,9 +41,17 @@ else
 	mkdir docs/notes
 fi
 
-mkdir ${HOME}/{bin,prj,.ssh,tmp}
+COMFORT_DIRS="
+	bin
+	tmp
+	prj
+	.ssh
+"
+for i in ${COMFORT_DIRS}; do
+	mkdir -p ${HOME}/${i}
+done
 
-ln -s ${HOME}/prj ${$HOME}src
+ln -s ${HOME}/prj ${HOME}/src
 mkdir -p ${HOME}/src/github.com
 
 chmod 700 ${HOME}/.ssh

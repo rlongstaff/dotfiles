@@ -1,6 +1,11 @@
 #!/bin/bash
 
-LINKS=(
+if [ ! -f ${HOME}/.homeconf_installed ]; then
+	echo "homeconf not installed."
+	exit 1
+fi
+
+LINKS="
     .bash
     .bash_profile
     .gitconfig
@@ -8,6 +13,14 @@ LINKS=(
     .vim
     .vimrc
     docs
-)
+    src
+"
 
-rm -f ${HOME}/${LINKS[@]}
+for i in ${LINKS}; do
+    rm -f ${HOME}/${i}
+done
+
+rmdir ${HOME}/bin
+rmdir ${HOME}/prj
+
+rm ${HOME}/.homeconf_installed
