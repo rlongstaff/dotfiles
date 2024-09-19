@@ -21,6 +21,7 @@ for i in ${LINKS}; do
 done
 
 rmdir ${HOME}/bin
+rmdir ${HOME}/prj/github.com
 rmdir ${HOME}/prj
 
 rm ${HOME}/.homeconf_installed

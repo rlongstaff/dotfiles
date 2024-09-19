@@ -36,9 +36,11 @@ if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
 	WINUSER=$(perl -e 'use Env; ($_) = ${PATH} =~ /Users\/([^\/]+)\/AppData/; print;')
 	ln -s /mnt/c/Users/${WINUSER}/Documents ${HOME}/docs
 	mkdir -p ${HOME}/docs/notes
-else
+elif [ -d ${HOME}/Documents ]; then
 	ln -s ${HOME}/Documents ${HOME}/docs
 	mkdir docs/notes
+else
+	mkdir -p docs/notes
 fi
 
 COMFORT_DIRS="
