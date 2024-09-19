@@ -17,6 +17,8 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools/
 export PATH=$PATH:/Applications/Development/Visual\ Studio\ Code.app/Contents/Resources/app/bin
 
+export EDITOR=/usr/bin/vim
+
 alias vi=vim
 
 which kubectl >& /dev/null
