@@ -14,6 +14,7 @@ for i in ${BASH_INC[@]}; do
 done
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/src/go/bin:$PATH
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools/
 export PATH=$PATH:/Applications/Development/Visual\ Studio\ Code.app/Contents/Resources/app/bin
 
@@ -28,13 +29,18 @@ if [ $? == 0 ]; then
     complete -o default -F __start_kubectl kn
 fi
 
+which eksctl>& /dev/null
+if [ $? == 0 ]; then
+    source <(eksctl completion bash)
+fi
+
 which minikube >& /dev/null
 if [ $? == 0 ]; then
     source <(minikube docker-env)
 fi
 
-if [ -x ${HOME}/prj/virpy/main/bin/activate ]; then
-    ${HOME}/prj/virpy/main/bin/activate
+if [ -f ${HOME}/prj/virpy/main/bin/activate ]; then
+    source ${HOME}/prj/virpy/main/bin/activate
 fi
 
 # Default OS X prompt
