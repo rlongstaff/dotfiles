@@ -21,6 +21,7 @@ export PATH=$PATH:/Applications/Development/Visual\ Studio\ Code.app/Contents/Re
 export EDITOR=/usr/bin/vim
 
 alias vi=vim
+alias tf=tofu
 
 which kubectl >& /dev/null
 if [ $? == 0 ]; then

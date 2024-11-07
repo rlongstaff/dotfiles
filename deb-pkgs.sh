@@ -2,6 +2,7 @@
 
 PKGS=(
      bash-completion
+     jq
      docker.io
      wamerican
 )
