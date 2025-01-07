@@ -1,6 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/Users/rob.longstaff/prs/robconf/.bash'
-let g:netrw_dirhist_2='/Volumes/Prj/tapad/puppet/modules/chronos'
-let g:netrw_dirhist_3='/Volumes/Prj/tapad/puppet/modules/aerospike'
-let g:netrw_dirhist_4='/Volumes/CREDS'
+let g:netrw_dirhistcnt =1
+let g:netrw_dirhist_1='/home/rlongstaff/prj/github.com/wolferesearch/660/integrations/wsl-bootstrap'
