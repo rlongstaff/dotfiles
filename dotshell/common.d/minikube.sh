@@ -1,6 +1,6 @@
 #!/bin/sh
 
 which minikube >& /dev/null
-if [ $? == 0 ]; then
+if [ $? = 0 ]; then
     source <(minikube docker-env)
 fi

@@ -13,6 +13,8 @@ DIR=$(dirname $0)
 OLD_CFG=".bash_profile
 .bashrc
 .profile
+.zshrc
+.zprofile
 "
 
 for i in ${OLD_CFG}; do
@@ -21,8 +23,10 @@ for i in ${OLD_CFG}; do
 	fi
 done
 
-CFG=".bash
+CFG=".bashrc
 .bash_profile
+.zshrc
+.zprofile
 .gitconfig
 .tmux.conf
 .vim
@@ -31,6 +35,8 @@ CFG=".bash
 for i in ${CFG}; do
 	ln -fs ${DIR}/${i} ${HOME}/${i}
 done
+
+ln -fs ${DIR}/dotshell ${HOME}/.shell
 
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
 	WINUSER=$(perl -e 'use Env; ($_) = ${PATH} =~ /Users\/([^\/]+)\/AppData/; print;')
@@ -62,3 +68,8 @@ mkdir -p ${HOME}/src/github.com
 chmod 700 ${HOME}/.ssh
 
 touch ${HOME}/.homeconf_installed
+
+read -p "Do you want to install oh-my-zsh? (y/n) " answer
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
