@@ -1,4 +1,0 @@
-. ~/bin/ssh-agent.inc
-. $AGENT_FILE
-start_ssh_agent
-
