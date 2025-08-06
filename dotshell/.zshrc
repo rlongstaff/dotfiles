@@ -15,4 +15,5 @@ unsetopt null_glob
 
 
 #PS1='[\u@boromir \W$(__git_ps1 " (%s)")]\$ '
-export PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+# export PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+export PS1="%n@%m %1~ %# "
