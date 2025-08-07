@@ -1,7 +1,8 @@
 #!/bin/sh
 
+REPO=rlongstaff/dotfiles
+
 GIT=github.com
-REPO=rlongstaff/robconf
 BASE=${HOME}/prj/${GIT}/${REPO}
 
 mkdir -p ${BASE}
