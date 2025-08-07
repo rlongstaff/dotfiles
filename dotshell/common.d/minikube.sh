@@ -1,4 +1,3 @@
-#!/bin/sh
 
 which minikube >& /dev/null
 if [ $? = 0 ]; then

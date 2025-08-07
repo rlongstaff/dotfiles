@@ -1,4 +1,3 @@
-#!/bin/sh
 
 alias python=python3
 

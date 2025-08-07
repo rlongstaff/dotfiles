@@ -1,4 +1,3 @@
-#!/bin/sh
 
 AGENT_FILE="$HOME/.ssh/agent.env"
 AGENT_CMD="/usr/bin/ssh-agent -s"

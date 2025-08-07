@@ -1,4 +1,3 @@
-#!/bin/sh
 
 # We may want to symlink or run a different binary
 # depending on docker/crictl.
