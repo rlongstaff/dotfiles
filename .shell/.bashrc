@@ -2,20 +2,21 @@
 # Load bash completion if available
 if [ -e /usr/share/bash-completion/bash_completion ]; then
     source /usr/share/bash-completion/bash_completion
-elif [ -e /usr/local/etc/bash_completion ]; then
-    source /usr/local/etc/bash_completion
+else
+    # Avoid elif for bash 3.x compatibility
+    if [ -e /usr/local/etc/bash_completion ]; then
+        source /usr/local/etc/bash_completion
+    fi
 fi
 
-if compgen -G "${HOME}/.shell/common.d/*" > /dev/null; then
-    for f in ${HOME}/.shell/common.d/*; do
-        [ -r "$f" ] && [ -f "$f" ] && source "$f"
-    done
-fi
-if compgen -G "${HOME}/.shell/bash.d/*" > /dev/null; then
-    for f in ${HOME}/.shell/bash.d/*; do
-        [ -r "$f" ] && [ -f "$f" ] && source "$f"
-    done
-fi
+shopt -s nullglob
+for f in ${HOME}/.shell/.common.d/*.inc ${HOME}/.shell/.common.d/*.sh; do
+    [ -r "$f" ] && [ -f "$f" ] && source "$f"
+done
+for f in ${HOME}/.shell/.bash.d/*.inc ${HOME}/.shell/.bash.d/*.sh ${HOME}/.shell/.bash.d/*.bash; do
+    [ -r "$f" ] && [ -f "$f" ] && source "$f"
+done
+shopt -u nullglob
 
 # Default OS X prompt
 # PS1='\h:\W \u\$'
