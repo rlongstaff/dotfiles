@@ -3,7 +3,7 @@ autoload -U +X compinit && compinit
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_CUSTOM=${HOME}/.shell/zsh.d
+ZSH_CUSTOM=${HOME}/.zsh
 
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
