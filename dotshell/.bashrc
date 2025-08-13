@@ -20,9 +20,18 @@ fi
 # Default OS X prompt
 # PS1='\h:\W \u\$'
 
+# Bash 4+
+export PROMPT_DIRTRIM=2
+
+export GIT_PS1_SHOWSTASHSTATE=true
+# shows $ if there are any stashes
+export GIT_PS1_SHOWDIRTYSTATE=true
+# shows % if there are any untracked files
+export GIT_PS1_SHOWUNTRACKEDFILES=true
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
     # WSL
-    export PS1='[\u@WSL \W$(__git_ps1 " (%s)")]\$ '
+    export PS1='╭─\e[32m\u\e[90m@\e[1;34mWSL\e[0m\e[90m:\e[33m\W\e[35m $(__git_ps1 "%s")\n\e[0m╰ \$ '
 else 
-    export PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+    export PS1='╭─\e[32m\u\e[90m@\e[1;34m\h\e[0m\e[90m:\e[33m\w\e[35m $(__git_ps1 "%s")\n\e[0m╰ \$ '
+
 fi
