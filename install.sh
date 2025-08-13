@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # set -e
-set -x
+# set -x
 
 TARGET=$1
 if [ -z "${TARGET}" ]; then
@@ -65,7 +65,9 @@ elif [ -d ${TARGET}/Documents ]; then
 	# Regular Linux or macOS
 	ln -sf Documents ${TARGET}/docs
 fi
-mkdir -p ${TARGET}/docs/notes
+if [ ! -d ${TARGET}/docs/notes ]; then
+	mkdir -p ${TARGET}/docs/notes
+fi
 
 cd $OLDPWD
 
@@ -96,7 +98,9 @@ if [ ! -e ${TARGET}/src ]; then
 fi
 
 # golang likes to have things this way
-mkdir -p ${TARGET}/src/github.com
+if [ ! -d ${TARGET}/src/github.com ]; then
+	mkdir -p ${TARGET}/src/github.com
+fi
 
 touch ${INSTALLED}
 
