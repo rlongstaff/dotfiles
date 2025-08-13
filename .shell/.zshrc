@@ -78,10 +78,12 @@ zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f
 # source  /usr/local/share/zsh/site-functions
 
 setopt null_glob
-for f in ${HOME}/.shell/common.d/*(.N); do
+for f in ${HOME}/.shell/.common.d/*.(inc|sh); do
     [ -r "$f" ] && [ -f "$f" ] && source "$f"
 done
-for f in ${HOME}/.shell/zsh.d/*(.N); do
+for f in ${HOME}/.shell/.zsh.d/*.(inc|sh|zsh); do
     [ -r "$f" ] && [ -f "$f" ] && source "$f"
 done
 unsetopt null_glob
+
+
