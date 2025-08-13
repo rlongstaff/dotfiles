@@ -1,75 +1,104 @@
 #!/bin/sh
 
-set -e
+# set -e
 set -x
 
-if [ -f ${HOME}/.homeconf_installed ]; then
-	echo "homeconf already installed: ${HOME}/.homeconf_installed"
+TARGET=$1
+if [ -z "${TARGET}" ]; then
+	TARGET=$HOME
+else
+	TARGET=$(realpath ${TARGET})
+fi
+
+INSTALLED=${TARGET}/.dotfiles_installed
+
+if [ -f ${INSTALLED} ]; then
+	echo "dotfiles already installed: ${INSTALLED}"
 	exit 1
 fi
 
-DIR=$(dirname $0)
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+BACKUP_DIR=${TARGET}/.dotfiles.bak.${TIMESTAMP}
+mkdir -p ${BACKUP_DIR}
 
-OLD_CFG=".bash_profile
-.bashrc
-.profile
-.zshrc
-.zprofile
-"
+DIR=$(realpath $(dirname $0))
 
-for i in ${OLD_CFG}; do
-	if [ -f ${HOME}/${i} ];then
-		mv ${HOME}/${i} ${HOME}/${i}.orig
+if [ ! ${DIR} -ef ${TARGET}/.dotfiles ]; then
+	if [ -e ${TARGET}/.dotfiles ]; then
+		mv ${TARGET}/.dotfiles ${BACKUP_DIR}/
 	fi
-done
+	ln -sf ${DIR} ${TARGET}/.dotfiles
+fi
 
-CFG=".bashrc
-.bash_profile
-.zshrc
-.zprofile
+
+FILEZ="
 .gitconfig
 .tmux.conf
 .vim
-.vimrc"
+.vimrc
+.shell
+.shell/.bashrc
+.shell/.bash_profile
+.shell/.profile
+.shell/.zsh
+.shell/.zshrc
+.shell/.zprofile
+"
 
-for i in ${CFG}; do
-	ln -fs ${DIR}/${i} ${HOME}/${i}
+cd $TARGET
+for i in ${FILEZ}; do
+	b=$(basename ${i})
+	if [ -e ${TARGET}/${b} ]; then
+		mv ${TARGET}/${b} ${BACKUP_DIR}/ 2>/dev/null
+	fi
+	ln -sf .dotfiles/${i} ${b}
 done
 
-ln -fs ${DIR}/dotshell ${HOME}/.shell
-
+# Get our ~/docs folders uniform across systems
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+	# Windows Subsystem for Linux (WSL)
 	WINUSER=$(perl -e 'use Env; ($_) = ${PATH} =~ /Users\/([^\/]+)\/AppData/; print;')
-	ln -s /mnt/c/Users/${WINUSER}/Documents ${HOME}/docs
-	mkdir -p ${HOME}/docs/notes
-	ln -s /mnt/c/Users/${WINUSER}/Downloads ${HOME}/downloads
-	ln -s /mnt/c/Users/${WINUSER} ${HOME}/win
-
-elif [ -d ${HOME}/Documents ]; then
-	ln -s ${HOME}/Documents ${HOME}/docs
-	mkdir docs/notes
-else
-	mkdir -p docs/notes
+	ln -s /mnt/c/Users/${WINUSER}/Documents ${TARGET}/docs
+	ln -s /mnt/c/Users/${WINUSER}/Downloads ${TARGET}/downloads
+	ln -s /mnt/c/Users/${WINUSER} ${TARGET}/win
+elif [ -d ${TARGET}/Documents ]; then
+	# Regular Linux or macOS
+	ln -sf Documents ${TARGET}/docs
 fi
+mkdir -p ${TARGET}/docs/notes
+
+cd $OLDPWD
 
 COMFORT_DIRS="
 	bin
 	tmp
 	prj
-	.ssh
 "
+
 for i in ${COMFORT_DIRS}; do
-	mkdir -p ${HOME}/${i}
+	if [ ! -d ${TARGET}/${i} ]; then
+		mkdir -p ${TARGET}/${i}
+	fi
 done
 
-ln -s ${HOME}/prj ${HOME}/src
-mkdir -p ${HOME}/src/github.com
-
-chmod 700 ${HOME}/.ssh
-
-touch ${HOME}/.homeconf_installed
-
-read -p "Do you want to install oh-my-zsh? (y/n) " answer
-if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [ ! -d ${TARGET}/.ssh ]; then
+	mkdir -p ${TARGET}/.ssh
+	chmod 700 ${TARGET}/.ssh
 fi
+if [ ! -f ${TARGET}/.ssh/authorized_keys ]; then
+	touch ${TARGET}/.ssh/authorized_keys
+	chmod 600 ${TARGET}/.ssh/authorized_keys
+fi
+
+# Set ~/src to ~/prj; ignore if ~/src already exists
+if [ ! -e ${TARGET}/src ]; then
+	ln -s ${TARGET}/prj ${TARGET}/src
+fi
+
+# golang likes to have things this way
+mkdir -p ${TARGET}/src/github.com
+
+touch ${INSTALLED}
+
+echo "Install ohmyzsh:"
+echo '	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
