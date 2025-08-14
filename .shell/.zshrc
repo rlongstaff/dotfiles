@@ -77,6 +77,9 @@ zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f
 # Replacing much of this with ohmyzsh
 # source  /usr/local/share/zsh/site-functions
 
+# Ditch the extra carriage return when using history substitutions
+unsetopt HIST_VERIFY
+
 setopt null_glob
 for f in ${HOME}/.shell/.common.d/*.(inc|sh); do
     [ -r "$f" ] && [ -f "$f" ] && source "$f"
