@@ -11,8 +11,6 @@ export GIT_PS1_SHOWDIRTYSTATE=true
 # shows % if there are any untracked files
 export GIT_PS1_SHOWUNTRACKEDFILES=true
 
-export LSCOLORS=Exfxcxdxbxegedabagacad
-
 NEWLINE=$'\n'
 
 alias timeshow="RPROMPT='%F{8}%D/%*%f'"
