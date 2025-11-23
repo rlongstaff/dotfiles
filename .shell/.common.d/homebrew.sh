@@ -1,2 +1,4 @@
 
-eval "$(/usr/local/bin/brew shellenv)"
+if [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
