@@ -5,6 +5,8 @@ PKGS=(
      jq
      docker.io
      wamerican
+     tmux
+     zsh
 )
 
 sudo apt-get update
