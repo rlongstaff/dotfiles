@@ -6,6 +6,7 @@ PKGS=(
      docker.io
      wamerican
      tmux
+     vim
      zsh
 )
 
