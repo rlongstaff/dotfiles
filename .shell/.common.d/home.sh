@@ -1,6 +1,6 @@
 
 export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
 
 export MANPATH="/usr/local/man:$MANPATH"
 export LESS="-EXFR"
