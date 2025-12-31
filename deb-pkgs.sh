@@ -3,7 +3,6 @@
 PKGS=(
      bash-completion
      jq
-     docker.io
      wamerican
      tmux
      vim

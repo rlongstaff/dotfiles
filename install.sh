@@ -104,5 +104,11 @@ fi
 
 touch ${INSTALLED}
 
+echo "The following is to pin ohmyzsh to a check-valve repo"
+echo "This allows for examination of deltas without blindy"
+echo "  installing things into your shell"
+echo
 echo "Install ohmyzsh:"
-echo '	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+echo '	sh -c "$(curl -fsSL https://raw.githubusercontent.com/rlongstaff/ohmyzsh/master/tools/install.sh)"'
+echo
+echo "CHECK YOUR .gitconfig [USER] SECTION!!!!"
