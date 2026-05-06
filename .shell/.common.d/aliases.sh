@@ -9,10 +9,13 @@ alias ll='ls -lh'     # long list
 alias ldot='ls -ld .*' # list dot files
 alias lS='ls -1FSsh'
 alias lart='ls -larth' # reverse time sorted, all
-alias lrt='ls -1Fcrt' # reverse time sorted
+alias lrt='ls -larth|tail -10'
 alias lsr='ls -lARFh' # Recursive list of files and directories
 alias lsn='ls -1'     # A column contains name of files and directories
 alias rsc='rsync -avz --progress -h' # Clobber remote files
 alias rsu='rsync -avzu --progress -h' # Keep remote files if newer
 alias vi=vim
 alias tf=tofu
+
+alias dmg2dd='hdiutil convert macos--extended.dmg -format UDTO -o ../dd/macos--extended.img'
+
