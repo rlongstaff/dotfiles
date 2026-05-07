@@ -17,5 +17,6 @@ alias rsu='rsync -avzu --progress -h' # Keep remote files if newer
 alias vi=vim
 alias tf=tofu
 
+# MacOS specific
 alias dmg2dd='hdiutil convert macos--extended.dmg -format UDTO -o ../dd/macos--extended.img'
-
+alias unquarantine='xattr -d com.apple.quarantine'
