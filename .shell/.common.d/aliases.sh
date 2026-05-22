@@ -1,6 +1,8 @@
 
 alias dud='du -d 1 -h -x'
 
+alias gh='cd ~/prj/github.com/rlongstaff'
+
 alias l='ls -lFh'     # size,show type,human readable
 alias la='ls -lAFh'   # long list,show almost all,show type,human readable
 alias lr='ls -tRFh'   # sorted by date,recursive,show type,human readable
