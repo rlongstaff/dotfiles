@@ -44,7 +44,7 @@ EOF
 ssh_refresh_keys() {
   local ssh_add_opts=''
   local key_lifetime=28800  # 8 hours
-  echo "Refreshing SSH keys..."
+  echo "Refreshing SSH keys on ${HOST}..."
   for keyfile in ~/.ssh/id_rsa ~/.ssh/id_ed25519 ~/.ssh/id_ecdsa; do
     if [ -f "$keyfile" ]; then
       if [ "$(uname -s)" = "Darwin" ]; then
