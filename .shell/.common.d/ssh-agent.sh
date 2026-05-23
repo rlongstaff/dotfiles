@@ -27,7 +27,6 @@ _ssh_agent_init() {
         fi
         ;;
       *)
-        echo "bork bork"
         eval "$(ssh-agent -s)" >/dev/null
         ;;
     esac
