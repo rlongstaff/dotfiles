@@ -1,4 +1,4 @@
-
+#set -x
 _ssh_agent_init() {
   local env_file="$HOME/.ssh/agent.env"
   local agent_socket_valid=0
@@ -58,3 +58,4 @@ ssh_refresh_keys() {
 
 _ssh_agent_init
 unset _ssh_agent_init
+#set +x
