@@ -1,19 +1,47 @@
-set textwidth=78
-set tabstop=4
-set shiftwidth=4
+set textwidth=100
+set tabstop=2
+set shiftwidth=2
 set expandtab
 set smarttab
 set autoindent
 set smartindent
-inoremap # X#
-set backspace=eol,start,indent
-
 set wrap
-
+set backspace=eol,start,indent
 set ruler
+set number
+set numberwidth=5
+set hlsearch
+set showmatch
+
+" Map PageUp and PageDown to Left and Right arrows
+"  because Dell keyboards are stupid
+nnoremap <PageUp> <Left>
+nnoremap <PageDown> <Right>
+inoremap <PageUp> <Left>
+inoremap <PageDown> <Right>
+vnoremap <PageUp> <Left>
+vnoremap <PageDown> <Right>
+
+" Map Ctrl+Up and Ctrl+Down to PageUp and PageDown functions
+nnoremap <C-Up> <C-u>
+nnoremap <C-Down> <C-d>
+inoremap <C-Up> <C-u>
+inoremap <C-Down> <C-d>
+vnoremap <C-Up> <C-u>
+vnoremap <C-Down> <C-d>
+
+syntax enable
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"set list
+"set listchars=tab:>~,trail:~
+
+"set background=dark
+highlight LineNr ctermbg=black   ctermfg=darkblue
 set laststatus=2
-"set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
-"set statusline=%F%m%r%h%w%<\ %{&ff}\ %Y\ [0x\%02.2B]\ %=l/%L,%v\ %p%%
 "set statusline +=%1*\ %n\ %*            "buffer number
 set statusline=
 set statusline +=%5*[%{&ff}]%*          "file format
@@ -29,23 +57,5 @@ set statusline +=%1*%=%5l%*             "current line
 set statusline +=%2*/%L%*               "total lines
 set statusline +=%1*%4c\ %*             "column number
 set statusline +=%2*0x%04B\ %*          "character under cursor
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-set number
-set numberwidth=5
-highlight LineNr ctermbg=black   ctermfg=darkblue
-
-set hlsearch
-set showmatch
-
-syntax enable
-"set background=dark
-
-set list
-set listchars=tab:>~,trail:~
 
 execute pathogen#infect()
