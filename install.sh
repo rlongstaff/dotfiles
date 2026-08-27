@@ -1,38 +1,38 @@
 #!/bin/sh
 
-# set -e
-# set -x
+set -e
+set -o pipefail
+#set -x
 
-TARGET=$1
-if [ -z "${TARGET}" ]; then
-	TARGET=$HOME
-else
-	TARGET=$(realpath ${TARGET})
-fi
+REPO="dotfiles"
+REPO_URL="https://github.com/rlongstaff/${REPO}"
 
-INSTALLED=${TARGET}/.dotfiles_installed
+help() {
+  echo "Usage: \$0 [target_dir]"
+  echo
+  echo "Install in your home directory:"
+  echo "  Option 1) curl -Ls ${REPO_URL}/install.sh | sh"
+  echo "  Option 2) curl -LOs ${REPO_URL}/install.sh \\"
+  echo "            # Review the code! \\"
+  echo "            ./install.sh"
+  echo "  Option 3) git clone ${REPO_URL} \\ "
+  echo "            $REPO/install.sh"
+  echo
+  echo "Install in a different directory"
+  echo "            install.sh ~/src/dotfiles"
+  
+  exit 0
+}
 
-if [ -f ${INSTALLED} ]; then
-	echo "dotfiles already installed: ${INSTALLED}"
-	exit 1
-fi
+SCRIPT_DIR=$(realpath $(dirname $0))
+INSTALL_CANARY=".${REPO}_installed"
+TIMESTAMP=$(date "+%Y%m%d-%H%M%S")
+BACKUP_DIR="${SCRIPT_DIR}/${REPO}.bak.${TIMESTAMP}"
 
-TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-BACKUP_DIR=${TARGET}/.dotfiles.bak.${TIMESTAMP}
-mkdir -p ${BACKUP_DIR}
-
-DIR=$(realpath $(dirname $0))
-
-if [ ! ${DIR} -ef ${TARGET}/.dotfiles ]; then
-	if [ -e ${TARGET}/.dotfiles ]; then
-		mv ${TARGET}/.dotfiles ${BACKUP_DIR}/
-	fi
-	ln -sf ${DIR} ${TARGET}/.dotfiles
-fi
-
-
+# Files to (re)place with symlinks in $TARGET
 FILEZ="
 .gitconfig
+.gitignore
 .tmux.conf
 .vim
 .vimrc
@@ -45,13 +45,62 @@ FILEZ="
 .shell/.zprofile
 "
 
+if [ ! -t 0 ]; then
+  # stdin is not a terminal, likely piped
+  echo "STOP PIPING RANDOM TEXT FROM THE INTERNET INTO YOUR SHELL!"
+fi
+
+
+TARGET=$1
+if [ -z "${TARGET}" ]; then
+	TARGET=$HOME
+elif [ ${TARGET} = "help" -o ${TARGET} = "--help" ]; then
+  help
+else
+	TARGET=$(realpath ${TARGET})
+fi
+
+if [ -z "${REPO}" ]; then
+  echo "No REPO set!"
+  exit 1
+fi
+
+if [ -f ${TARGET}/${INSTALL_CANARY} ]; then
+	echo "${REPO} already installed: ${TARGET}/${INSTALL_CANARY}"
+	exit 1
+fi
+
+LOCAL_REPO="$TARGET/.$REPO"
+
+# set up our backup directory / backup existing repo
+if [ -e ${LOCAL_REPO} ]; then
+  mv ${LOCAL_REPO} ${BACKUP_DIR}
+else
+  mkdir -p ${BACKUP_DIR}
+fi
+
+# Do we have our friemds?
+if [ -f ${SCRIPT_DIR}/uninstall.sh ]; then
+  # Yup, use this as home base
+  ln -sf ${SCRIPT_DIR} ${LOCAL_REPO}
+else
+  # Nope, grab them
+  TMPDIR=$(mktemp -d)
+  curl -Ls "${REPO_URL}/archive/refs/heads/main.tar.gz" \
+    | tar xz -C ${TMPDIR}
+
+  mv ${TMPDIR}/${REPO}-main ${LOCAL_REPO}
+  rmdir ${TMPDIR}
+fi
+
+# Symlink all of the files into target
 cd $TARGET
 for i in ${FILEZ}; do
 	b=$(basename ${i})
 	if [ -e ${TARGET}/${b} ]; then
 		mv ${TARGET}/${b} ${BACKUP_DIR}/ 2>/dev/null
 	fi
-	ln -sf .dotfiles/${i} ${b}
+	ln -sf .${REPO}/${i} ${b}
 done
 
 # Get our ~/docs folders uniform across systems
@@ -83,6 +132,7 @@ for i in ${COMFORT_DIRS}; do
 	fi
 done
 
+# Basic ssh skel
 if [ ! -d ${TARGET}/.ssh ]; then
 	mkdir -p ${TARGET}/.ssh
 	chmod 700 ${TARGET}/.ssh
@@ -94,7 +144,7 @@ fi
 
 # Set ~/src to ~/prj; ignore if ~/src already exists
 if [ ! -e ${TARGET}/src ]; then
-	ln -s ${TARGET}/prj ${TARGET}/src
+	ln -s prj ${TARGET}/src
 fi
 
 # golang likes to have things this way
@@ -102,7 +152,12 @@ if [ ! -d ${TARGET}/src/github.com ]; then
 	mkdir -p ${TARGET}/src/github.com
 fi
 
-touch ${INSTALLED}
+# ditch the backup is it's empty
+if [ -z "$(ls -A ${BACKUP_DIR})" ]; then
+  rmdir ${BACKUP_DIR}
+fi
+
+touch ${TARGET}/${INSTALL_CANARY}
 
 echo "The following is to pin ohmyzsh to a check-valve repo"
 echo "This allows for examination of deltas without blindy"
