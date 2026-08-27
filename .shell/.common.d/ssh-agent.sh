@@ -8,6 +8,7 @@ _ssh_agent_init() {
   if [ -n "${SSH_AUTH_SOCK}" ] && [ -S "$SSH_AUTH_SOCK" ] ; then
     # We have an agent ENV and it is a socket
     # Do not let the env_file overwrite "valid" state
+    : # Do nothing
   elif [ -f "$env_file" ] ; then
     . "$env_file"
   fi
