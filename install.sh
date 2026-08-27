@@ -33,6 +33,7 @@ BACKUP_DIR="${SCRIPT_DIR}/${REPO}.bak.${TIMESTAMP}"
 FILEZ="
 .gitconfig
 .gitignore
+.tmux
 .tmux.conf
 .vim
 .vimrc
