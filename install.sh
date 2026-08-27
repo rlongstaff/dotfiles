@@ -152,7 +152,7 @@ if [ ! -d ${TARGET}/src/github.com ]; then
 	mkdir -p ${TARGET}/src/github.com
 fi
 
-# ditch the backup is it's empty
+# ditch the backup if it's empty
 if [ -z "$(ls -A ${BACKUP_DIR})" ]; then
   rmdir ${BACKUP_DIR}
 fi
