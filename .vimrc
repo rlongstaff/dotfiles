@@ -12,6 +12,7 @@ set number
 set numberwidth=5
 set hlsearch
 set showmatch
+set mouse=a
 
 " Map PageUp and PageDown to Left and Right arrows
 "  because Dell keyboards are stupid
