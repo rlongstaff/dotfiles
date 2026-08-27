@@ -9,12 +9,33 @@ ZSH_CUSTOM=${HOME}/.zsh
 # ZSH_THEME="robbyrussell"
 ZSH_THEME="rlongstaff"
 
+# Automatically start tmux
+ZSH_TMUX_AUTOSTART=true
+# Only autostart once. If set to false, tmux will attempt to
+# autostart every time your zsh configs are reloaded.
+ZSH_TMUX_AUTOSTART_ONCE=true
+# Automatically connect to a previous session if it exists
+ZSH_TMUX_AUTOCONNECT=true
+# Automatically close the terminal when tmux exits
+ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
+# Automatically name the new session based on the basename of PWD
+ZSH_TMUX_AUTONAME_SESSION=false
+# Automatically pick up tmux environments
+ZSH_TMUX_AUTOREFRESH=false
+# Set term to screen or screen-256color based on current terminal support
+ZSH_TMUX_DETACHED=false
+# Set detached mode
+ZSH_TMUX_FIXTERM=true
+# Set '-CC' option for iTerm2 tmux integration
+if [[ $(uname -s) -eq 'Darwin' ]]; then
+    ZSH_TMUX_ITERM2=false
+fi
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
 zstyle ':omz:update' mode disabled  # disable automatic updates
@@ -25,7 +46,7 @@ zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -62,6 +83,8 @@ plugins=(
     # thefuck
     themes
     tmux
+    # zsh-autosuggestions
+    # zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -90,5 +113,4 @@ for f in ${HOME}/.shell/.zsh.d/*.(inc|sh|zsh); do
     [ -r "$f" ] && [ -f "$f" ] && source "$f"
 done
 unsetopt null_glob
-
 
