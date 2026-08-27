@@ -46,7 +46,7 @@ vendor/*
 
 ### C ###
 # Prerequisites
-*.d
+#*.d
 
 # Object files
 *.o
