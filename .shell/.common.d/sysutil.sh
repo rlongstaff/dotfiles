@@ -1,6 +1,5 @@
 
-REPO_USER=rlongstaff
-SYSUTIL_BASE=${HOME}/prj/github.com/${REPO_USER}/sysutil
+SYSUTIL_BASE=${HOME}/prj/github.com/${DOTFILES_REPO_USER}/sysutil
 LOCAL_OS=$(uname -s)
 LOCAL_ARCH=$(uname -m)
 

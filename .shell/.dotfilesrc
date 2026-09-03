@@ -1,0 +1,4 @@
+
+# export DOTFILES_REPO_USER=$USER
+export DOTFILES_REPO_USER=rlongstaff
+

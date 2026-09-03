@@ -1,4 +1,6 @@
 
+source ${HOME}/.shell/.dotfilesrc
+
 # Load bash completion if available
 if [ -e /usr/share/bash-completion/bash_completion ]; then
     source /usr/share/bash-completion/bash_completion
@@ -29,10 +31,15 @@ export GIT_PS1_SHOWSTASHSTATE=true
 export GIT_PS1_SHOWDIRTYSTATE=true
 # shows % if there are any untracked files
 export GIT_PS1_SHOWUNTRACKEDFILES=true
+# Colour escapes are wrapped in \[ \] so readline does not count them as printable width.
+# Without the wrapping readline thinks the prompt is 4 columns wider than it is (the \e[0m
+# after the newline), so Home, End and Ctrl-Left/Right land in visibly wrong columns and
+# long lines redraw over the prompt.  zsh needs no equivalent: %F{}/%f are zero-width to it
+# by definition, which is why only the bash half had the defect.
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
     # WSL
-    export PS1='╭─\e[32m\u\e[90m@\e[1;34mWSL\e[0m\e[90m:\e[33m\W\e[35m $(__git_ps1 "%s")\n\e[0m╰ \$ '
+    export PS1='╭─\[\e[32m\]\u\[\e[90m\]@\[\e[1;34m\]WSL\[\e[0m\]\[\e[90m\]:\[\e[33m\]\W\[\e[35m\] $(__git_ps1 "%s")\n\[\e[0m\]╰ \$ '
 else 
-    export PS1='╭─\e[32m\u\e[90m@\e[1;34m\h\e[0m\e[90m:\e[33m\w\e[35m $(__git_ps1 "%s")\n\e[0m╰ \$ '
+    export PS1='╭─\[\e[32m\]\u\[\e[90m\]@\[\e[1;34m\]\h\[\e[0m\]\[\e[90m\]:\[\e[33m\]\w\[\e[35m\] $(__git_ps1 "%s")\n\[\e[0m\]╰ \$ '
 
 fi

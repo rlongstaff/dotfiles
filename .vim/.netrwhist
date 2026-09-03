@@ -1,4 +1,12 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =2
-let g:netrw_dirhist_2='/Volumes/prj/github.com/rlongstaff/helloworld/golang'
-let g:netrw_dirhist_1='/home/rlongstaff/prj/github.com/wolferesearch/660/integrations/wsl-bootstrap'
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/rob/.oh-my-zsh/plugins/tldr'
+let g:netrw_dirhist_3='/home/rob/.oh-my-zsh/plugins'
+let g:netrw_dirhist_2='/home/rob/.oh-my-zsh'
+let g:netrw_dirhist_1='/home/rob/.oh-my-zsh/lib'
+let g:netrw_dirhist_0='/home/rob/.oh-my-zsh'
+let g:netrw_dirhist_9='/home/rob/.oh-my-zsh/lib'
+let g:netrw_dirhist_8='/home/rob/.oh-my-zsh'
+let g:netrw_dirhist_7='/home/rob/.oh-my-zsh/lib'
+let g:netrw_dirhist_6='/home/rob/.oh-my-zsh'
+let g:netrw_dirhist_5='/home/rob'

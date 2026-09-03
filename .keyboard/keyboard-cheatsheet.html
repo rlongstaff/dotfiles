@@ -1,0 +1,655 @@
+<title>Six Keyboards, One Layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&display=swap">
+
+<style>
+  :root {
+    --ground:      #F2F3F5;
+    --surface:     #FFFFFF;
+    --surface-sub: #E9EBEF;
+    --ink:         #16181D;
+    --ink-soft:    #4A5060;
+    --ink-mute:    #767D8C;
+    --rule:        #D9DDE4;
+    --rule-soft:   #E6E9ED;
+
+    --cmd:      #3F51C4;
+    --cmd-bg:   #E7E9FA;
+    --alt:      #96550A;
+    --alt-bg:   #F7EBDA;
+    --ctrl:     #9A2A3B;
+    --ctrl-bg:  #F8E4E7;
+
+    --key-face:   #FFFFFF;
+    --key-edge:   #C6CCD6;
+    --key-shadow: #B9C0CC;
+
+    --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --f-body:    "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --f-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --max: 1080px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #131519;
+      --surface:     #1B1E24;
+      --surface-sub: #23272F;
+      --ink:         #E7EAEF;
+      --ink-soft:    #AEB6C2;
+      --ink-mute:    #838C9A;
+      --rule:        #2E333C;
+      --rule-soft:   #262A32;
+
+      --cmd:      #93A2FF;
+      --cmd-bg:   #232842;
+      --alt:      #E0A44B;
+      --alt-bg:   #362B1B;
+      --ctrl:     #F0808F;
+      --ctrl-bg:  #3A222A;
+
+      --key-face:   #262B33;
+      --key-edge:   #3A414C;
+      --key-shadow: #101216;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #131519;
+    --surface:     #1B1E24;
+    --surface-sub: #23272F;
+    --ink:         #E7EAEF;
+    --ink-soft:    #AEB6C2;
+    --ink-mute:    #838C9A;
+    --rule:        #2E333C;
+    --rule-soft:   #262A32;
+
+    --cmd:      #93A2FF;
+    --cmd-bg:   #232842;
+    --alt:      #E0A44B;
+    --alt-bg:   #362B1B;
+    --ctrl:     #F0808F;
+    --ctrl-bg:  #3A222A;
+
+    --key-face:   #262B33;
+    --key-edge:   #3A414C;
+    --key-shadow: #101216;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* ---------- header ---------- */
+  header { display: flex; flex-direction: column; gap: 14px; }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 46px);
+    letter-spacing: -.022em;
+    line-height: 1.04;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--ink-soft);
+    font-size: 16px;
+  }
+
+  /* ---------- anchors diagram ---------- */
+  .anchors {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 26px 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .kbd-rows { display: flex; flex-direction: column; gap: 10px; overflow-x: auto; }
+  .kbd-row  { display: flex; gap: 6px; align-items: stretch; min-width: max-content; }
+
+  .cap {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--key-face);
+    border: 1px solid var(--key-edge);
+    border-bottom-width: 3px;
+    border-radius: 6px;
+    padding: 10px 12px 8px;
+    min-width: 62px;
+    text-align: center;
+    color: var(--ink-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: center;
+  }
+  .cap .role {
+    font-family: var(--f-body);
+    font-size: 10px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .cap.space { flex: 1; min-width: 150px; }
+
+  .cap.is-ctrl { border-color: var(--ctrl); background: var(--ctrl-bg); color: var(--ctrl); }
+  .cap.is-ctrl .role { color: var(--ctrl); }
+  .cap.is-cmd  { border-color: var(--cmd);  background: var(--cmd-bg);  color: var(--cmd); }
+  .cap.is-cmd .role  { color: var(--cmd); }
+  .cap.is-alt  { border-color: var(--alt);  background: var(--alt-bg);  color: var(--alt); }
+  .cap.is-alt .role  { color: var(--alt); }
+  .cap.is-void { opacity: .55; border-style: dashed; border-bottom-width: 1px; }
+
+  .anchor-note {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    max-width: 74ch;
+  }
+
+  /* ---------- ownership ---------- */
+  .owners { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); }
+
+  .owner {
+    border-left: 3px solid var(--rule);
+    padding: 2px 0 2px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .owner h3 {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .owner p { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .owner .never { color: var(--ink-mute); font-size: 12.5px; }
+  .owner.o-cmd  { border-left-color: var(--cmd);  }
+  .owner.o-cmd h3  { color: var(--cmd); }
+  .owner.o-alt  { border-left-color: var(--alt);  }
+  .owner.o-alt h3  { color: var(--alt); }
+  .owner.o-ctrl { border-left-color: var(--ctrl); }
+  .owner.o-ctrl h3 { color: var(--ctrl); }
+
+  /* ---------- sections ---------- */
+  section { display: flex; flex-direction: column; gap: 14px; }
+
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--ink);
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--rule);
+  }
+  h2 .tag {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    letter-spacing: .04em;
+    text-transform: none;
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-left: 10px;
+  }
+  h2 .tag.t-cmd  { color: var(--cmd);  }
+  h2 .tag.t-alt  { color: var(--alt);  }
+
+  .lede { margin: 0; color: var(--ink-soft); font-size: 14px; max-width: 74ch; }
+
+  .scroll { overflow-x: auto; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th {
+    text-align: left;
+    font-family: var(--f-body);
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 0 14px 8px 0;
+    white-space: nowrap;
+  }
+  td { padding: 7px 14px 7px 0; border-top: 1px solid var(--rule-soft); vertical-align: top; }
+  td:last-child, th:last-child { padding-right: 0; }
+  tbody tr:hover td { background: var(--surface-sub); }
+  .fn { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
+  .dash { color: var(--ink-mute); }
+  .note-cell { color: var(--ink-soft); }
+
+  /* inline keycap */
+  kbd {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--key-face);
+    border: 1px solid var(--key-edge);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 2px 6px 1px;
+    color: var(--ink);
+    white-space: nowrap;
+    display: inline-block;
+  }
+  kbd.k-cmd  { border-color: var(--cmd);  color: var(--cmd);  background: var(--cmd-bg);  }
+  kbd.k-alt  { border-color: var(--alt);  color: var(--alt);  background: var(--alt-bg);  }
+  kbd.k-ctrl { border-color: var(--ctrl); color: var(--ctrl); background: var(--ctrl-bg); }
+  .keys { white-space: nowrap; }
+  .keys .sep { color: var(--ink-mute); font-size: 11px; padding: 0 3px; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    background: var(--surface-sub);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--ink);
+  }
+
+  /* ---------- callouts ---------- */
+  .warn {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--alt);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .warn strong { color: var(--ink); font-weight: 600; }
+
+  .cols2 { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Dotfiles · keyboard standard</div>
+    <h1>Six Keyboards, One Layout</h1>
+    <p class="standfirst">
+      One physical finger position means one thing on every machine — XPS 13, Touch Bar MacBook
+      Pro, MacBook Air, Pixelbook, and the Apple full-size and compact keyboards. A key is bound
+      in the outermost layer that can still see it.
+    </p>
+  </header>
+
+  <div class="anchors">
+    <div class="kbd-rows">
+      <div class="kbd-row">
+        <div class="cap is-ctrl" style="min-width:104px">Caps Lock<span class="role">Control</span></div>
+        <div class="cap is-void" style="min-width:44px">A</div>
+        <div class="cap is-void" style="min-width:44px">S</div>
+        <div class="cap is-void" style="min-width:44px">D</div>
+        <div class="cap is-void" style="min-width:44px">F</div>
+      </div>
+      <div class="kbd-row">
+        <div class="cap is-void" style="min-width:74px">corner<span class="role">varies</span></div>
+        <div class="cap is-alt">⌥ Alt<span class="role">two left</span></div>
+        <div class="cap is-cmd">⌘ Cmd<span class="role">left of space</span></div>
+        <div class="cap space">space</div>
+        <div class="cap is-cmd">⌘ Cmd<span class="role">left of space</span></div>
+        <div class="cap is-alt">⌥ Alt<span class="role">two left</span></div>
+      </div>
+    </div>
+    <p class="anchor-note">
+      These are the only positions present on all six keyboards. The bottom-left corner is
+      deliberately <strong>not</strong> an anchor — it is <code>Ctrl</code> on the XPS and
+      Pixelbook but <code>fn</code> on both MacBooks. That is the whole reason Caps carries
+      Control. On Linux, Cmd is <code>Super</code>; on macOS it is <code>Command</code>.
+    </p>
+  </div>
+
+  <div class="owners">
+    <div class="owner o-cmd">
+      <h3>Command</h3>
+      <p>Terminal emulator and window manager.</p>
+      <p class="never">Never reaches tmux or vim — it has no byte encoding and cannot get there.</p>
+    </div>
+    <div class="owner o-alt">
+      <h3>Alt / Option</h3>
+      <p>tmux, and vim splits.</p>
+      <p class="never">Never used for terminal-emulator shortcuts.</p>
+    </div>
+    <div class="owner o-ctrl">
+      <h3>Control</h3>
+      <p>Signals, tmux prefix, vim <code>&lt;C-…&gt;</code>.</p>
+      <p class="never">Never copy or paste.</p>
+    </div>
+  </div>
+
+  <section>
+    <h2>Terminal &amp; window <span class="tag t-cmd">Command — never reaches tmux or vim</span></h2>
+    <div class="cols2">
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Key</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ C</kbd><span class="sep">/</span><kbd class="k-cmd">⌘ V</kbd></td><td>Copy / paste</td></tr>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ A</kbd></td><td>Select all</td></tr>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ F</kbd></td><td>Find</td></tr>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ T</kbd><span class="sep">/</span><kbd class="k-cmd">⌘ W</kbd></td><td>New / close tab</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Key</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ N</kbd></td><td>New window</td></tr>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ 1</kbd> … <kbd class="k-cmd">⌘ 9</kbd></td><td>Tab N</td></tr>
+            <tr><td class="keys"><kbd class="k-cmd">⌘ ←</kbd><span class="sep">/</span><kbd class="k-cmd">⌘ →</kbd></td><td>Previous / next tab</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="warn">
+      <strong>Linux GUI apps are the exception.</strong>
+      GTK and Qt hardcode <code>Ctrl</code> accelerators and will not accept <code>Super-C</code>.
+      In Firefox and Nautilus, copy stays <kbd class="k-ctrl">⌃ C</kbd> — that is, Caps-C.
+    </div>
+  </section>
+
+  <section>
+    <h2>tmux <span class="tag t-alt">Alt — unprefixed, never chained</span></h2>
+    <p class="lede">Frequent operations take one keystroke. The <kbd class="k-ctrl">⌃ X</kbd> prefix survives for the rare ones.</p>
+    <div class="cols2">
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Key</th><th>Pane</th></tr></thead>
+          <tbody>
+            <tr><td class="keys"><kbd class="k-alt">⌥ \</kbd></td><td>Split vertical</td></tr>
+            <tr><td class="keys"><kbd class="k-alt">⌥ -</kbd></td><td>Split horizontal</td></tr>
+            <tr><td class="keys"><kbd class="k-alt">⌥ Z</kbd></td><td>Zoom pane</td></tr>
+            <tr><td class="keys"><kbd class="k-alt">⌥ W</kbd></td><td>Kill pane</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Key</th><th>Window</th></tr></thead>
+          <tbody>
+            <tr><td class="keys"><kbd class="k-alt">⌥ N</kbd></td><td>New window</td></tr>
+            <tr><td class="keys"><kbd class="k-alt">⌥ ,</kbd><span class="sep">/</span><kbd class="k-alt">⌥ .</kbd></td><td>Previous / next window</td></tr>
+            <tr><td class="keys"><kbd class="k-alt">⌥ 1</kbd> … <kbd class="k-alt">⌥ 9</kbd></td><td>Window N</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="warn">
+      <strong><kbd class="k-alt">⌥ [</kbd> and <kbd class="k-alt">⌥ ]</kbd> are unusable.</strong>
+      They transmit <code>ESC [</code> and <code>ESC ]</code> — the CSI and OSC introducers — which
+      no program can distinguish from the start of a real escape sequence. Hence
+      <kbd class="k-alt">⌥ ,</kbd> and <kbd class="k-alt">⌥ .</kbd> for previous and next window.
+    </div>
+  </section>
+
+  <section>
+    <h2>Focus &amp; resize <span class="tag t-alt">Alt — one key crosses tmux panes and vim splits</span></h2>
+    <p class="lede">
+      In a pane running vim the key is forwarded to vim; anywhere else it moves the tmux pane.
+      Letters and arrows are interchangeable everywhere, not only in vim's normal mode.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Direction</th><th>Focus pane / split</th><th>Resize</th><th>vim equivalent</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Left</td>
+            <td class="keys"><kbd class="k-alt">⌥ H</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ←</kbd></td>
+            <td class="keys"><kbd class="k-alt">⌥ ⇧ H</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ⇧ ←</kbd> <span class="dash">narrow</span></td>
+            <td class="fn">&lt;C-w&gt;h &nbsp; &lt;C-w&gt;&lt;</td>
+          </tr>
+          <tr>
+            <td>Down</td>
+            <td class="keys"><kbd class="k-alt">⌥ J</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ↓</kbd></td>
+            <td class="keys"><kbd class="k-alt">⌥ ⇧ J</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ⇧ ↓</kbd> <span class="dash">lengthen</span></td>
+            <td class="fn">&lt;C-w&gt;j &nbsp; &lt;C-w&gt;+</td>
+          </tr>
+          <tr>
+            <td>Up</td>
+            <td class="keys"><kbd class="k-alt">⌥ K</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ↑</kbd></td>
+            <td class="keys"><kbd class="k-alt">⌥ ⇧ K</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ⇧ ↑</kbd> <span class="dash">shorten</span></td>
+            <td class="fn">&lt;C-w&gt;k &nbsp; &lt;C-w&gt;-</td>
+          </tr>
+          <tr>
+            <td>Right</td>
+            <td class="keys"><kbd class="k-alt">⌥ L</kbd><span class="sep">/</span><kbd class="k-alt">⌥ →</kbd></td>
+            <td class="keys"><kbd class="k-alt">⌥ ⇧ L</kbd><span class="sep">/</span><kbd class="k-alt">⌥ ⇧ →</kbd> <span class="dash">widen</span></td>
+            <td class="fn">&lt;C-w&gt;l &nbsp; &lt;C-w&gt;&gt;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Line editing <span class="tag">Identical in bash, zsh, tmux copy-mode and vim</span></h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Key</th><th>Does</th><th>shell</th><th>tmux copy-mode</th><th>vim</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="keys"><kbd>Home</kbd></td><td>Beginning of line</td><td class="fn">beginning-of-line</td><td class="fn">start-of-line</td><td class="fn">0</td></tr>
+          <tr><td class="keys"><kbd>End</kbd></td><td>End of line</td><td class="fn">end-of-line</td><td class="fn">end-of-line</td><td class="fn">$</td></tr>
+          <tr><td class="keys"><kbd class="k-ctrl">⌃ ←</kbd></td><td>Back one word</td><td class="fn">backward-word</td><td class="fn">previous-word</td><td class="fn">b</td></tr>
+          <tr><td class="keys"><kbd class="k-ctrl">⌃ →</kbd></td><td>Forward one word</td><td class="fn">forward-word</td><td class="fn">next-word</td><td class="fn">w</td></tr>
+          <tr><td class="keys"><kbd>Delete</kbd></td><td>Delete char forward</td><td class="fn">delete-char</td><td class="fn dash">— read-only</td><td class="fn">x</td></tr>
+          <tr><td class="keys"><kbd class="k-ctrl">⌃ Del</kbd></td><td>Delete word forward</td><td class="fn">kill-word</td><td class="fn dash">— read-only</td><td class="fn">dw</td></tr>
+          <tr><td class="keys"><kbd>PgUp</kbd></td><td>Page up</td><td class="fn">enters scrollback</td><td class="fn">page-up</td><td class="fn">page up</td></tr>
+          <tr><td class="keys"><kbd>PgDn</kbd></td><td>Page down</td><td class="fn dash">—</td><td class="fn">page-down</td><td class="fn">page down</td></tr>
+          <tr><td class="keys"><kbd class="k-ctrl">⌃ Home</kbd></td><td>Top of buffer</td><td class="fn dash">—</td><td class="fn">history-top</td><td class="fn">gg</td></tr>
+          <tr><td class="keys"><kbd class="k-ctrl">⌃ End</kbd></td><td>Bottom of buffer</td><td class="fn dash">—</td><td class="fn">history-bottom</td><td class="fn">G</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn">
+      <strong>Word motion stops at the start of the next word</strong> in all four layers — not the
+      end of the current one. zsh, vim's <code>w</code> and tmux's <code>next-word</code> already
+      agreed; readline's <code>forward-word</code> was the sole dissenter, so bash binds
+      <code>vi-fword</code> instead. <code>PgUp</code> in a plain shell pane enters tmux scrollback;
+      in anything that pages its own content — <code>vim</code>, <code>less</code>,
+      <code>man</code>, <code>top</code> — the key passes straight through.
+    </div>
+  </section>
+
+  <section>
+    <h2>Beyond the shared set</h2>
+    <div class="cols2">
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Key</th><th>vim</th></tr></thead>
+          <tbody>
+            <tr><td class="keys"><kbd class="k-ctrl">⌃ ↑</kbd><span class="sep">/</span><kbd class="k-ctrl">⌃ ↓</kbd></td><td>Half-page scroll</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Key</th><th>tmux prefix — rare operations</th></tr></thead>
+          <tbody>
+            <tr><td class="keys"><kbd class="k-ctrl">⌃ X</kbd> <kbd>\</kbd></td><td>Split vertical</td></tr>
+            <tr><td class="keys"><kbd class="k-ctrl">⌃ X</kbd> <kbd>-</kbd></td><td>Split horizontal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where each binding lives</h2>
+    <p class="lede">
+      A key is bound in the outermost layer that can still see it. Bind it too far out and the
+      layers inside never receive it; too far in and an outer layer eats it first.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Binding group</th><th>File</th><th>Why there</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Caps → Control, Alt/Super swap</td>
+            <td class="fn">.keyboard/{linux,macos}/apply.sh</td>
+            <td class="note-cell">The OS layer is the only one that can rewrite a keysym. Everything above sees the result.</td>
+          </tr>
+          <tr>
+            <td>Per-machine deviations</td>
+            <td class="fn">.keyboard/linux/machines/</td>
+            <td class="note-cell">The Pixelbook has no physical Super key, so it needs a different xkb rewrite.</td>
+          </tr>
+          <tr>
+            <td>Command shortcuts</td>
+            <td class="fn">.keyboard/linux/terminal.sh</td>
+            <td class="note-cell">Super has no byte encoding, so the emulator is the innermost layer that can see it. iTerm2 does this natively on macOS.</td>
+          </tr>
+          <tr>
+            <td>Alt — panes, windows, paging</td>
+            <td class="fn">.tmux.conf</td>
+            <td class="note-cell">Root table, not behind the prefix, because frequent operations must never be chained.</td>
+          </tr>
+          <tr>
+            <td>Alt — vim splits</td>
+            <td class="fn">.vimrc</td>
+            <td class="note-cell">tmux forwards these only when the pane runs vim. Without the vim half the keys still move panes — a floor, not a break.</td>
+          </tr>
+          <tr>
+            <td>Line editing, shells</td>
+            <td class="fn">.shell/.common.d/keys.sh</td>
+            <td class="note-cell">readline and ZLE cannot read tmux's or vim's tables. The duplication is real and accepted.</td>
+          </tr>
+          <tr>
+            <td>Line editing, scrollback</td>
+            <td class="fn">.tmux.conf</td>
+            <td class="note-cell">Both <code>copy-mode</code> and <code>copy-mode-vi</code>, since <code>mode-keys</code> follows <code>$EDITOR</code>.</td>
+          </tr>
+          <tr>
+            <td>Prompt width</td>
+            <td class="fn">.shell/.bashrc</td>
+            <td class="note-cell">Not a binding, but the cursor keys draw in the wrong column without it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Conflicts this arrangement avoids</h2>
+    <p class="lede">Each is a case where two layers wanted the same key, and the fix was deciding which layer owns it.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Collision</th><th>Resolution</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>gnome-terminal tabs vs tmux windows</td>
+            <td class="note-cell">gnome-terminal ships <code>switch-to-tab-N</code> on <code>&lt;Alt&gt;N</code>. Moved to <code>&lt;Super&gt;N</code> — the emulator is outermost, so keeping Alt would mean tmux never sees it.</td>
+          </tr>
+          <tr>
+            <td>GNOME Shell dash vs terminal tabs</td>
+            <td class="note-cell">Moving tabs to Super then collides with <code>switch-to-application-N</code>, further out still. Released first — outermost layer cleared before the next one in.</td>
+          </tr>
+          <tr>
+            <td>tmux pane focus vs vim split focus</td>
+            <td class="note-cell">tmux owns the key and forwards it when the pane runs vim. vim-tmux-navigator behaviour without the plugin.</td>
+          </tr>
+          <tr>
+            <td>tmux scrollback vs a program's own pager</td>
+            <td class="note-cell">tmux owns <code>PgUp</code>, forwarding whenever the pane pages its own content — tested as <code>alternate_on</code> <em>or</em> a command-name match, because <code>LESS="-EXFR"</code> keeps <code>less</code> off the alternate screen.</td>
+          </tr>
+          <tr>
+            <td><kbd class="k-ctrl">⌃ ←</kbd> / <kbd class="k-ctrl">⌃ →</kbd> in tmux</td>
+            <td class="note-cell">Deliberately <strong>not</strong> bound in tmux's root table, so they pass through untouched. Word motion belongs to whatever is reading the line.</td>
+          </tr>
+          <tr>
+            <td>The rxvt form of <kbd class="k-ctrl">⌃ →</kbd></td>
+            <td class="note-cell"><code>ESC [ 5 C</code> is safe for readline and ZLE, but vim decodes the tail as <code>5C</code> — change five lines — which destroys the buffer. Bound in the shells and nowhere else.</td>
+          </tr>
+          <tr>
+            <td><kbd class="k-alt">⌥ ←</kbd> as readline word motion</td>
+            <td class="note-cell">Left alone rather than unbound: tmux takes the key first, so it is unreachable inside tmux and harmless outside it, where there are no panes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two settings no script can set</h2>
+    <div class="cols2">
+      <div class="warn">
+        <strong>iTerm2 — Option must reach the tty</strong>
+        Profiles → Keys → General → Left Option key and Right Option key → <code>Esc+</code>.
+        Without this, Option never reaches tmux or vim and half this sheet is dead.
+      </div>
+      <div class="warn">
+        <strong>Touch Bar MacBook Pro</strong>
+        Settings → Keyboard → Touch Bar shows <code>F1–F12</code>, with <code>fn</code> for the
+        Control Strip. Otherwise the machine has no Escape and no function row.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Applied by <code>.keyboard/linux/apply.sh</code> and <code>.keyboard/macos/apply.sh</code> — both idempotent, self-guarding, and no-ops on the wrong platform.</div>
+    <div>Full reasoning in <code>.keyboard/README.md</code>. Plain-text copy of this sheet in <code>.keyboard/CHEATSHEET.md</code>.</div>
+  </footer>
+
+</div>
