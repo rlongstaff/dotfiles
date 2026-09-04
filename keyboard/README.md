@@ -4,10 +4,11 @@ One physical finger position means one thing on every machine and every keyboard
 
 `CHEATSHEET.md` is the binding list. This file is the reasoning behind it.
 
-## The anchors
+## The three modifier anchors
 
-Only three positions exist on all six target keyboards, so only these carry meaning.
-Everything else is derived.
+Six target keyboards, and only three *modifier* positions are in the same place on all of
+them. Those three carry the meaning; every binding in this standard is expressed in terms
+of them, and nothing depends on a modifier that only some of the keyboards have.
 
 | Finger position   | Role                                      | Linux emits | macOS emits |
 | ----------------- | ----------------------------------------- | ----------- | ----------- |
@@ -30,9 +31,11 @@ apart exactly as macOS does:
    (iTerm2 / gnome-terminal) and by the window manager.
 
 The price: Linux **GUI** toolkits hardcode `Ctrl` accelerators and will not accept
-`Super-C`. In Firefox, Nautilus and friends, copy stays `Caps-C`. Terminal applications —
-the stated priority — are unaffected, because terminal emulators let their shortcuts be
-rebound to `Super`.
+`Super-C`. In Firefox, Nautilus and friends, copy stays `Ctrl-C` — reached from Caps, like
+every other `Ctrl` here. That is accepted, not worked around: they already use the
+system clipboard, so the buffer is shared even when the key is not. Terminal applications
+— the stated priority — are unaffected, because terminal emulators let their shortcuts be
+rebound to `Super`, and nothing here substitutes `Super` for `Control` globally.
 
 ## Why Command cannot reach tmux or vim
 
@@ -47,9 +50,10 @@ operations only.
 
 Requires the terminal to send Option as Meta:
 
- - iTerm2 — Profiles → Keys → Left/Right Option key → `Esc+`
- - gnome-terminal — on by default
- - foot — `[main] locked-title=...`, Meta is default
+ - gnome-terminal — on by default *(required target)*
+ - iTerm2 — Profiles → Keys → Left/Right Option key → `Esc+` *(required target)*
+ - alacritty, kitty — on by default *(nice to have)*
+ - xterm — `metaSendsEscape: true` *(optional)*
 
 ## Function row and Escape
 
@@ -91,7 +95,7 @@ emulator *and* on whether the cursor keys are in application mode:
 
 | Form  | Bytes       | Sent by                                        |
 | ----- | ----------- | ---------------------------------------------- |
-| CSI   | `ESC [ H`   | foot, kitty, alacritty; VTE in normal mode     |
+| CSI   | `ESC [ H`   | kitty, alacritty; VTE in normal mode           |
 | SS3   | `ESC O H`   | gnome-terminal/VTE and xterm in application mode |
 | vt    | `ESC [ 1 ~` | what tmux and screen re-emit to programs inside |
 | rxvt  | `ESC [ 7 ~` | rxvt and descendants                            |
@@ -102,7 +106,7 @@ The layers did not agree:
 
  - **bash** binds the first three out of the box. Fine.
  - **zsh** binds exactly **one** — whichever `khome`/`kend` names for the current `TERM`.
-   So `Home` worked in gnome-terminal and silently did nothing in foot or kitty, which
+   So `Home` worked in gnome-terminal and silently did nothing in kitty or alacritty, which
    send the CSI form that `TERM=xterm-256color` does not name. Verified, not theorised.
  - **tmux** copy-mode already binds `Home`/`End` correctly; no change was needed.
  - **vim** decodes all four under an `xterm` `TERM`, and all but SS3 under a `tmux`/`screen`
@@ -146,13 +150,15 @@ to the layers inside; binding it too far in means an outer layer eats it first.
 | --- | --- | --- |
 | Caps → Control; Alt/Super swap | `linux/apply.sh`, `macos/apply.sh` | The OS layer is the only one that can rewrite a *keysym*. Every layer above sees the result and needs no knowledge of it — doing this per-application would mean the same remap re-implemented in the emulator, tmux, the shells and vim, four places to drift. |
 | Per-machine deviations | `linux/machines/<host>.sh` | The Pixelbook has no physical Super key at all, so it needs a different xkb rewrite. Keeping it hostname-selected means `apply.sh` stays the standard and the exception stays visibly an exception. |
-| `Super-…` copy/paste/tab/window | `linux/terminal.sh`; iTerm2 native on macOS | `Super`/`Cmd` has **no byte encoding**, so it physically cannot reach tmux or vim — the emulator is the innermost layer that can see it. Binding it anywhere else would bind nothing. |
+| `Super-…` tab and window shortcuts | `linux/terminal.sh`; iTerm2 native on macOS | `Super`/`Cmd` has **no byte encoding**, so it physically cannot reach tmux or vim — the emulator is the innermost layer that can see it. Binding it anywhere else would bind nothing. Coverage follows what each emulator has: gnome-terminal and iTerm2 get the full set, kitty gets tabs and windows, alacritty gets windows, xterm has neither. |
 | `Alt-…` tmux panes, windows, paging | `.tmux.conf`, root table (`bind -n`) | `Alt` *does* encode, as an `ESC` prefix, so it is the innermost modifier available to in-terminal programs. Root table rather than behind the `C-x` prefix because the requirement is that frequent operations are never chained. |
 | `Alt-…` vim splits | `.vimrc` | tmux forwards these to vim only when the pane is running vim, so the same keystroke crosses both the pane and the split boundary. The vim half must exist independently: without it the keys still move tmux panes, which is a floor, not a break. |
 | Edge handoff back to tmux | `.vimrc` (`s:VimIdeFocus`, `s:VimIdeResize`) | Only vim knows whether it has a window in that direction, so only vim can decide to hand the keystroke back. tmux cannot: by the time it has forwarded the key it has no idea what vim did with it. Applies to focus and resize alike. |
 | `Alt-Tab` pane cycling | `.tmux.conf`, root table, **no `is_vim` test** | The one focus key that is never forwarded. Every other focus binding depends on the inner layer cooperating; this one is the guarantee that holds when it does not. |
-| Copy → system clipboard | `.tmux.conf` (`set-clipboard on` + `copy-pipe`), `.vimrc` (`s:VimIdeOsc52`) | Each layer owns its own selection and no layer can read another's, so each has to send its own. Both send the same way, OSC 52, which is why a copy made over ssh still reaches the local clipboard. |
-| Selection highlight | `.tmux.conf` `mode-style`, `.vimrc` `Visual` | Two programs, two palettes, one appearance. Written as colour numbers because the two disagree about what the colour *names* mean. |
+| Copy / paste — `Cmd-C`, `Cmd-V` | `linux/terminal.sh` (gnome-terminal, alacritty, kitty, xterm); iTerm2 native | Tier-1, so it is single modifier plus key, at the same finger position, on all three desktops. The emulator is the only layer that can reach the clipboard on *every* required terminal — OSC 52 would have let tmux and vim do it themselves, but VTE does not implement it, so on gnome-terminal that path is dead with no setting to revive it. |
+| vim yank → clipboard | `.vimrc` (`s:VimIdeClip`) | A convenience, not the standard: `yy` pipes to `pbcopy`/`wl-copy`/`xclip` so a keyboard yank matches `Cmd-C`. Local only, and silent when no tool is installed — vim is built `-clipboard`, so there is nothing to fall back to. The tier-1 path never depends on it. |
+| tmux mouse off, `Alt-m` to toggle | `.tmux.conf` | `Cmd-C` copies the *terminal's* selection. With `mouse on` tmux takes the drag and there is no terminal selection to copy, so the tier-1 gesture silently does nothing. Off by default makes a plain drag work; `Alt-m` buys back wheel scrollback and drag-to-resize when they are wanted. |
+| Selection highlight | `.tmux.conf` `mode-style`, `.vimrc` `Visual` | Two programs draw their own selections — tmux in copy-mode, vim in visual mode — and neither can read the other's colours. Written as colour *numbers* because the two disagree about what the colour names mean: tmux's `blue` is colour4, vim's `Blue` is colour12. |
 | `Super-Tab` app switching | `linux/terminal.sh`; native on macOS | GNOME ships the switcher on `Super-Tab` *and* `Alt-Tab`. The `Alt` copy has to be released or it shadows tmux from outside, and pinning it to `Super` is also what makes Linux match macOS, where `Cmd-Tab` already switches applications. |
 | `Home`/`End`/`Ctrl-arrow`/`Delete` in the shells | `.shell/.common.d/keys.sh` | Each layer decodes its own input, so there is no single place that can serve all of them. This is genuine duplication and is accepted: readline and ZLE cannot read tmux's or vim's tables. |
 | `Home`/`End`/`Ctrl-arrow`/`Ctrl-Home`/`Ctrl-End` in scrollback | `.tmux.conf`, `copy-mode` and `copy-mode-vi` | Same reason, tmux's own tables. Both tables, because `mode-keys` follows `$EDITOR` and a box without vim lands in `copy-mode` rather than `copy-mode-vi`. |
@@ -197,21 +203,42 @@ which layer owns it rather than to bind it twice and hope.
    never reaches the terminal. `terminal.sh` pins the switcher to `Super-Tab` alone. This
    is the `Alt`/`Super` split applied to one more key: `Super` switches applications,
    `Alt` switches panes inside one — the same distinction macOS already makes for free.
- - **`Cmd-C` vs the mouse.** With `mouse on`, tmux owns the mouse, so a drag makes a *tmux*
-   selection and the terminal's own selection stays empty — and `Cmd-C`, which can only ever
-   copy the terminal's selection, would copy nothing. The key cannot be given to tmux
-   (`Cmd` has no byte encoding), so the resolution is to change what "copy" means: the
-   selection reaches the system clipboard the moment it is made. `Shift`-drag remains as the
-   terminal-owned selection, which is what `Cmd-C` still copies.
- - **`+clipboard` is not available, and that turned out to be the right constraint.** The
-   vim these systems ship is built without it, so `"+y` and `clipboard=unnamedplus` are not
-   options. The alternative — writing an OSC 52 escape sequence to the terminal — is the
-   only method that also works over ssh, where a remote vim has no clipboard to reach but
-   the local terminal does. Piping to `xclip` would have worked only on the machine vim runs
-   on, so the constraint pushed the design somewhere better.
- - **tmux and vim emit OSC 52 with different selection fields** (`52;;` and `52;c;`).
-   Both are valid and both terminals accept; worth knowing before grepping a trace for one
-   and concluding the other layer is broken.
+ - **Copy/paste is tier-1, so it gets one gesture and no chords.** `Cmd-C` / `Super-C` and
+   `Cmd-V` / `Super-V`, single modifier plus key, at the key left of the space bar on every
+   machine. `Ctrl-Shift-C` is a chord and was rejected on that basis alone; it is also a
+   *different* finger position from macOS, which is the thing this standard exists to
+   remove. All four targets write the same `CLIPBOARD` selection, which is why xterm names
+   it explicitly — xterm's defaults deal in `PRIMARY`, the middle-click buffer, which is a
+   different clipboard from the one GTK apps use.
+ - **Three grabs sit on top of the terminal on GNOME and had to be released.** The
+   compositor takes a key before the focused window sees it, so a grabbed accelerator looks
+   bound and does nothing, with no error anywhere. `Super-A` is the app grid, `Super-N`
+   focuses the last notification, and `Super-V` has shipped as the message tray in some
+   versions. `linux/terminal.sh` releases all three; the `Super-V` release is unconditional
+   rather than conditional, because a grab there means paste is dead machine-wide.
+ - **`Cmd-C` vs the mouse, and why tmux mouse reporting is off.** `Cmd-C` can only copy what
+   the *terminal* has selected. With `mouse on` tmux consumes the drag, the terminal's
+   selection stays empty, and the tier-1 gesture copies nothing — the failure mode that
+   started this. Mouse reporting is therefore off by default so a plain drag is a terminal
+   selection, with `Alt-m` as the toggle when wheel scrollback, click-to-focus or
+   drag-to-resize are wanted. tmux's own selection was explicitly declared not to matter,
+   which is what made this the cheap fix rather than a trade.
+ - **The earlier OSC 52 design, and why it is gone.** tmux and vim were made to put their
+   own selections on the clipboard by writing OSC 52 to the terminal. It worked on iTerm2,
+   alacritty and kitty and was silently dead on gnome-terminal: **VTE has never implemented
+   OSC 52 and offers no setting to enable it.** A mechanism that fails invisibly on a
+   required terminal is worse than no mechanism. Piping to `xclip` instead would have worked
+   locally and failed over ssh, which is the case tmux exists for — whereas a terminal-side
+   selection is made by the *local* terminal out of glyphs already on screen, so it works
+   over ssh with nothing installed on the far end.
+ - **fluxbox/X11 is covered by xterm, alacritty and kitty.** fluxbox itself only grabs
+   `Mod4` combinations if `~/.fluxbox/keys` says so, which the stock file does not; the
+   script warns rather than rewriting, because `keys(5)` is the user's file and a
+   window-manager grab beats the terminal every time.
+ - **Supported terminals, in scope order.** Required: **gnome-terminal**, **iTerm2**.
+   Nice to have: **alacritty**, **kitty**. Entirely optional: **xterm**. A behaviour that
+   cannot be made to work on the two required terminals does not ship, whatever the other
+   three can do — that rule is what removed OSC 52.
  - **`Alt-Tab` is deliberately excluded from the `is_vim` forwarding.** Every other focus
    key trusts the inner layer to cooperate. This one does not, on purpose: it is the key
    that still works against an unconfigured vim, an old vim, or any program that swallows
@@ -242,12 +269,20 @@ which layer owns it rather than to bind it twice and hope.
 ## Applying
 
 ```sh
-.keyboard/linux/apply.sh          # GNOME/Wayland, X11 and fluxbox
-.keyboard/macos/apply.sh          # hidutil + a LaunchAgent so it survives reboot
+keyboard/linux/apply.sh          # GNOME/Wayland, X11 and fluxbox — calls terminal.sh
+keyboard/macos/apply.sh          # hidutil + a LaunchAgent so it survives reboot
 ```
 
-Both are idempotent, self-guarding, and no-op on the wrong platform.
+One command per platform. On Linux `apply.sh` does the xkb modifier remap and then runs
+`linux/terminal.sh` for the emulator shortcuts; run `terminal.sh` on its own only when
+re-applying emulator bindings without touching the layout.
 
-Per-machine deviations live in `.keyboard/linux/machines/<name>.sh`, selected by
+Both are idempotent, self-guarding, and no-op on the wrong platform. Neither installs
+packages: that is `deb-pkgs.sh` and `mac-pkgs.sh`.
+
+After running either, restart tmux (`tmux kill-server`) — `.tmux.conf` is read at server
+start, and a running server keeps the bindings it had.
+
+Per-machine deviations live in `keyboard/linux/machines/<name>.sh`, selected by
 hostname, falling back to nothing. The Pixelbook needs one because it has no physical
 Super key at all — see `machines/pixelbook.sh`.

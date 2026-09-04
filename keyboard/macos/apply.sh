@@ -23,7 +23,7 @@ set -e
 CAPS_TO_CTRL='{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x7000000E0}]}'
 
 AGENT_DIR="${HOME}/Library/LaunchAgents"
-AGENT_LABEL="us.longstaff.keyboard"
+AGENT_LABEL="us.longstaffkeyboard"
 AGENT_PLIST="${AGENT_DIR}/${AGENT_LABEL}.plist"
 
 hidutil property --set "${CAPS_TO_CTRL}" >/dev/null

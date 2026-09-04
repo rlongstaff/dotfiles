@@ -6,6 +6,11 @@
 #   left of space  -> Super        (altwin:swap_lalt_lwin)
 #   two left       -> Alt          (same swap, other direction)
 #
+# This is the entry point for the Linux side: it applies the modifier remap, then runs
+# terminal.sh for the emulator shortcuts.  The two are separate files because they act on
+# different layers -- xkb rewrites keysyms for the whole session, terminal.sh rewrites
+# accelerators inside each emulator -- but there is no case for running only one.
+#
 # Idempotent.  Self-guarding: silently does nothing on a machine that lacks the tool
 # for its session type.
 
@@ -64,3 +69,11 @@ case "${XDG_SESSION_TYPE}" in
 esac
 
 xkb_extra
+
+# Terminal-emulator half.  Runs last so the modifier remap is in place first: on GNOME the
+# gsettings writes below are read against the layout applied above.
+if [ -x "${KBD_DIR}/terminal.sh" ]; then
+  "${KBD_DIR}/terminal.sh"
+else
+  sh "${KBD_DIR}/terminal.sh"
+fi

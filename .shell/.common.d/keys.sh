@@ -1,6 +1,6 @@
 
 # Line-editing keys, in every encoding a terminal might send.  See
-# ~/.dotfiles/.keyboard/README.md.
+# ~/.dotfiles/keyboard/README.md.
 #
 #   Home / End                beginning / end of line
 #   Delete                    delete the character under the cursor
@@ -10,10 +10,10 @@
 # Each means the same thing in bash, zsh, tmux copy-mode and vim.  tmux and vim already
 # agree; the shells did not, which is what this file fixes.
 #
-# The problem is that a terminal has three different ways to say "Home", and which one it
+# The problem is that a terminal has four different ways to say "Home", and which one it
 # picks depends on the emulator AND on whether the cursor keys are in application mode:
 #
-#     ESC [ H     "CSI"  -- foot, kitty, alacritty, and VTE in normal mode
+#     ESC [ H     "CSI"  -- kitty, alacritty, and VTE in normal mode
 #     ESC O H     "SS3"  -- VTE/gnome-terminal and xterm in application mode
 #     ESC [ 1 ~   "vt"   -- what tmux and screen re-emit to the programs inside them
 #     ESC [ 7 ~   rxvt
@@ -23,7 +23,7 @@
 #
 # bash's stock readline binds the first three already.  zsh binds exactly ONE: whichever
 # `khome`/`kend` names for the current TERM.  So zsh Home/End works in gnome-terminal and
-# silently does nothing in foot or kitty, which send the CSI form that TERM=xterm-256color
+# silently does nothing in kitty or alacritty, which send the CSI form that TERM=xterm-256color
 # does not name.  Binding all four in both shells removes the dependency on terminfo and on
 # application mode entirely -- the key means the same thing regardless of how it arrived.
 #

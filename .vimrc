@@ -32,9 +32,9 @@ set mouse=a
 " vim picks 'ttymouse' from TERM and lands on 'xterm' under TERM=tmux-256color, which is
 " the oldest of the mouse protocols: it encodes the position in single bytes, so it cannot
 " report a click past column 223, and it does not distinguish a drag from a move.  Both
-" matter here -- a wide terminal is normal, and the drag-release is what triggers the
-" clipboard copy below.  'sgr' has neither limit and every terminal on the target list
-" speaks it (xterm, VTE, foot, iTerm2 and tmux itself).
+" matter here -- a wide terminal is normal, and visual-mode drag needs move separated from
+" drag.  'sgr' has neither limit and every terminal on the target list speaks it
+" (gnome-terminal/VTE, iTerm2, alacritty, kitty, xterm and tmux itself).
 if has('mouse_sgr')
   set ttymouse=sgr
 endif
@@ -55,7 +55,7 @@ inoremap <C-Down> <C-d>
 vnoremap <C-Up> <C-u>
 vnoremap <C-Down> <C-d>
 
-" Alt/Option is the in-terminal command modifier -- see .keyboard/README.md.  M-h/j/k/l
+" Alt/Option is the in-terminal command modifier -- see keyboard/README.md.  M-h/j/k/l
 " moves between vim splits; .tmux.conf forwards those keys here when the pane is running
 " vim, so one keystroke crosses both the tmux pane and vim split boundary.
 "
@@ -175,84 +175,69 @@ for [s:key, s:flag] in [['H', 'L'], ['J', 'D'], ['K', 'U'], ['L', 'R'],
 endfor
 
 " ---------------------------------------------------------------------------------------
-" Clipboard.  See .keyboard/README.md.
+" Clipboard.  See keyboard/README.md.
 "
-" This vim is built -clipboard (`vim --version | grep clipboard`), which is the normal case
-" for the terminal vim Debian and the base OS images ship -- so "+y, "*y and
-" 'clipboard=unnamedplus' are all unavailable and cannot be the mechanism.  That turns out
-" to be a gift rather than a limitation: the alternative, OSC 52, is an escape sequence
-" written to the terminal, so it is the only method that also works over ssh, where the
-" remote vim has no clipboard to talk to but the local terminal does.
+" Copy belongs to the terminal emulator everywhere else in this standard (Shift-drag, then
+" Cmd-C or Ctrl-Shift-C), and that gesture works inside a vim pane too -- Shift suppresses
+" mouse reporting, so vim never sees the drag and the terminal selects the glyphs itself.
+" Nothing here is needed for that case.
 "
-" Cmd-C cannot reach vim -- Cmd has no byte encoding -- so, exactly as in tmux, the rule is
-" that a selection reaches the system clipboard the moment it is made rather than waiting
-" for a key vim will never receive.
+" What is needed is the keyboard case: `yy` in vim should mean the same thing as Cmd-C.
+" This vim is built -clipboard (the normal case for the terminal vim Debian ships), so
+" "+y, "*y and 'clipboard=unnamedplus' do not exist and cannot be the mechanism.  The
+" mechanism is a pipe to whatever clipboard tool the machine has.
 "
-" Set g:vimide_clipboard = 0 before this file to turn the whole thing off.
+" OSC 52 was tried first and removed: gnome-terminal is a required target and VTE has
+" never implemented it, with no setting to turn it on.  A mechanism that is silently dead
+" on a required terminal is worse than one that is obviously absent on a remote box.
+"
+" The consequence is that this only works locally.  Over ssh there is no clipboard tool to
+" pipe to and yanks stay in vim's registers, where Shift-drag plus Cmd-C is the answer --
+" the same answer as for a shell pane.
+"
+" Set g:vimide_clipboard = 0 before this file to turn it off.
 let g:vimide_clipboard = get(g:, 'vimide_clipboard', 1)
 
-" Terminals stop honouring OSC 52 somewhere in the tens of kilobytes and differ on where.
-" Past the cap the sequence is dropped rather than sent half-formed, which would leave the
-" terminal parsing the rest of the payload as keystrokes.
-let g:vimide_clipboard_max = get(g:, 'vimide_clipboard_max', 74994)
+" One tool, chosen once at startup rather than per yank.  Wayland is tested before X11
+" because a Wayland session commonly has xclip present via XWayland and it writes to the
+" wrong clipboard there.
+let s:vimide_clip_cmd = ''
+if executable('pbcopy')
+  let s:vimide_clip_cmd = 'pbcopy'
+elseif !empty($WAYLAND_DISPLAY) && executable('wl-copy')
+  let s:vimide_clip_cmd = 'wl-copy'
+elseif !empty($DISPLAY) && executable('xclip')
+  let s:vimide_clip_cmd = 'xclip -selection clipboard -in'
+elseif !empty($DISPLAY) && executable('xsel')
+  let s:vimide_clip_cmd = 'xsel --clipboard --input'
+endif
 
-function! s:VimIdeOsc52(text) abort
-  if !g:vimide_clipboard || empty(a:text) || !filewritable('/dev/tty')
+function! s:VimIdeClip(text) abort
+  if !g:vimide_clipboard || empty(s:vimide_clip_cmd) || empty(a:text)
     return
   endif
-  " base64_encode() and str2blob() are vim 9.1; older vim shells out to base64(1), which is
-  " POSIX and present on every target including macOS.  split() with keepempty preserves a
-  " trailing newline, so a linewise yank pastes as a line rather than losing its break.
-  if exists('*base64_encode') && exists('*str2blob')
-    let l:b64 = base64_encode(str2blob(split(a:text, "\n", 1)))
-  else
-    let l:b64 = substitute(system('base64 | tr -d "\n"', a:text), '[\r\n]', '', 'g')
-  endif
-  if len(l:b64) > g:vimide_clipboard_max
-    return
-  endif
-  " Written straight to the controlling terminal.  Inside tmux this lands in the pane's
-  " pty, tmux recognises OSC 52, stores it in its own paste buffer AND re-emits it to the
-  " terminal it is attached to -- so one write serves vim's clipboard, tmux's buffer and
-  " the system clipboard at once.  That is why nothing here special-cases $TMUX.
-  call writefile(["\033]52;c;" . l:b64 . "\007"], '/dev/tty', 'b')
+  call system(s:vimide_clip_cmd, a:text)
 endfunction
 
 " Any explicit yank goes to the system clipboard, so `y` and Cmd-C mean the same thing.
 " Restricted to the yank operator on purpose: `d` and `c` fill vim's registers too, but a
 " delete is not a copy anywhere else in this standard, and having it silently replace the
 " clipboard is exactly the surprise the layer rules exist to prevent.
+"
+" A linewise yank gets its trailing newline back, so it pastes as a line elsewhere rather
+" than losing its break.  Nothing hooks the mouse: a mouse drag in vim is a visual
+" selection, which is the start of `d`, `c` or `>` as often as it is a copy, and `y`
+" finishes it into the clipboard when that is what was meant.
 if exists('##TextYankPost')
   augroup vimide_clipboard
     autocmd!
     autocmd TextYankPost *
           \ if v:event.operator ==# 'y' |
-          \   call s:VimIdeOsc52(join(v:event.regcontents, "\n")
+          \   call s:VimIdeClip(join(v:event.regcontents, "\n")
           \        . (v:event.regtype ==# 'V' ? "\n" : '')) |
           \ endif
   augroup END
 endif
-
-" Mouse selection copies on release, which is what tmux's MouseDragEnd1Pane does one layer
-" out.  Two deliberate differences from tmux, because vim's visual mode is not a
-" copy-only mode the way tmux's is:
-"
-"   - the selection stays up afterwards (`gv`), so the drag can still be the start of a
-"     `d`, `c` or `>` rather than only ever a copy;
-"   - vim's own registers are put back exactly as they were, so only the *system*
-"     clipboard changes.  Without that, mouse-selecting a target to paste over would
-"     destroy the very text about to be pasted.
-function! s:VimIdeClipVisual() abort
-  let l:save = [getreg('"'), getregtype('"')]
-  normal! gvy
-  if !exists('##TextYankPost')
-    call s:VimIdeOsc52(getreg('"'))
-  endif
-  call setreg('"', l:save[0], l:save[1])
-  normal! gv
-endfunction
-
-xnoremap <silent> <LeftRelease> <LeftRelease>:<C-u>call <SID>VimIdeClipVisual()<CR>
 
 " Selection highlight, identical to tmux's mode-style in .tmux.conf.
 "

@@ -7,10 +7,10 @@ PKGS=(
      tmux
      vim
      zsh
-     # Clipboard fallback for .keyboard/'s copy support.  Not the primary mechanism --
-     # tmux and vim both copy via OSC 52, which needs nothing installed and is the only
-     # thing that works over ssh.  These cover a local terminal that refuses OSC 52.
-     # One per session type; installing both is harmless, since each is chosen at runtime.
+     # Clipboard tools, so a vim yank (`yy`) reaches the system clipboard -- vim is built
+     # -clipboard here, so it pipes to one of these.  Mouse copy does not need them: that
+     # is Shift-drag plus Cmd-C, handled entirely by the terminal emulator.  One per
+     # session type; installing both is harmless, since .vimrc picks one at runtime.
      wl-clipboard
      tealdeer
      xclip

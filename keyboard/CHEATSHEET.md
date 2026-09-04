@@ -3,9 +3,10 @@
 Every binding in the standard, and the file that implements it. See `README.md` for why the
 layers are split the way they are.
 
-## The three anchors
+## The three modifier anchors
 
-The only key positions present on all six target keyboards. Everything else is derived.
+The only *modifier* positions in the same place on all six target keyboards. Every binding
+below is expressed in terms of these three.
 
 | Finger position       | Is         | Linux keysym | macOS   |
 | --------------------- | ---------- | ------------ | ------- |
@@ -22,7 +23,7 @@ MacBooks. That is why Caps carries Control.
 | ----------- | ------------------------------- | ------------------------------------ |
 | **Command** | terminal emulator, window manager | anything inside tmux or vim — it has no byte encoding and cannot get there |
 | **Alt**     | tmux, and vim splits             | terminal-emulator shortcuts          |
-| **Control** | signals, tmux prefix, vim `<C-…>` | copy/paste                          |
+| **Control** | signals, tmux prefix, vim `<C-…>` | copy/paste **in a terminal** — GUI apps still use `Ctrl-C`/`Ctrl-V` |
 
 ## Command — terminal and window (never reaches tmux or vim)
 
@@ -39,8 +40,15 @@ MacBooks. That is why Caps carries Control.
 
 `Cmd` is `Super` on Linux and `Command` on macOS, both at the key left of space.
 
-**Linux GUI apps are the exception.** GTK and Qt hardcode `Ctrl` accelerators and will not
-accept `Super-C`. In Firefox and Nautilus, copy stays `Caps-C`.
+**Copy and paste are on all five terminals; the rest depend on what the emulator has.**
+gnome-terminal and iTerm2 get the whole table. kitty gets copy/paste plus tabs and windows,
+alacritty gets copy/paste and windows (it has no tabs), xterm gets copy/paste only. Tabs and
+windows are reachable through tmux anyway, which is why the frequent operations live there.
+
+**Linux GUI apps are the exception, deliberately.** GTK and Qt hardcode `Ctrl` accelerators
+and will not accept `Super-C`. Firefox, Nautilus and the rest keep `Ctrl-C` / `Ctrl-V` —
+`Ctrl` reached from Caps, like everywhere else. They already use the system clipboard, so
+the buffer is shared even where the key is not.
 
 ## Alt — tmux, unprefixed
 
@@ -53,6 +61,7 @@ Frequent operations are never chained. `C-x` survives for the rare ones.
 | `Alt-z`        | zoom pane                     |
 | `Alt-w`        | kill pane                     |
 | `Alt-n`        | new window                    |
+| `Alt-m`        | toggle tmux mouse reporting   |
 | `Alt-,` / `Alt-.` | previous / next window     |
 | `Alt-1` … `Alt-9` | window N                   |
 
@@ -98,33 +107,35 @@ macOS needs nothing: `Cmd-Tab` is already the switcher and `Option-Tab` is alrea
 
 ## Copy and paste
 
-| Gesture | Does | Who does it |
-| ------- | ---- | ----------- |
-| drag with the mouse | selects **and copies** to the system clipboard | tmux, or vim |
-| double-click / triple-click | copies word / line | tmux |
-| `y` or `Enter` in scrollback | copies the selection | tmux copy-mode |
-| `y` in vim | copies to the system clipboard too | vim |
-| `Cmd-C` | copies the **terminal's** selection | terminal emulator |
-| `Cmd-V` | pastes | terminal emulator |
-| `Shift`-drag | selects with the *terminal*, bypassing tmux and vim | terminal emulator |
-| `C-x` `]` | pastes tmux's own buffer | tmux |
+**One gesture, one modifier, one clipboard, three desktops.**
 
-**Selecting is copying.** `Cmd-C` cannot reach tmux or vim — `Cmd` has no byte encoding — so
-waiting for it would mean the key never arrives. Instead the selection lands on the system
-clipboard the instant it is made, and `Cmd-C` stays bound for the case where the terminal
-owns the selection.
+| Key | Does | Where |
+| --- | ---- | ----- |
+| `Cmd-C` / `Super-C` | copy the selection | every terminal, all three desktops |
+| `Cmd-V` / `Super-V` | paste | every terminal, all three desktops |
+| drag with the mouse | make the selection | shell pane |
+| `Alt-m` | toggle tmux mouse reporting | tmux |
 
-**It works over ssh.** Copying travels as an OSC 52 escape sequence to whatever terminal is
-attached, so a selection made in a remote tmux or vim lands on the *local* clipboard. No
-`xclip` on the far end, nothing forwarded.
+`Cmd` on macOS and `Super` on Linux are the **same physical key** — the one left of the
+space bar. Same finger, same result, on GNOME/Wayland, fluxbox/X11 and macOS.
 
-`Shift`-drag is the escape hatch: it bypasses mouse reporting entirely and gives the
-terminal's own selection, which is what `Cmd-C` copies. Use it when you want a rectangle of
-the screen rather than what tmux or vim thinks you selected.
+Firefox, Nautilus and other desktop applications are untouched and keep `Ctrl-C` / `Ctrl-V`.
+Nothing rebinds Control; `Super` is *added* inside terminals, not substituted for anything.
 
-Deletes never touch the clipboard — only yanks do. In vim, a mouse selection leaves vim's
-own registers untouched, so selecting a target to paste over does not destroy the text
-about to be pasted.
+**The mouse is off in tmux by default, and that is what makes copy work.** `Cmd-C` copies
+the *terminal's* selection. If tmux owns the mouse, a drag makes a tmux selection instead,
+the terminal's stays empty, and `Cmd-C` silently copies nothing. With mouse reporting off,
+a plain drag is a terminal selection and the tier-1 gesture just works.
+
+`Alt-m` turns mouse reporting back on when you want wheel scrollback, click-to-focus or
+drag-to-resize, and off again. While it is on, hold `Shift` (`Option` in iTerm2) to select.
+`PageUp` reaches scrollback either way.
+
+Inside a vim pane vim owns the mouse, so `Shift`-drag there.
+
+`yy` in vim also reaches the clipboard when `pbcopy`, `wl-copy` or `xclip` is installed —
+a convenience, not part of the standard. It is local-only and silent when no tool is there;
+`Cmd-C` is the path that always works.
 
 ## Line editing — identical in bash, zsh, tmux copy-mode and vim
 
@@ -158,22 +169,33 @@ content (`vim`, `less`, `man`, `top`) the key is passed straight through.
 | ----------- | ---------------- |
 | `C-x` `\`   | split vertical   |
 | `C-x` `-`   | split horizontal |
+| `C-x` `]`   | paste tmux's own copy-mode buffer |
 
 ## Where each binding is implemented
 
 | Binding group                | File                                  |
 | ---------------------------- | ------------------------------------- |
-| Caps→Control, Alt/Super swap | `.keyboard/linux/apply.sh`, `.keyboard/macos/apply.sh` |
-| Command (Super) shortcuts    | `.keyboard/linux/terminal.sh`; iTerm2 native on macOS |
+| Caps→Control, Alt/Super swap | `keyboard/linux/apply.sh`, `keyboard/macos/apply.sh` |
+| Command (Super) shortcuts    | `keyboard/linux/terminal.sh`; iTerm2 native on macOS |
 | Alt — tmux, focus, resize, paging | `.tmux.conf`                     |
-| `Alt-Tab` pane cycling       | `.tmux.conf`; GNOME released in `.keyboard/linux/terminal.sh` |
+| `Alt-Tab` pane cycling       | `.tmux.conf`; GNOME released in `keyboard/linux/terminal.sh` |
 | Home/End/Ctrl-arrow in copy-mode | `.tmux.conf`                      |
 | Alt — vim splits             | `.vimrc`                              |
-| Copy → clipboard (OSC 52)    | `.tmux.conf` and `.vimrc`             |
+| `Super-C` / `Super-V` copy/paste | `keyboard/linux/terminal.sh`; iTerm2 native |
+| tmux mouse off + `Alt-m` toggle | `.tmux.conf`                          |
 | Selection highlight          | `.tmux.conf` `mode-style`, `.vimrc` `Visual` |
 | vim edge handoff back to tmux| `.vimrc` (`s:VimIdeFocus`, `s:VimIdeResize`) |
+| vim yank → clipboard         | `.vimrc` (`s:VimIdeClip`)             |
 | Line editing in the shells   | `.shell/.common.d/keys.sh`            |
 | Prompt width (readline)      | `.shell/.bashrc`                      |
+
+## Applying it
+
+```sh
+keyboard/linux/apply.sh    # modifier remap, then terminal.sh for the emulator shortcuts
+keyboard/macos/apply.sh    # Caps → Control, kept across reboots by a LaunchAgent
+tmux kill-server            # .tmux.conf is read at server start
+```
 
 ## Two settings no script can set
 
