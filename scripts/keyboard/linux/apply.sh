@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 # Apply the keyboard standard on Linux.  See ../README.md for the standard itself.
+# Run by scripts/install.d/30-keyboard.sh, or by hand at any time.
 #
 #   Caps Lock      -> Control      (ctrl:nocaps)
 #   left of space  -> Super        (altwin:swap_lalt_lwin)
@@ -15,8 +16,18 @@
 # for its session type.
 
 set -e
+: "${SCRIPT_DIR:=$(CDPATH= cd -- "$(dirname -- "$0")/../../.." && pwd)}"
+TARGET=${1:-${TARGET:-$HOME}}
+MODULE=keyboard
+. "${SCRIPT_DIR}/scripts/lib.sh"
 
-KBD_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+KBD_DIR="${SCRIPT_DIR}/scripts/keyboard/linux"
+
+# xkb, gsettings and xkbcomp all act on the live session, not on files under TARGET.
+if ! live_home; then
+  log "TARGET is not \$HOME; skipping the live-session modifier remap"
+  exit 0
+fi
 
 XKB_LAYOUT="us"
 XKB_OPTIONS="ctrl:nocaps,altwin:swap_lalt_lwin"
@@ -38,12 +49,12 @@ apply_gnome() {
     "[('xkb', '${XKB_LAYOUT}')]"
   gsettings set org.gnome.desktop.input-sources xkb-options \
     "['$(echo "${XKB_OPTIONS}" | sed "s/,/', '/g")']"
-  echo "keyboard: applied via gsettings (${XKB_OPTIONS})"
+  log "applied via gsettings (${XKB_OPTIONS})"
 }
 
 apply_x11() {
   setxkbmap -layout "${XKB_LAYOUT}" -option "" -option "${XKB_OPTIONS}"
-  echo "keyboard: applied via setxkbmap (${XKB_OPTIONS})"
+  log "applied via setxkbmap (${XKB_OPTIONS})"
 }
 
 case "${XDG_SESSION_TYPE}" in
@@ -51,7 +62,7 @@ case "${XDG_SESSION_TYPE}" in
     if which gsettings >/dev/null 2>&1; then
       apply_gnome
     else
-      echo "keyboard: wayland session with no gsettings; nothing applied" >&2
+      log "wayland session with no gsettings; nothing applied" >&2
       exit 1
     fi
     ;;
@@ -72,8 +83,4 @@ xkb_extra
 
 # Terminal-emulator half.  Runs last so the modifier remap is in place first: on GNOME the
 # gsettings writes below are read against the layout applied above.
-if [ -x "${KBD_DIR}/terminal.sh" ]; then
-  "${KBD_DIR}/terminal.sh"
-else
-  sh "${KBD_DIR}/terminal.sh"
-fi
+run_script "${KBD_DIR}/terminal.sh"

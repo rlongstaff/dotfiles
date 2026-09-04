@@ -751,3 +751,6 @@ MigrationBackup/
 .ionide/
 
 
+
+# dotfiles: ~/.config is managed here (the *.config pattern above would hide it)
+!.config/

@@ -175,13 +175,13 @@ content (`vim`, `less`, `man`, `top`) the key is passed straight through.
 
 | Binding group                | File                                  |
 | ---------------------------- | ------------------------------------- |
-| Caps→Control, Alt/Super swap | `keyboard/linux/apply.sh`, `keyboard/macos/apply.sh` |
-| Command (Super) shortcuts    | `keyboard/linux/terminal.sh`; iTerm2 native on macOS |
+| Caps→Control, Alt/Super swap | `scripts/keyboard/linux/apply.sh`, `scripts/keyboard/macos/apply.sh` |
+| Command (Super) shortcuts    | `scripts/keyboard/linux/terminal.sh`; iTerm2 native on macOS |
 | Alt — tmux, focus, resize, paging | `.tmux.conf`                     |
-| `Alt-Tab` pane cycling       | `.tmux.conf`; GNOME released in `keyboard/linux/terminal.sh` |
+| `Alt-Tab` pane cycling       | `.tmux.conf`; GNOME released in `scripts/keyboard/linux/terminal.sh` |
 | Home/End/Ctrl-arrow in copy-mode | `.tmux.conf`                      |
 | Alt — vim splits             | `.vimrc`                              |
-| `Super-C` / `Super-V` copy/paste | `keyboard/linux/terminal.sh`; iTerm2 native |
+| `Super-C` / `Super-V` copy/paste | `scripts/keyboard/linux/terminal.sh`; iTerm2 native |
 | tmux mouse off + `Alt-m` toggle | `.tmux.conf`                          |
 | Selection highlight          | `.tmux.conf` `mode-style`, `.vimrc` `Visual` |
 | vim edge handoff back to tmux| `.vimrc` (`s:VimIdeFocus`, `s:VimIdeResize`) |
@@ -192,10 +192,12 @@ content (`vim`, `less`, `man`, `top`) the key is passed straight through.
 ## Applying it
 
 ```sh
-keyboard/linux/apply.sh    # modifier remap, then terminal.sh for the emulator shortcuts
-keyboard/macos/apply.sh    # Caps → Control, kept across reboots by a LaunchAgent
-tmux kill-server            # .tmux.conf is read at server start
+scripts/keyboard/linux/apply.sh    # modifier remap, then terminal.sh for the emulator shortcuts
+scripts/keyboard/macos/apply.sh    # Caps → Control, kept across reboots by a LaunchAgent
+tmux kill-server                   # .tmux.conf is read at server start
 ```
+
+`install.sh` runs the platform's `apply.sh` for you; the lines above re-apply it.
 
 ## Two settings no script can set
 

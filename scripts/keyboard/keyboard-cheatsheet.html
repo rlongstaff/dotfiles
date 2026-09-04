@@ -548,17 +548,17 @@
         <tbody>
           <tr>
             <td>Caps → Control, Alt/Super swap</td>
-            <td class="fn">.keyboard/{linux,macos}/apply.sh</td>
+            <td class="fn">scripts/keyboard/{linux,macos}/apply.sh</td>
             <td class="note-cell">The OS layer is the only one that can rewrite a keysym. Everything above sees the result.</td>
           </tr>
           <tr>
             <td>Per-machine deviations</td>
-            <td class="fn">.keyboard/linux/machines/</td>
+            <td class="fn">scripts/keyboard/linux/machines/</td>
             <td class="note-cell">The Pixelbook has no physical Super key, so it needs a different xkb rewrite.</td>
           </tr>
           <tr>
             <td>Command shortcuts</td>
-            <td class="fn">.keyboard/linux/terminal.sh</td>
+            <td class="fn">scripts/keyboard/linux/terminal.sh</td>
             <td class="note-cell">Super has no byte encoding, so the emulator is the innermost layer that can see it. iTerm2 does this natively on macOS.</td>
           </tr>
           <tr>
@@ -648,8 +648,8 @@
   </section>
 
   <footer>
-    <div>Applied by <code>.keyboard/linux/apply.sh</code> and <code>.keyboard/macos/apply.sh</code> — both idempotent, self-guarding, and no-ops on the wrong platform.</div>
-    <div>Full reasoning in <code>.keyboard/README.md</code>. Plain-text copy of this sheet in <code>.keyboard/CHEATSHEET.md</code>.</div>
+    <div>Applied by <code>scripts/keyboard/linux/apply.sh</code> and <code>scripts/keyboard/macos/apply.sh</code> — both idempotent, self-guarding, and no-ops on the wrong platform.</div>
+    <div>Full reasoning in <code>scripts/keyboard/README.md</code>. Plain-text copy of this sheet in <code>scripts/keyboard/CHEATSHEET.md</code>.</div>
   </footer>
 
 </div>

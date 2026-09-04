@@ -1,4 +1,4 @@
-# Pixelbook, running Linux.  Sourced by ../apply.sh; see ../../README.md.
+# Pixelbook, running Linux.  Sourced by ../apply.sh (KBD_DIR set); see ../../README.md.
 #
 # The Pixelbook bottom row is
 #

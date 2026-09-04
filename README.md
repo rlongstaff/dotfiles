@@ -25,20 +25,34 @@ When you install this, it will archive, then link the following files to the git
 - .zsh
 - .zshrc
 - .zprofile
+- .config/alacritty/alacritty.toml, .config/kitty/kitty.conf
+- .Xresources (Linux), Library/LaunchAgents/us.longstaff.keyboard.plist (macOS)
+
+The list is `LINKS` in `scripts/lib.sh`. Every link is absolute into the repo, so editing
+`~/.vimrc` edits the checkout and `git status` shows it. `scripts/check.sh` audits the links
+and lists real files in `$HOME` that should be managed here instead.
 
 # How do I install this?
 
 1. Install git
 2. Clone the repo. Put this where it will live permanently. Current convention is to locate it here `~/src/github.com/rlongstaff/dotfiles`
-3. Run `deb-pkgs.sh` (required). This handles debian, ubuntu, WSL2. The is currently no script to install things via homebrew for MacOS
-4. Run `mac-tweaks` if you want to stop some silly things for MacOS
-5. Run `./install.sh` from the repo dir. This will backup any configs that it replaces to `~/.dotfiles.backup.{TIMESTAMP}`
+3. Run `scripts/pkgs/deb.sh` (required). This handles debian, ubuntu, WSL2. There is currently no script to install things via homebrew for MacOS
+4. Run `scripts/pkgs/mac-tweaks.sh` if you want to stop some silly things for MacOS
+5. Run `./install.sh` from the repo dir. This will backup any configs that it replaces to `~/.dotfiles.bak.{TIMESTAMP}`, then run each step in `scripts/install.d/` in order (symlinks, comfort dirs, keyboard standard, notes)
 6. **!!!!!CHECK YOUR `.gitconfig`!!!!!** .gitconfig does not allow for shell expansion so you need to change your username and email
 7. Exit your existing terminal and start a fresh one.
 
+Re-run any single step later with `scripts/install.d/<step>.sh`. Everything under `scripts/`
+sources `scripts/lib.sh` and speaks only in `$SCRIPT_DIR` (the repo) and `$TARGET` (the home
+dir being set up), so `./install.sh /tmp/fakehome` is a safe dry run: file changes land in the
+fake home and live-session changes (gsettings, hidutil) are skipped.
+
+The keyboard standard (same finger positions on every machine and layer) is documented in
+`scripts/keyboard/README.md` with a cheatsheet alongside.
+
 ## This sucks, how do I get rid of it?
 1. Run `./uninstall.sh`
-2. Copy the .dotfiles.backup.{TIMESTAMP} you want back to $HOME.
+2. Copy the .dotfiles.bak.{TIMESTAMP} you want back to $HOME.
 
 ## What's with all the extra/comfort dirs?
 

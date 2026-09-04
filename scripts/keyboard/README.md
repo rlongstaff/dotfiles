@@ -269,20 +269,24 @@ which layer owns it rather than to bind it twice and hope.
 ## Applying
 
 ```sh
-keyboard/linux/apply.sh          # GNOME/Wayland, X11 and fluxbox — calls terminal.sh
-keyboard/macos/apply.sh          # hidutil + a LaunchAgent so it survives reboot
+scripts/keyboard/linux/apply.sh          # GNOME/Wayland, X11 and fluxbox — calls terminal.sh
+scripts/keyboard/macos/apply.sh          # hidutil + a LaunchAgent so it survives reboot
 ```
 
-One command per platform. On Linux `apply.sh` does the xkb modifier remap and then runs
+`install.sh` runs the right one through `scripts/install.d/30-keyboard.sh`; run it by hand
+to re-apply. One command per platform. On Linux `apply.sh` does the xkb modifier remap and then runs
 `linux/terminal.sh` for the emulator shortcuts; run `terminal.sh` on its own only when
 re-applying emulator bindings without touching the layout.
 
 Both are idempotent, self-guarding, and no-op on the wrong platform. Neither installs
-packages: that is `deb-pkgs.sh` and `mac-pkgs.sh`.
+packages (that is `scripts/pkgs/deb.sh`) and neither writes a file into `$HOME`: the
+alacritty and kitty configs, `.Xresources` and the macOS LaunchAgent are repo files that
+`install.sh` links in (`LINKS` in `scripts/lib.sh`). `terminal.sh` only merges the xterm
+resources and sets gsettings.
 
 After running either, restart tmux (`tmux kill-server`) — `.tmux.conf` is read at server
 start, and a running server keeps the bindings it had.
 
-Per-machine deviations live in `keyboard/linux/machines/<name>.sh`, selected by
+Per-machine deviations live in `scripts/keyboard/linux/machines/<name>.sh`, selected by
 hostname, falling back to nothing. The Pixelbook needs one because it has no physical
 Super key at all — see `machines/pixelbook.sh`.
