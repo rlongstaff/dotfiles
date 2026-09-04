@@ -1,3 +1,6 @@
+
+source ${HOME}/.shell/.dotfilesrc
+
 autoload -U +X compinit && compinit
 
 # Path to your Oh My Zsh installation.
@@ -17,13 +20,14 @@ ZSH_TMUX_AUTOSTART_ONCE=true
 # Automatically connect to a previous session if it exists
 ZSH_TMUX_AUTOCONNECT=true
 # Automatically close the terminal when tmux exits
-ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
+#ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
+ZSH_TMUX_AUTOQUIT=false
 # Automatically name the new session based on the basename of PWD
 ZSH_TMUX_AUTONAME_SESSION=false
 # Automatically pick up tmux environments
 ZSH_TMUX_AUTOREFRESH=false
 # Set term to screen or screen-256color based on current terminal support
-ZSH_TMUX_DETACHED=false
+ZSH_TMUX_DETACHED=true
 # Set detached mode
 ZSH_TMUX_FIXTERM=true
 # Set '-CC' option for iTerm2 tmux integration
@@ -101,7 +105,7 @@ zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f
 # source  /usr/local/share/zsh/site-functions
 
 # Ditch the extra carriage return when using history substitutions
-unsetopt HIST_VERIFY
+# unsetopt HIST_VERIFY
 
 unsetopt AUTO_CD
 

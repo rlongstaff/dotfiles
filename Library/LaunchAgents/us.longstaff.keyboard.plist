@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Linked to ~/Library/LaunchAgents/ by dotfiles (scripts/lib.sh LINKS) and loaded by
+     scripts/keyboard/macos/apply.sh.  Re-applies Caps Lock -> Control at login, because
+     hidutil does not survive a reboot or a keyboard being replugged.
+     Usage page 0x7 (keyboard), Caps Lock 0x39 -> Left Control 0xE0; the same literal
+     lives in macos/apply.sh for the immediate hidutil call. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>us.longstaff.keyboard</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/hidutil</string>
+    <string>property</string>
+    <string>--set</string>
+    <string>{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x7000000E0}]}</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+</dict>
+</plist>

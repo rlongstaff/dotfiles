@@ -1,0 +1,12 @@
+! Linked to ~/.Xresources by dotfiles (scripts/lib.sh LINKS); merged into the live server
+! by scripts/keyboard/linux/terminal.sh.  See scripts/keyboard/README.md.
+!
+! CLIPBOARD is named explicitly: xterm's defaults deal in PRIMARY, the middle-click
+! buffer, which is not the clipboard GTK apps and Firefox use.
+!
+! metaSendsEscape: xterm's default sets the eighth bit for Alt instead of prefixing ESC,
+! and tmux and vim read the ESC prefix.  Without it the whole Alt layer is dead in xterm.
+XTerm*metaSendsEscape: true
+XTerm*vt100.translations: #override \
+    Super <Key>c: copy-selection(CLIPBOARD) \n\
+    Super <Key>v: insert-selection(CLIPBOARD)
