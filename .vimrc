@@ -32,7 +32,7 @@ set mouse=a
 " vim picks 'ttymouse' from TERM and lands on 'xterm' under TERM=tmux-256color, which is
 " the oldest of the mouse protocols: it encodes the position in single bytes, so it cannot
 " report a click past column 223, and it does not distinguish a drag from a move.  Both
-" matter here -- a wide terminal is normal, and visual-mode drag needs move separated from
+" matter here - a wide terminal is normal, and visual-mode drag needs move separated from
 " drag.  'sgr' has neither limit and every terminal on the target list speaks it
 " (gnome-terminal/VTE, iTerm2, alacritty, kitty, xterm and tmux itself).
 if has('mouse_sgr')
@@ -40,12 +40,7 @@ if has('mouse_sgr')
 endif
 
 " PageUp/PageDown page, in every mode, which is what they do in the terminal and in tmux
-" scrollback too -- one key, one meaning across all three layers.
-"
-" These used to be remapped to Left/Right for cramped arrow clusters.  That made vim the
-" only layer where the key did something else, so it went; plain arrows and h/l still
-" cover horizontal movement.  No mapping is needed -- paging is vim's own default for
-" these keys; the mappings that used to be here were the deviation.
+" scrollback too - one key, one meaning across all three layers.
 
 " Ctrl+Up / Ctrl+Down stay half-page, a finer step than PageUp/PageDown's full screen.
 nnoremap <C-Up> <C-u>
@@ -55,7 +50,15 @@ inoremap <C-Down> <C-d>
 vnoremap <C-Up> <C-u>
 vnoremap <C-Down> <C-d>
 
-" Alt/Option is the in-terminal command modifier -- see keyboard/README.md.  M-h/j/k/l
+" Ctrl-a / Ctrl-e : beginning / end of line
+nnoremap <C-a> <Home>
+nnoremap <C-e> <End>
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+vnoremap <C-a> <Home>
+vnoremap <C-e> <End>
+
+" Alt/Option is the in-terminal command modifier - see keyboard/README.md.  M-h/j/k/l
 " moves between vim splits; .tmux.conf forwards those keys here when the pane is running
 " vim, so one keystroke crosses both the tmux pane and vim split boundary.
 "
@@ -70,7 +73,7 @@ if !has('gui_running')
   endfor
 
   " Alt+Arrow needs no declaration.  It arrives as the xterm CSI form
-  " ESC [ 1 ; <mod> <letter> (modifier 3 = Alt), which vim decodes natively -- unlike
+  " ESC [ 1 ; <mod> <letter> (modifier 3 = Alt), which vim decodes natively - unlike
   " Alt+letter, whose bare-ESC-prefix form it does not.  Declaring it is not merely
   " redundant but an error: `set <M-Up>=` is E518, because that syntax only accepts keys
   " vim carries as termcap entries and the modified arrows are not among them.
@@ -79,13 +82,13 @@ if !has('gui_running')
   set ttimeoutlen=25
 endif
 
-" Alt moves focus, Alt-Shift resizes -- the two differ only by Shift.  Each is driven off
+" Alt moves focus, Alt-Shift resizes - the two differ only by Shift.  Each is driven off
 " one table covering both key families, so the cursor keys mirror h/j/k/l rather than
 " being a second, separately-maintained set of bindings that can drift.
 
 " Focus has to hand back to tmux at the edge of the split layout, or focus is trapped:
 " .tmux.conf forwards M-h/j/k/l into vim whenever the pane runs vim, and plain <C-w>h in
-" vim's leftmost window is a silent no-op -- so the keystroke is consumed by vim, vim does
+" vim's leftmost window is a silent no-op - so the keystroke is consumed by vim, vim does
 " nothing with it, and there is no way back out to the tmux pane on that side.
 "
 " The fix is the vim-tmux-navigator trick without the plugin: try the split move, and if
@@ -96,7 +99,7 @@ endif
 " Guarded on $TMUX and executable('tmux'), so outside tmux this degrades to exactly the
 " old behaviour: the move simply does nothing at the edge.
 "
-" M-Tab is the belt to this braces -- it is bound at the tmux root with no vim
+" M-Tab is the belt to this braces - it is bound at the tmux root with no vim
 " passthrough, so it always cycles tmux panes no matter what the pane is running.
 let s:vimide_pane_dir = {'h': 'L', 'j': 'D', 'k': 'U', 'l': 'R'}
 
@@ -121,7 +124,7 @@ endfor
 " Same edge handoff as focus, for the same reason: tmux forwards these into vim whenever
 " the pane runs vim, and a vim with no split in that axis has nothing to resize, so the
 " keystroke was consumed and the tmux pane never moved.  A resize at the edge is not a
-" dead end the way trapped focus is -- but it is still a key that silently does nothing,
+" dead end the way trapped focus is - but it is still a key that silently does nothing,
 " which is exactly what this config exists to remove.
 "
 " Detected by measuring rather than by counting windows: `winheight()` is the honest test
@@ -133,14 +136,14 @@ endfor
 " Decided by asking whether a neighbouring window exists in that axis, NOT by resizing and
 " checking whether anything moved.  The measure-first-then-compare approach looks equivalent
 " and is wrong in exactly one direction: with a single window, `<C-w>-` really does shrink
-" it -- vim just leaves the freed row blank -- so the height *does* change, the handoff
+" it - vim just leaves the freed row blank - so the height *does* change, the handoff
 " never fires, and repeated presses shrink the lone window inside a full-size pane instead
 " of resizing the pane.  `<C-w>+`, `<C-w><` and `<C-w>>` are all genuine no-ops there,
 " which is what makes the bug so easy to miss: three directions out of four work.
 "
 " Consequence worth stating: with no neighbour, vim is not asked to resize at all.  Outside
 " tmux that makes the key a no-op rather than shrinking the lone window.  That is the point
-" -- a window with nothing beside it has nothing to resize against.
+" - a window with nothing beside it has nothing to resize against.
 "
 " The dict is keyed on the tmux flag so the mapping RHS carries only a bare letter.
 " Passing the wincmd character instead would put a literal '<' into a :nnoremap argument,
@@ -178,7 +181,7 @@ endfor
 " Clipboard.  See keyboard/README.md.
 "
 " Copy belongs to the terminal emulator everywhere else in this standard (Shift-drag, then
-" Cmd-C or Ctrl-Shift-C), and that gesture works inside a vim pane too -- Shift suppresses
+" Cmd-C or Ctrl-Shift-C), and that gesture works inside a vim pane too - Shift suppresses
 " mouse reporting, so vim never sees the drag and the terminal selects the glyphs itself.
 " Nothing here is needed for that case.
 "
@@ -255,13 +258,13 @@ highlight Visual ctermbg=4 ctermfg=15
 " Pasting needs no mapping.  Cmd-V is the terminal writing bytes into the tty, which vim
 " reads like any other input.  What makes it paste cleanly rather than auto-indenting into
 " a staircase is bracketed paste, which vim enables from terminfo when the terminal
-" advertises it -- verified non-empty under TERM=tmux-256color, so the tmux path works too.
+" advertises it - verified non-empty under TERM=tmux-256color, so the tmux path works too.
 " 'pastetoggle' and :set paste are therefore not needed and are deliberately absent: they
 " would disable this and every other insert-mode mapping while active.
 
 syntax enable
 
-" Inert when syntastic is absent -- a plain `let g:` never errors, so these need no guard.
+" Inert when syntastic is absent - a plain `let g:` never errors, so these need no guard.
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
