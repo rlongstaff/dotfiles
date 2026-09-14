@@ -40,7 +40,12 @@ if has('mouse_sgr')
 endif
 
 " PageUp/PageDown page, in every mode, which is what they do in the terminal and in tmux
-" scrollback too - one key, one meaning across all three layers.
+" scrollback too -- one key, one meaning across all three layers.
+"
+" These used to be remapped to Left/Right for cramped arrow clusters.  That made vim the
+" only layer where the key did something else, so it went; plain arrows and h/l still
+" cover horizontal movement.  No mapping is needed -- paging is vim's own default for
+" these keys; the mappings that used to be here were the deviation.
 
 " Ctrl+Up / Ctrl+Down stay half-page, a finer step than PageUp/PageDown's full screen.
 nnoremap <C-Up> <C-u>
@@ -294,3 +299,4 @@ set statusline +=%1*%=%5l%*             "current line
 set statusline +=%2*/%L%*               "total lines
 set statusline +=%1*%4c\ %*             "column number
 set statusline +=%2*0x%04B\ %*          "character under cursor
+
