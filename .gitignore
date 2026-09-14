@@ -38,6 +38,7 @@ depcomp
 .dirstamp
 .godot/
 .idea
+.netrwhist
 sampledata/*
 vendor/*
 .vscode
