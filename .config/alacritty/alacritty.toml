@@ -16,3 +16,7 @@ action = "Paste"
 key = "N"
 mods = "Super"
 action = "CreateNewWindow"
+
+[colors.primary]
+background = "#000000"
+
