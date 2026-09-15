@@ -15,6 +15,7 @@ endif
 
 set textwidth=100
 set tabstop=2
+set softtabstop=2
 set shiftwidth=2
 set expandtab
 set smarttab
@@ -38,6 +39,10 @@ set mouse=a
 if has('mouse_sgr')
   set ttymouse=sgr
 endif
+
+" Press Enter to temporarily disable search highlighting. The search is still there and
+" highlighting will return on the next n/N or ia new search.
+nnoremap <silent> <CR> :nohlsearch<CR><CR>
 
 " PageUp/PageDown page, in every mode, which is what they do in the terminal and in tmux
 " scrollback too -- one key, one meaning across all three layers.
@@ -274,6 +279,12 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+let g:NERDTreeShowHidden = 1
+autocmd VimEnter * NERDTree | wincmd p 
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
+nnoremap <C-t> :NERDTreeToggle<CR>
 
 "set list
 "set listchars=tab:>~,trail:~
