@@ -17,6 +17,40 @@ key = "N"
 mods = "Super"
 action = "CreateNewWindow"
 
+[general]
+import = [
+]
+
+[colors.bright]
+black = "#949494"
+blue = "#70a0ff"
+cyan = "#85dc85"
+green = "#36c692"
+magenta = "#ae81ff"
+red = "#ff5189"
+white = "#e4e4e4"
+yellow = "#c6c684"
+
+[colors.cursor]
+cursor = "#00FF00"
+text = "#000000"
+
+[colors.normal]
+black = "#151515"
+blue = "#4545ff"
+cyan = "#499bd7"
+green = "#2ec02e"
+magenta = "#cf87e8"
+red = "#ff5454"
+white = "#c6c6c6"
+yellow = "#d3d300"
+
 [colors.primary]
 background = "#000000"
+bright_foreground = "#ffffff"
+foreground = "#ffffff"
+
+[colors.selection]
+background = "#4545ff"
+text = "#080808"
 
