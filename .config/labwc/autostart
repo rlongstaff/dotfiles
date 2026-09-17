@@ -1,0 +1,14 @@
+kanshi &
+waybar &
+#swaybg -c '#333333' &
+swaybg -i ~/.config/labwc/kali-neon.png &
+
+swayidle -w \
+  timeout 300 'swaylock -f -c 000000' \
+  timeout 600 'wlopm --off "*"' \
+  resume 'wlopm --on "*"' \
+  before-sleep 'swaylock -f -c 000000' &
+
+# xfce4-panel &
+# lxqt-panel &
+

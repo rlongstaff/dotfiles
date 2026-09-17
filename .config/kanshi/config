@@ -1,0 +1,13 @@
+profile docked {
+  output eDP-1 mode 1920x1200@59.95Hz position 0,0
+  output "Samsung Electric Company Odyssey G5 HNTYA00500" mode 2560x1440@60Hz position 1920,-1000
+  output "Samsung Electric Company Odyssey G5 HNTYA00485" mode 2560x1440@60Hz position 4480,-1000
+}
+
+profile undocked {
+  output eDP-1 mode 1920x1200@60Hz position 0,0
+  output DP-1 disable
+  output DP-2 disable
+  output HDMI-1 disable
+  output HDMI-2 disable
+}

@@ -1,0 +1,13 @@
+{
+  "memory": {
+    "format": "<span rise = '1200' size = '8000'>ram: {percentage}%</span>",
+    "tooltip-format": "Memory Used: {used:0.0f}/{total:0.0f} GB\nSwap: {swapUsed}GB / {swapTotal}GB",
+    "format-icons": "󰘚 ",
+    "interval": 10,
+    "states": {
+	    "warning": 75,
+	    "critical": 90
+    },
+  }
+}
+

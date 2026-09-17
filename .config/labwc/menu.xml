@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<openbox_menu>
+<menu id="root-menu" label="">
+  <item label="Firefox"><action name="Execute" command="firefox"/></item>
+  <item label="Terminal"><action name="Execute" command="kitty"/></item>
+  <item label="Files"><action name="Execute" command="thunar"/></item>
+ <menu id="dev-menu" label="development">
+    <item label="code"><action name="Execute" command="vscode"/></item>
+    <item label="godot"><action name="Execute" command="godot"/></item>
+  </menu>
+  <menu id="office-menu" label="office">
+    <item label="calibre"><action name="Execute" command="calibre"/></item>
+    <item label="libreoffice"><action name="Execute" command="libreoffice"/></item>
+  </menu>
+  <menu id="sys-menu" label="sysutils">
+    <menu id="term-menu" label="terminals">
+      <item label="kitty"><action name="Execute" command="kitty"/></item>
+      <item label="gnome-shell"><action name="Execute" command="gnome-shell"/></item>
+      <item label="alacritty"><action name="Execute" command="alacritty"/></item>
+      <item label="xterm"><action name="Execute" command="xterm"/></item>
+    </menu>
+  </menu>
+   <separator/>
+  <item label="Reconfigure"><action name="Reconfigure"/></item>
+  <item label="Exit"><action name="Exit"/></item>
+</menu>
+</openbox_menu>
+

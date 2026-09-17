@@ -1,0 +1,7 @@
+{
+	"custom/launcher": {
+		"format": "󱓞",
+		"tooltip": false,
+		"on-click": "rofi -show drun -theme ~/.config/waybar/rofi/launcher.rasi -hover-select"
+	}
+}

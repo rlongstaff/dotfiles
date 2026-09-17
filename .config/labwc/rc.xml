@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<labwc_config>
+ <keyboard>
+    <!-- The W- prefix refers to the Super key -->
+    <!-- <default /> -->
+    <keybind key="W-Tab">
+      <action name="NextWindow"/>
+    </keybind>
+    <keybind key="W-S-Tab">
+      <action name="PreviousWindow" workspace="current" output="all" identifier="all" />
+    </keybind>
+    <keybind key="W-a">
+      <action name="ToggleMaximize" />
+    </keybind>
+    <keybind key="W-t">
+      <action name="Execute" command="kitty" />
+    </keybind>
+    <keybind key="W-l">
+      <action name="Execute" command="swaylock -f -c 000000" />
+    </keybind>
+
+  </keyboard>
+
+  <mouse>
+    <default />
+    <context name="Root">
+      <mousebind direction="W-Up" action="Scroll">
+        <action name="ZoomIn" />
+      </mousebind>
+      <mousebind direction="W-Down" action="Scroll">
+        <action name="ZoomOut" />
+      </mousebind>
+    </context>
+    <context name="Frame">
+      <mousebind button="A-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="A-Right" action="Drag">
+        <action name="Resize" />
+      </mousebind>
+      <mousebind direction="W-Up" action="Scroll">
+        <action name="ZoomIn" />
+      </mousebind>
+      <mousebind direction="W-Down" action="Scroll">
+        <action name="ZoomOut" />
+      </mousebind>
+    </context>
+  </mouse>
+
+  <magnifier>
+    <width>-1</width>
+    <height>-1</height>
+    <initScale>1.5</initScale>
+    <increment>0.2</increment>
+    <useFilter>true</useFilter>
+  </magnifier>
+
+</labwc_config>

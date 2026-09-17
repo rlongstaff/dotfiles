@@ -1,0 +1,9 @@
+{
+	"cpu": {
+		"format": "<span rise='1200' size = '8000'>load: {load}</span>",
+		"states": {
+			"warning": 75,
+			"critical": 90
+		}
+	}
+}
