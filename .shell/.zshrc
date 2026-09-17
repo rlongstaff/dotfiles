@@ -1,4 +1,3 @@
-
 source ${HOME}/.shell/.dotfilesrc
 
 autoload -U +X compinit && compinit
