@@ -3,6 +3,9 @@
 PKGS=(
      bash-completion
      jq
+     # mikefarah's Go yq, for scripts/keyboard/render.sh.  NOT the 'yq' package, which is
+     # the python jq wrapper with the same name and a different language.
+     yq-go
      wamerican
      tmux
      vim

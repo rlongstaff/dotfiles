@@ -16,7 +16,7 @@ When you install this, it will archive, then link the following files to the git
 
 - .gitconfig
 - .gitignore
-- .tmux.conf
+- .tmux, .tmux.conf
 - .vim
 - .vimrc
 - .bashrc
@@ -25,7 +25,7 @@ When you install this, it will archive, then link the following files to the git
 - .zsh
 - .zshrc
 - .zprofile
-- .config/alacritty/alacritty.toml, .config/kitty/kitty.conf
+- .config/kitty, .config/alacritty (directories); .config/labwc (Linux)
 - .Xresources (Linux), Library/LaunchAgents/us.longstaff.keyboard.plist (macOS)
 
 The list is `LINKS` in `scripts/lib.sh`. Every link is absolute into the repo, so editing
@@ -48,7 +48,9 @@ dir being set up), so `./install.sh /tmp/fakehome` is a safe dry run: file chang
 fake home and live-session changes (gsettings, hidutil) are skipped.
 
 The keyboard standard (same finger positions on every machine and layer) is documented in
-`scripts/keyboard/README.md` with a cheatsheet alongside.
+`scripts/keyboard/README.md`. Every key binding for the compositor, terminal, tmux, the shells
+and vim is defined once in `scripts/keyboard/keys.yaml`; `scripts/keyboard/render.sh` (needs
+`yq`, mikefarah v4) regenerates each app's fragment and `scripts/keyboard/CHEATSHEET.md`.
 
 ## This sucks, how do I get rid of it?
 1. Run `./uninstall.sh`
