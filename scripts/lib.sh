@@ -31,6 +31,10 @@ LOCAL_REPO="${TARGET}/.${REPO}"                 # convenience symlink to SCRIPT_
 # The second column defaults to the first.  The third restricts the entry to one OS
 # (`linux` or `darwin`, as uname -s spells it in lower case).  Nested destinations are
 # fine; the parent directory is created.  Add a line here, never an `ln` elsewhere.
+#
+# Link a config *directory* rather than a file inside it when the app reads more than one
+# file there (kitty includes keys.conf).  Never both: a file entry under a linked
+# directory resolves to the repo file itself, and 10-symlinks.sh would move it aside.
 # --------------------------------------------------------------------------------------
 LINKS="
 .gitconfig
@@ -46,8 +50,9 @@ LINKS="
 .zsh                                        .shell/.zsh
 .zshrc                                      .shell/.zshrc
 .zprofile                                   .shell/.zprofile
-.config/alacritty/alacritty.toml
-.config/kitty/kitty.conf
+.config/alacritty
+.config/kitty
+.config/labwc                               .config/labwc                               linux
 .Xresources                                 .Xresources                                 linux
 Library/LaunchAgents/us.longstaff.keyboard.plist   Library/LaunchAgents/us.longstaff.keyboard.plist   darwin
 "
