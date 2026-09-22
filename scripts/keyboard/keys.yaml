@@ -1,0 +1,398 @@
+# Every key binding in the dotfiles, in the order the layers capture a keystroke.
+#
+#   os -> compositor -> terminal -> tmux -> shell | vim
+#
+# A key is caught by the FIRST layer below that binds it.  tmux is the one layer that can
+# hand a key on: `pass: vim` forwards it when the pane runs vim, `pass: pager` when the pane
+# runs anything that pages its own content.
+#
+# Edit this file, then run   scripts/keyboard/render.sh   and commit the regenerated
+# fragments with it.  Never edit a file whose first line says GENERATED.
+# Why each key lives where it does: scripts/keyboard/README.md.
+#
+# ---------------------------------------------------------------------------------------
+# Key spelling (the renderer rejects anything else)
+#
+#   modifiers   ctrl alt shift super, joined by '+', always in that order
+#               alt   = Alt, Option, Meta, M-, A-
+#               super = Super, Cmd, Command, Win, Hyper, W-
+#   keys        a-z 0-9 and literal punctuation; letters always lower case, Shift explicit
+#               (alt+shift+h, never alt+H)
+#               left right up down home end pageup pagedown tab enter space backspace
+#               delete esc f1..f12, XF86* keysyms verbatim
+#   modifier    a bare modifier name as the key, for os-layer remaps (capslock, alt)
+#
+# Binding fields
+#
+#   key, action          required
+#   group                section header in the rendered fragment
+#   note                 one-line comment carried into the rendered fragment
+#   range: A-B           repeat the binding for n = A..B, substituting %n everywhere
+#   <app>                how that app renders it; no field = not bound there
+#
+# Apps, by layer
+#
+#   compositor  labwc: {action, <attr>: value...}     rendered into .config/labwc/rc.xml
+#               gnome: {schema, name, unbind|value}   rendered into linux/gnome-keys.sh
+#   terminal    kitty: <action>                       .config/kitty/keys.conf
+#               gnome-terminal: <name> | {name, unbind|value}   linux/gnome-keys.sh
+#               iterm2: native                        docs only
+#   tmux        tmux: {cmd, table: root|prefix|copy, pass: vim|pager, unbind, option}
+#   shell       zsh: <widget>, bash: <readline fn>    .shell/.common.d/keys.sh
+#   vim         vim: {modes: [n,i,v], cmd: <ex> | rhs: <raw>, silent}     .vim/keys.vim
+#               cmd is wrapped per mode (:cmd<CR>, <C-o>:cmd<CR>, <Esc>:cmd<CR>);
+#               rhs is used as written in every mode.
+# ---------------------------------------------------------------------------------------
+
+version: 1
+
+# Byte forms of the keys the shells bind.  Only the shells need these: tmux, vim and the
+# terminals all name keys symbolically.  Four forms each, because the form depends on the
+# emulator AND on application-cursor mode -- see README "Why these needed fixing at all".
+sequences:
+  home:        ['\e[H', '\eOH', '\e[1~', '\e[7~']
+  end:         ['\e[F', '\eOF', '\e[4~', '\e[8~']
+  delete:      ['\e[3~']
+  ctrl+delete: ['\e[3;5~']
+  ctrl+left:   ['\e[1;5D', '\eO5D', '\e[5D', '\eOd']
+  ctrl+right:  ['\e[1;5C', '\eO5C', '\e[5C', '\eOc']
+
+layers:
+
+  # -------------------------------------------------------------------------------------
+  - id: os
+    title: OS modifier remap
+    where: scripts/keyboard/linux/apply.sh (xkb), scripts/keyboard/macos/apply.sh (hidutil)
+    bindings:
+      - key: capslock
+        action: becomes ctrl
+        note: Linux xkb ctrl:nocaps; macOS hidutil + LaunchAgent
+      - key: alt
+        action: swapped with super, so the key left of space is super (Linux)
+        note: xkb altwin:swap_lalt_lwin; the Pixelbook uses machines/pixelbook.sh instead
+
+  # -------------------------------------------------------------------------------------
+  - id: compositor
+    title: Window manager / desktop
+    where: labwc .config/labwc/rc.xml; GNOME Shell via scripts/keyboard/linux/terminal.sh
+    bindings:
+      - key: super+tab
+        group: windows
+        action: next window / application
+        note: GNOME ships this on alt+tab too; pinning it to super+tab frees alt+tab for tmux
+        labwc: {action: NextWindow}
+        gnome: {schema: org.gnome.desktop.wm.keybindings, name: switch-applications}
+      - key: shift+super+tab
+        group: windows
+        action: previous window / application
+        labwc: {action: PreviousWindow, workspace: current, output: all, identifier: all}
+        gnome: {schema: org.gnome.desktop.wm.keybindings, name: switch-applications-backward}
+      - key: super+a
+        group: windows
+        action: toggle maximize (labwc)
+        labwc: {action: ToggleMaximize}
+      - key: super+t
+        group: launch
+        action: launch kitty (labwc)
+        labwc: {action: Execute, command: kitty}
+      - key: super+l
+        group: launch
+        action: lock screen (labwc)
+        labwc: {action: Execute, command: swaylock -f -c 000000}
+      - key: XF86MonBrightnessUp
+        group: media
+        action: brightness up
+        labwc: {action: Execute, command: brightnessctl set +10%}
+      - key: XF86MonBrightnessDown
+        group: media
+        action: brightness down
+        labwc: {action: Execute, command: brightnessctl set 10%-}
+      - key: XF86AudioRaiseVolume
+        group: media
+        action: volume up
+        labwc: {action: Execute, command: pactl set-sink-volume @DEFAULT_SINK@ +5%}
+      - key: XF86AudioLowerVolume
+        group: media
+        action: volume down
+        labwc: {action: Execute, command: pactl set-sink-volume @DEFAULT_SINK@ -5%}
+      - key: XF86AudioMute
+        group: media
+        action: mute toggle
+        labwc: {action: Execute, command: pactl set-sink-mute @DEFAULT_SINK@ toggle}
+
+      # GNOME Shell grabs that would swallow terminal keys.  unbind = released, not captured.
+      - key: super+%n
+        range: 1-9
+        group: gnome releases
+        action: released from GNOME's dash so the terminal gets tab %n
+        gnome: {schema: org.gnome.shell.keybindings, name: switch-to-application-%n, unbind: true}
+      - key: super+a
+        group: gnome releases
+        action: released from GNOME's app grid (terminal select-all)
+        gnome: {schema: org.gnome.shell.keybindings, name: toggle-application-view, unbind: true}
+      - key: super+n
+        group: gnome releases
+        action: released from GNOME's notification focus (terminal new window)
+        gnome: {schema: org.gnome.shell.keybindings, name: focus-active-notification, unbind: true}
+      - key: super+m
+        group: gnome releases
+        action: GNOME message tray, moved here off super+v (paste)
+        gnome: {schema: org.gnome.shell.keybindings, name: toggle-message-tray}
+
+      # Mouse: documented here so Alt+drag is visible; lives in rc.xml <mouse>, not rendered.
+      - key: alt+mouse-left
+        group: mouse
+        action: drag window frame to move (labwc)
+      - key: alt+mouse-right
+        group: mouse
+        action: drag window frame to resize (labwc)
+      - key: super+wheel
+        group: mouse
+        action: zoom in / out (labwc magnifier)
+
+  # -------------------------------------------------------------------------------------
+  - id: terminal
+    title: Terminal emulator (super never reaches the tty)
+    where: kitty .config/kitty/keys.conf; gnome-terminal via linux/terminal.sh; iTerm2 native
+    bindings:
+      - key: super+c
+        group: clipboard
+        action: copy
+        kitty: copy_to_clipboard
+        gnome-terminal: copy
+        iterm2: native
+      - key: super+v
+        group: clipboard
+        action: paste
+        kitty: paste_from_clipboard
+        gnome-terminal: paste
+        iterm2: native
+      - key: super+a
+        group: clipboard
+        action: select all
+        gnome-terminal: select-all
+        iterm2: native
+      - key: super+f
+        group: clipboard
+        action: find
+        gnome-terminal: find
+        iterm2: native
+      - key: super+t
+        group: tabs
+        action: new tab
+        gnome-terminal: new-tab
+        iterm2: native
+      - key: super+w
+        group: tabs
+        action: close tab
+        gnome-terminal: close-tab
+        iterm2: native
+      - key: super+n
+        group: tabs
+        action: new window
+        gnome-terminal: new-window
+        iterm2: native
+      - key: super+left
+        group: tabs
+        action: previous tab
+        gnome-terminal: prev-tab
+      - key: super+right
+        group: tabs
+        action: next tab
+        gnome-terminal: next-tab
+      - key: super+%n
+        range: 1-9
+        group: tabs
+        action: tab %n
+        note: gnome-terminal ships these on alt+N, which would collide with tmux windows
+        gnome-terminal: switch-to-tab-%n
+        iterm2: native
+      - key: alt+0
+        range: 10-20
+        group: tabs
+        action: gnome-terminal tabs 10-20 unbound (no super key left for them)
+        gnome-terminal: {name: switch-to-tab-%n, unbind: true}
+      - key: f10
+        group: tabs
+        action: gnome-terminal menu accelerator off, so F10 reaches the program
+        gnome-terminal: {schema: org.gnome.Terminal.Legacy.Settings, name: menu-accelerator-enabled, value: 'false'}
+
+  # -------------------------------------------------------------------------------------
+  - id: tmux
+    title: tmux (alt = unprefixed, ctrl+x = prefix for rare operations)
+    where: .tmux/keys.conf, sourced by .tmux.conf
+    bindings:
+      - key: ctrl+x
+        group: prefix
+        action: tmux prefix
+        tmux: {option: prefix}
+
+      - key: alt+m
+        group: mouse
+        action: toggle mouse reporting (on by default; shift+drag selects for the terminal)
+        tmux: {cmd: 'set -g mouse \; display "mouse #{?mouse,on -- Shift-drag to select,off -- drag to select}"'}
+
+      - key: 'alt+\'
+        group: panes
+        action: split right
+        note: "'M-\\' is quoted in tmux: an unquoted backslash is eaten by the parser"
+        tmux: {cmd: 'split-window -h -c "#{pane_current_path}"'}
+      - key: alt+-
+        group: panes
+        action: split below
+        tmux: {cmd: 'split-window -v -c "#{pane_current_path}"'}
+      - key: alt+z
+        group: panes
+        action: zoom pane
+        tmux: {cmd: resize-pane -Z}
+      - key: alt+enter
+        group: panes
+        action: zoom pane
+        tmux: {cmd: resize-pane -Z}
+      - key: 'alt+['
+        group: panes
+        action: swap pane up
+        note: ESC-[ is also the CSI introducer; works with extended-keys csi-u, may misfire elsewhere
+        tmux: {cmd: swap-pane -U}
+      - key: 'alt+]'
+        group: panes
+        action: swap pane down
+        tmux: {cmd: swap-pane -D}
+      - key: alt+w
+        group: panes
+        action: kill pane
+        tmux: {cmd: kill-pane}
+      - key: '\'
+        group: panes
+        action: split right (prefix, old habit)
+        tmux: {table: prefix, cmd: 'split-window -h -c "#{pane_current_path}"'}
+      - key: '-'
+        group: panes
+        action: split below (prefix, old habit)
+        tmux: {table: prefix, cmd: 'split-window -v -c "#{pane_current_path}"'}
+      - key: '"'
+        group: panes
+        action: unbound (replaced by prefix -)
+        tmux: {table: prefix, unbind: true}
+      - key: '%'
+        group: panes
+        action: unbound (replaced by prefix \)
+        tmux: {table: prefix, unbind: true}
+
+      - key: alt+n
+        group: windows
+        action: new window
+        tmux: {cmd: 'new-window -c "#{pane_current_path}"'}
+      - key: alt+,
+        group: windows
+        action: previous window
+        tmux: {cmd: previous-window}
+      - key: alt+.
+        group: windows
+        action: next window
+        tmux: {cmd: next-window}
+      - key: alt+%n
+        range: 1-9
+        group: windows
+        action: window %n
+        tmux: {cmd: select-window -t %n}
+
+      # Focus and resize: forwarded into vim when the pane runs vim; vim hands the key back
+      # to tmux at the edge of its splits (vimide#focus / vimide#resize).
+      - {key: alt+h,     group: focus, action: focus left,  tmux: {cmd: select-pane -L, pass: vim}}
+      - {key: alt+j,     group: focus, action: focus down,  tmux: {cmd: select-pane -D, pass: vim}}
+      - {key: alt+k,     group: focus, action: focus up,    tmux: {cmd: select-pane -U, pass: vim}}
+      - {key: alt+l,     group: focus, action: focus right, tmux: {cmd: select-pane -R, pass: vim}}
+      - {key: alt+left,  group: focus, action: focus left,  tmux: {cmd: select-pane -L, pass: vim}}
+      - {key: alt+down,  group: focus, action: focus down,  tmux: {cmd: select-pane -D, pass: vim}}
+      - {key: alt+up,    group: focus, action: focus up,    tmux: {cmd: select-pane -U, pass: vim}}
+      - {key: alt+right, group: focus, action: focus right, tmux: {cmd: select-pane -R, pass: vim}}
+      - key: alt+tab
+        group: focus
+        action: next pane, never forwarded (the guaranteed way out)
+        tmux: {cmd: 'select-pane -t :.+'}
+      - key: alt+shift+tab
+        group: focus
+        action: previous pane, never forwarded
+        note: rendered as both M-BTab and M-S-Tab, the two encodings terminals send
+        tmux: {cmd: 'select-pane -t :.-'}
+
+      - {key: alt+shift+h,     group: resize, action: narrow,   tmux: {cmd: resize-pane -L 2, pass: vim}}
+      - {key: alt+shift+j,     group: resize, action: lengthen, tmux: {cmd: resize-pane -D 2, pass: vim}}
+      - {key: alt+shift+k,     group: resize, action: shorten,  tmux: {cmd: resize-pane -U 2, pass: vim}}
+      - {key: alt+shift+l,     group: resize, action: widen,    tmux: {cmd: resize-pane -R 2, pass: vim}}
+      - {key: alt+shift+left,  group: resize, action: narrow,   tmux: {cmd: resize-pane -L 2, pass: vim}}
+      - {key: alt+shift+down,  group: resize, action: lengthen, tmux: {cmd: resize-pane -D 2, pass: vim}}
+      - {key: alt+shift+up,    group: resize, action: shorten,  tmux: {cmd: resize-pane -U 2, pass: vim}}
+      - {key: alt+shift+right, group: resize, action: widen,    tmux: {cmd: resize-pane -R 2, pass: vim}}
+
+      - key: pageup
+        group: scrollback
+        action: enter scrollback in a shell pane; passed through to pagers and vim
+        note: pagedown is left unbound so it always reaches the program
+        tmux: {cmd: copy-mode -u, pass: pager}
+      - {key: ctrl+home,  group: scrollback, action: scrollback top,    tmux: {table: copy, cmd: send-keys -X history-top}}
+      - {key: ctrl+end,   group: scrollback, action: scrollback bottom, tmux: {table: copy, cmd: send-keys -X history-bottom}}
+      - {key: ctrl+left,  group: scrollback, action: previous word,     tmux: {table: copy, cmd: send-keys -X previous-word}}
+      - {key: ctrl+right, group: scrollback, action: next word,         tmux: {table: copy, cmd: send-keys -X next-word}}
+      - key: ']'
+        group: scrollback
+        action: paste tmux's own copy-mode buffer (prefix)
+        tmux: {table: prefix, cmd: paste-buffer -p}
+
+  # -------------------------------------------------------------------------------------
+  - id: shell
+    title: Shell line editing (bash readline, zsh zle)
+    where: .shell/.common.d/keys.sh
+    bindings:
+      - {key: home,        group: line, action: start of line,       zsh: beginning-of-line, bash: beginning-of-line}
+      - {key: end,         group: line, action: end of line,         zsh: end-of-line,       bash: end-of-line}
+      - {key: delete,      group: line, action: delete char forward, zsh: delete-char,       bash: delete-char}
+      - {key: ctrl+delete, group: line, action: delete word forward, zsh: kill-word,         bash: kill-word}
+      - key: ctrl+left
+        group: words
+        action: previous word start
+        zsh: backward-word
+        bash: vi-bword
+      - key: ctrl+right
+        group: words
+        action: next word start
+        note: bash vi-fword, because readline's forward-word stops at the END of the word
+        zsh: forward-word
+        bash: vi-fword
+
+  # -------------------------------------------------------------------------------------
+  - id: vim
+    title: vim
+    where: .vim/keys.vim, sourced by .vimrc
+    bindings:
+      - key: enter
+        group: editing
+        action: clear search highlight
+        vim: {modes: [n], rhs: ':nohlsearch<CR><CR>', silent: true}
+      - {key: ctrl+up,   group: editing, action: half page up,   vim: {modes: [n, i, v], rhs: '<C-u>'}}
+      - {key: ctrl+down, group: editing, action: half page down, vim: {modes: [n, i, v], rhs: '<C-d>'}}
+      - {key: ctrl+a,    group: editing, action: start of line,  vim: {modes: [n, i, v], rhs: '<Home>'}}
+      - {key: ctrl+e,    group: editing, action: end of line,    vim: {modes: [n, i, v], rhs: '<End>'}}
+      - key: ctrl+t
+        group: editing
+        action: toggle NERDTree
+        vim: {modes: [n], rhs: ':NERDTreeToggle<CR>'}
+
+      - {key: alt+h,     group: focus, action: split left (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#focus('h')", silent: true}}
+      - {key: alt+j,     group: focus, action: split down (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#focus('j')", silent: true}}
+      - {key: alt+k,     group: focus, action: split up (else tmux pane),    vim: {modes: [n, i, v], cmd: "call vimide#focus('k')", silent: true}}
+      - {key: alt+l,     group: focus, action: split right (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#focus('l')", silent: true}}
+      - {key: alt+left,  group: focus, action: split left (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#focus('h')", silent: true}}
+      - {key: alt+down,  group: focus, action: split down (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#focus('j')", silent: true}}
+      - {key: alt+up,    group: focus, action: split up (else tmux pane),    vim: {modes: [n, i, v], cmd: "call vimide#focus('k')", silent: true}}
+      - {key: alt+right, group: focus, action: split right (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#focus('l')", silent: true}}
+
+      - {key: alt+shift+h,     group: resize, action: narrow (else tmux pane),   vim: {modes: [n, i, v], cmd: "call vimide#resize('L')", silent: true}}
+      - {key: alt+shift+j,     group: resize, action: lengthen (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#resize('D')", silent: true}}
+      - {key: alt+shift+k,     group: resize, action: shorten (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#resize('U')", silent: true}}
+      - {key: alt+shift+l,     group: resize, action: widen (else tmux pane),    vim: {modes: [n, i, v], cmd: "call vimide#resize('R')", silent: true}}
+      - {key: alt+shift+left,  group: resize, action: narrow (else tmux pane),   vim: {modes: [n, i, v], cmd: "call vimide#resize('L')", silent: true}}
+      - {key: alt+shift+down,  group: resize, action: lengthen (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#resize('D')", silent: true}}
+      - {key: alt+shift+up,    group: resize, action: shorten (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#resize('U')", silent: true}}
+      - {key: alt+shift+right, group: resize, action: widen (else tmux pane),    vim: {modes: [n, i, v], cmd: "call vimide#resize('R')", silent: true}}
