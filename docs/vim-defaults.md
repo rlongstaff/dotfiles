@@ -8,7 +8,7 @@ Notation: `Ctrl-x`, `Alt-x` (Option on macOS), `Shift-x`.
 
 ## Buffers
 
-vim defaults; no custom buffer mappings exist yet.
+No mapping in this repo changes these.
 
 | Command | Does |
 | ------- | ---- |
@@ -51,7 +51,7 @@ repo's fast path for focus and resize (see `keyboard-cheatsheet.md`); everything
 tmux panes are not vim, but vim splits live inside them and share the Alt keys. The
 full set, including which keys tmux forwards into vim, is in `keyboard-cheatsheet.md`.
 
-## Cursor movement — Normal mode
+## Cursor movement: Normal mode
 
 | Key | Does |
 | --- | ---- |
@@ -71,7 +71,7 @@ full set, including which keys tmux forwards into vim, is in `keyboard-cheatshee
 | `m{a}` | set mark `a` |
 | two backticks + `{a}`, or `'{a}` | jump to mark `a` (exact position / start of line) |
 
-## Editing — Normal mode
+## Editing: Normal mode
 
 | Key | Does |
 | --- | ---- |
@@ -93,7 +93,7 @@ full set, including which keys tmux forwards into vim, is in `keyboard-cheatshee
 | `v` / `V` / `Ctrl-v` | start visual / visual-line / visual-block selection |
 | `:s/pat/rep/` | substitute on current line; add `g` for all matches, `%` before `s` for whole file |
 
-## Editing — Insert mode
+## Editing: Insert mode
 
 | Key | Does |
 | --- | ---- |
@@ -106,7 +106,7 @@ full set, including which keys tmux forwards into vim, is in `keyboard-cheatshee
 | `Ctrl-r {reg}` | insert contents of register `reg` (e.g. `Ctrl-r "` for last yank/delete) |
 | `Ctrl-n` / `Ctrl-p` | next / previous keyword completion match |
 | `Ctrl-v {code}` | insert a literal character by code |
-| paste (`Cmd-V`/`Super-V`) | bracketed paste — no auto-indent staircase, no mapping needed |
+| paste (`Cmd-V`/`Super-V`) | bracketed paste, so no auto-indent staircase and no mapping needed |
 
 ## Command-line mode (`:`, `/`, `?`)
 
