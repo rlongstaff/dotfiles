@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <labwc_config>
   <keyboard>
-    <!-- The W- prefix refers to the Super key -->
     <!-- <default /> -->
+    <!-- BEGIN GENERATED from scripts/keyboard/keys.yaml by render.sh; edit the yaml -->
+
+    <!-- == windows =========================================================== -->
+    <!-- GNOME ships this on alt+tab too; pinning it to super+tab frees alt+tab for tmux -->
     <keybind key="W-Tab">
       <action name="NextWindow"/>
     </keybind>
@@ -12,12 +15,16 @@
     <keybind key="W-a">
       <action name="ToggleMaximize"/>
     </keybind>
+
+    <!-- == launch ============================================================ -->
     <keybind key="W-t">
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="W-l">
       <action name="Execute" command="swaylock -f -c 000000"/>
     </keybind>
+
+    <!-- == media ============================================================= -->
     <keybind key="XF86MonBrightnessUp">
       <action name="Execute" command="brightnessctl set +10%"/>
     </keybind>
@@ -33,6 +40,7 @@
     <keybind key="XF86AudioMute">
       <action name="Execute" command="pactl set-sink-mute @DEFAULT_SINK@ toggle"/>
     </keybind>
+    <!-- END GENERATED -->
   </keyboard>
   <mouse>
     <default/>

@@ -1,206 +1,286 @@
+<!-- GENERATED from scripts/keyboard/keys.yaml by render.sh. Edit the yaml, not this file. -->
+
 # Keyboard cheatsheet
 
-Every binding in the standard, and the file that implements it. See `README.md` for why the
-layers are split the way they are.
+Every binding in the dotfiles, generated from `scripts/keyboard/keys.yaml`. Why each key
+lives where it does is in `README.md`; vim's own defaults are in `vim-defaults.md`.
 
-## The three modifier anchors
+**Capture order.** A keystroke goes `os -> compositor -> terminal -> tmux -> shell | vim`,
+and the first layer that binds it wins. **Bold** marks that layer. `→ vim` / `→ pager`
+means tmux forwards the key when the pane runs vim / a pager. "released" means the layer
+explicitly lets the key through. ~~Struck~~ means an earlier layer takes the key first.
 
-The only *modifier* positions in the same place on all six target keyboards. Every binding
-below is expressed in terms of these three.
+Keys are spelled `ctrl alt shift super`. Super is Cmd on macOS, and the key left of the
+space bar on every machine; alt is Option.
 
-| Finger position       | Is         | Linux keysym | macOS   |
-| --------------------- | ---------- | ------------ | ------- |
-| Caps Lock             | **Control**| `Control_L`  | Control |
-| left of space         | **Command**| `Super_L`    | Command |
-| two left of space     | **Alt**    | `Alt_L`      | Option  |
+## Capture chain
 
-Bottom-left corner is **not** an anchor — `Ctrl` on the XPS and Pixelbook, `fn` on both
-MacBooks. That is why Caps carries Control.
+| key | os | compositor | terminal | tmux | shell | vim |
+| --- | --- | --- | --- | --- | --- | --- |
+| `capslock` | **becomes ctrl** |  |  |  |  |  |
+| `alt` | **swapped with super, so the key left of space is super (Linux)** |  |  |  |  |  |
+| `super+tab` |  | **next window / application** |  |  |  |  |
+| `shift+super+tab` |  | **previous window / application** |  |  |  |  |
+| `super+a` |  | **toggle maximize (labwc); released** | ~~select all~~ |  |  |  |
+| `super+t` |  | **launch kitty (labwc)** | ~~new tab~~ |  |  |  |
+| `super+l` |  | **lock screen (labwc)** |  |  |  |  |
+| `XF86MonBrightnessUp` |  | **brightness up** |  |  |  |  |
+| `XF86MonBrightnessDown` |  | **brightness down** |  |  |  |  |
+| `XF86AudioRaiseVolume` |  | **volume up** |  |  |  |  |
+| `XF86AudioLowerVolume` |  | **volume down** |  |  |  |  |
+| `XF86AudioMute` |  | **mute toggle** |  |  |  |  |
+| `super+1` |  | released | **tab 1** |  |  |  |
+| `super+2` |  | released | **tab 2** |  |  |  |
+| `super+3` |  | released | **tab 3** |  |  |  |
+| `super+4` |  | released | **tab 4** |  |  |  |
+| `super+5` |  | released | **tab 5** |  |  |  |
+| `super+6` |  | released | **tab 6** |  |  |  |
+| `super+7` |  | released | **tab 7** |  |  |  |
+| `super+8` |  | released | **tab 8** |  |  |  |
+| `super+9` |  | released | **tab 9** |  |  |  |
+| `super+n` |  | released | **new window** |  |  |  |
+| `super+m` |  | **GNOME message tray, moved here off super+v (paste)** |  |  |  |  |
+| `alt+mouse-left` |  | **drag window frame to move (labwc)** |  |  |  |  |
+| `alt+mouse-right` |  | **drag window frame to resize (labwc)** |  |  |  |  |
+| `super+wheel` |  | **zoom in / out (labwc magnifier)** |  |  |  |  |
+| `super+c` |  |  | **copy** |  |  |  |
+| `super+v` |  |  | **paste** |  |  |  |
+| `super+f` |  |  | **find** |  |  |  |
+| `super+w` |  |  | **close tab** |  |  |  |
+| `super+left` |  |  | **previous tab** |  |  |  |
+| `super+right` |  |  | **next tab** |  |  |  |
+| `alt+0` |  |  | released |  |  |  |
+| `f10` |  |  | released |  |  |  |
+| `ctrl+x` |  |  |  | **tmux prefix** |  |  |
+| `alt+m` |  |  |  | **toggle mouse reporting (on by default; shift+drag selects for the terminal)** |  |  |
+| `alt+\` |  |  |  | **split right** |  |  |
+| `alt+-` |  |  |  | **split below** |  |  |
+| `alt+z` |  |  |  | **zoom pane** |  |  |
+| `alt+enter` |  |  |  | **zoom pane** |  |  |
+| `alt+[` |  |  |  | **swap pane up** |  |  |
+| `alt+]` |  |  |  | **swap pane down** |  |  |
+| `alt+w` |  |  |  | **kill pane** |  |  |
+| `\` |  |  |  | after prefix: split right (prefix, old habit) |  |  |
+| `-` |  |  |  | after prefix: split below (prefix, old habit) |  |  |
+| `"` |  |  |  | released |  |  |
+| `%` |  |  |  | released |  |  |
+| `alt+n` |  |  |  | **new window** |  |  |
+| `alt+,` |  |  |  | **previous window** |  |  |
+| `alt+.` |  |  |  | **next window** |  |  |
+| `alt+1` |  |  |  | **window 1** |  |  |
+| `alt+2` |  |  |  | **window 2** |  |  |
+| `alt+3` |  |  |  | **window 3** |  |  |
+| `alt+4` |  |  |  | **window 4** |  |  |
+| `alt+5` |  |  |  | **window 5** |  |  |
+| `alt+6` |  |  |  | **window 6** |  |  |
+| `alt+7` |  |  |  | **window 7** |  |  |
+| `alt+8` |  |  |  | **window 8** |  |  |
+| `alt+9` |  |  |  | **window 9** |  |  |
+| `alt+h` |  |  |  | **→ vim: focus left** |  | split left (else tmux pane) |
+| `alt+j` |  |  |  | **→ vim: focus down** |  | split down (else tmux pane) |
+| `alt+k` |  |  |  | **→ vim: focus up** |  | split up (else tmux pane) |
+| `alt+l` |  |  |  | **→ vim: focus right** |  | split right (else tmux pane) |
+| `alt+left` |  |  |  | **→ vim: focus left** |  | split left (else tmux pane) |
+| `alt+down` |  |  |  | **→ vim: focus down** |  | split down (else tmux pane) |
+| `alt+up` |  |  |  | **→ vim: focus up** |  | split up (else tmux pane) |
+| `alt+right` |  |  |  | **→ vim: focus right** |  | split right (else tmux pane) |
+| `alt+tab` |  |  |  | **next pane, never forwarded (the guaranteed way out)** |  |  |
+| `alt+shift+tab` |  |  |  | **previous pane, never forwarded** |  |  |
+| `alt+shift+h` |  |  |  | **→ vim: narrow** |  | narrow (else tmux pane) |
+| `alt+shift+j` |  |  |  | **→ vim: lengthen** |  | lengthen (else tmux pane) |
+| `alt+shift+k` |  |  |  | **→ vim: shorten** |  | shorten (else tmux pane) |
+| `alt+shift+l` |  |  |  | **→ vim: widen** |  | widen (else tmux pane) |
+| `alt+shift+left` |  |  |  | **→ vim: narrow** |  | narrow (else tmux pane) |
+| `alt+shift+down` |  |  |  | **→ vim: lengthen** |  | lengthen (else tmux pane) |
+| `alt+shift+up` |  |  |  | **→ vim: shorten** |  | shorten (else tmux pane) |
+| `alt+shift+right` |  |  |  | **→ vim: widen** |  | widen (else tmux pane) |
+| `pageup` |  |  |  | **→ pager: enter scrollback in a shell pane; passed through to pagers and vim** |  |  |
+| `ctrl+home` |  |  |  | copy-mode: scrollback top |  |  |
+| `ctrl+end` |  |  |  | copy-mode: scrollback bottom |  |  |
+| `ctrl+left` |  |  |  | copy-mode: previous word | **previous word start** |  |
+| `ctrl+right` |  |  |  | copy-mode: next word | **next word start** |  |
+| `]` |  |  |  | after prefix: paste tmux's own copy-mode buffer (prefix) |  |  |
+| `home` |  |  |  |  | **start of line** |  |
+| `end` |  |  |  |  | **end of line** |  |
+| `delete` |  |  |  |  | **delete char forward** |  |
+| `ctrl+delete` |  |  |  |  | **delete word forward** |  |
+| `enter` |  |  |  |  |  | **clear search highlight** |
+| `ctrl+up` |  |  |  |  |  | **half page up** |
+| `ctrl+down` |  |  |  |  |  | **half page down** |
+| `ctrl+a` |  |  |  |  |  | **start of line** |
+| `ctrl+e` |  |  |  |  |  | **end of line** |
+| `ctrl+t` |  |  |  |  |  | **toggle NERDTree** |
 
-## Who owns which modifier
+## Shadowed keys
 
-| Modifier    | Owned by                        | Never used for                       |
-| ----------- | ------------------------------- | ------------------------------------ |
-| **Command** | terminal emulator, window manager | anything inside tmux or vim — it has no byte encoding and cannot get there |
-| **Alt**     | tmux, and vim splits             | terminal-emulator shortcuts          |
-| **Control** | signals, tmux prefix, vim `<C-…>` | copy/paste **in a terminal** — GUI apps still use `Ctrl-C`/`Ctrl-V` |
+Bound in a later layer, but an earlier layer takes the key first. On a desktop
+that does not run the earlier app (labwc vs GNOME, say) there is no conflict.
 
-## Command — terminal and window (never reaches tmux or vim)
+- `super+a`: compositor (toggle maximize (labwc); released) before terminal (select all)
+- `super+t`: compositor (launch kitty (labwc)) before terminal (new tab)
 
-| Key             | Does            |
-| --------------- | --------------- |
-| `Cmd-C` / `Cmd-V` | copy / paste  |
-| `Cmd-A`         | select all      |
-| `Cmd-F`         | find            |
-| `Cmd-T` / `Cmd-W` | new / close tab |
-| `Cmd-N`         | new window      |
-| `Cmd-1` … `Cmd-9` | tab N         |
-| `Cmd-Left` / `Cmd-Right` | previous / next tab |
-| `Cmd-Tab` / `Cmd-Shift-Tab` | switch application — the OS, not the terminal |
+## OS modifier remap
 
-`Cmd` is `Super` on Linux and `Command` on macOS, both at the key left of space.
+Rendered to / applied by: scripts/keyboard/linux/apply.sh (xkb), scripts/keyboard/macos/apply.sh (hidutil)
 
-**Copy and paste are on all five terminals; the rest depend on what the emulator has.**
-gnome-terminal and iTerm2 get the whole table. kitty gets copy/paste plus tabs and windows,
-alacritty gets copy/paste and windows (it has no tabs), xterm gets copy/paste only. Tabs and
-windows are reachable through tmux anyway, which is why the frequent operations live there.
+| key | action | apps | note |
+| --- | --- | --- | --- |
+| `capslock` | becomes ctrl |  | Linux xkb ctrl:nocaps; macOS hidutil + LaunchAgent |
+| `alt` | swapped with super, so the key left of space is super (Linux) |  | xkb altwin:swap_lalt_lwin; the Pixelbook uses machines/pixelbook.sh instead |
 
-**Linux GUI apps are the exception, deliberately.** GTK and Qt hardcode `Ctrl` accelerators
-and will not accept `Super-C`. Firefox, Nautilus and the rest keep `Ctrl-C` / `Ctrl-V` —
-`Ctrl` reached from Caps, like everywhere else. They already use the system clipboard, so
-the buffer is shared even where the key is not.
+## Window manager / desktop
 
-## Alt — tmux, unprefixed
+Rendered to / applied by: labwc .config/labwc/rc.xml; GNOME Shell via scripts/keyboard/linux/terminal.sh
 
-Frequent operations are never chained. `C-x` survives for the rare ones.
+| key | action | apps | note |
+| --- | --- | --- | --- |
+| `super+tab` | next window / application | labwc, gnome | GNOME ships this on alt+tab too; pinning it to super+tab frees alt+tab for tmux |
+| `shift+super+tab` | previous window / application | labwc, gnome |  |
+| `super+a` | toggle maximize (labwc) | labwc |  |
+| `super+t` | launch kitty (labwc) | labwc |  |
+| `super+l` | lock screen (labwc) | labwc |  |
+| `XF86MonBrightnessUp` | brightness up | labwc |  |
+| `XF86MonBrightnessDown` | brightness down | labwc |  |
+| `XF86AudioRaiseVolume` | volume up | labwc |  |
+| `XF86AudioLowerVolume` | volume down | labwc |  |
+| `XF86AudioMute` | mute toggle | labwc |  |
+| `super+1` | released from GNOME's dash so the terminal gets tab 1 | gnome |  |
+| `super+2` | released from GNOME's dash so the terminal gets tab 2 | gnome |  |
+| `super+3` | released from GNOME's dash so the terminal gets tab 3 | gnome |  |
+| `super+4` | released from GNOME's dash so the terminal gets tab 4 | gnome |  |
+| `super+5` | released from GNOME's dash so the terminal gets tab 5 | gnome |  |
+| `super+6` | released from GNOME's dash so the terminal gets tab 6 | gnome |  |
+| `super+7` | released from GNOME's dash so the terminal gets tab 7 | gnome |  |
+| `super+8` | released from GNOME's dash so the terminal gets tab 8 | gnome |  |
+| `super+9` | released from GNOME's dash so the terminal gets tab 9 | gnome |  |
+| `super+a` | released from GNOME's app grid (terminal select-all) | gnome |  |
+| `super+n` | released from GNOME's notification focus (terminal new window) | gnome |  |
+| `super+m` | GNOME message tray, moved here off super+v (paste) | gnome |  |
+| `alt+mouse-left` | drag window frame to move (labwc) |  |  |
+| `alt+mouse-right` | drag window frame to resize (labwc) |  |  |
+| `super+wheel` | zoom in / out (labwc magnifier) |  |  |
 
-| Key            | Does                          |
-| -------------- | ----------------------------- |
-| `Alt-\`        | split vertical                |
-| `Alt--`        | split horizontal              |
-| `Alt-z`        | zoom pane                     |
-| `Alt-w`        | kill pane                     |
-| `Alt-n`        | new window                    |
-| `Alt-m`        | toggle tmux mouse reporting   |
-| `Alt-,` / `Alt-.` | previous / next window     |
-| `Alt-1` … `Alt-9` | window N                   |
+## Terminal emulator (super never reaches the tty)
 
-`Alt-[` and `Alt-]` are **unusable** — they transmit `ESC [` and `ESC ]`, the CSI and OSC
-introducers, which no program can tell from a real escape sequence. Hence `,` and `.`.
+Rendered to / applied by: kitty .config/kitty/keys.conf; gnome-terminal via linux/terminal.sh; iTerm2 native
 
-## Alt — focus and resize, shared between tmux panes and vim splits
+| key | action | apps | note |
+| --- | --- | --- | --- |
+| `super+c` | copy | kitty, gnome-terminal, iterm2 |  |
+| `super+v` | paste | kitty, gnome-terminal, iterm2 |  |
+| `super+a` | select all | gnome-terminal, iterm2 |  |
+| `super+f` | find | gnome-terminal, iterm2 |  |
+| `super+t` | new tab | gnome-terminal, iterm2 |  |
+| `super+w` | close tab | gnome-terminal, iterm2 |  |
+| `super+n` | new window | gnome-terminal, iterm2 |  |
+| `super+left` | previous tab | gnome-terminal |  |
+| `super+right` | next tab | gnome-terminal |  |
+| `super+1` | tab 1 | gnome-terminal, iterm2 | gnome-terminal ships these on alt+N, which would collide with tmux windows |
+| `super+2` | tab 2 | gnome-terminal, iterm2 |  |
+| `super+3` | tab 3 | gnome-terminal, iterm2 |  |
+| `super+4` | tab 4 | gnome-terminal, iterm2 |  |
+| `super+5` | tab 5 | gnome-terminal, iterm2 |  |
+| `super+6` | tab 6 | gnome-terminal, iterm2 |  |
+| `super+7` | tab 7 | gnome-terminal, iterm2 |  |
+| `super+8` | tab 8 | gnome-terminal, iterm2 |  |
+| `super+9` | tab 9 | gnome-terminal, iterm2 |  |
+| `alt+0` | gnome-terminal tabs 10-20 unbound (no super key left for them) | gnome-terminal |  |
+| `f10` | gnome-terminal menu accelerator off, so F10 reaches the program | gnome-terminal |  |
 
-One keystroke crosses both boundaries. In a pane running vim the key is forwarded to vim;
-anywhere else it moves the tmux pane.
+## tmux (alt = unprefixed, ctrl+x = prefix for rare operations)
 
-| Key | Focus | | Key | Resize |
-| --- | ----- |-| --- | ------ |
-| `Alt-h` / `Alt-Left`   | pane/split left  | | `Alt-H` / `Alt-Shift-Left`  | narrow |
-| `Alt-j` / `Alt-Down`   | pane/split down  | | `Alt-J` / `Alt-Shift-Down`  | lengthen |
-| `Alt-k` / `Alt-Up`     | pane/split up    | | `Alt-K` / `Alt-Shift-Up`    | shorten |
-| `Alt-l` / `Alt-Right`  | pane/split right | | `Alt-L` / `Alt-Shift-Right` | widen |
+Rendered to / applied by: .tmux/keys.conf, sourced by .tmux.conf
 
-Letters and arrows are interchangeable everywhere, not only in vim's normal mode.
+| key | action | apps | note |
+| --- | --- | --- | --- |
+| `ctrl+x` | tmux prefix | tmux |  |
+| `alt+m` | toggle mouse reporting (on by default; shift+drag selects for the terminal) | tmux |  |
+| `alt+\` | split right | tmux | 'M-\' is quoted in tmux: an unquoted backslash is eaten by the parser |
+| `alt+-` | split below | tmux |  |
+| `alt+z` | zoom pane | tmux |  |
+| `alt+enter` | zoom pane | tmux |  |
+| `alt+[` | swap pane up | tmux | ESC-[ is also the CSI introducer; works with extended-keys csi-u, may misfire elsewhere |
+| `alt+]` | swap pane down | tmux |  |
+| `alt+w` | kill pane | tmux |  |
+| `\` | split right (prefix, old habit) | tmux |  |
+| `-` | split below (prefix, old habit) | tmux |  |
+| `"` | unbound (replaced by prefix -) | tmux |  |
+| `%` | unbound (replaced by prefix \) | tmux |  |
+| `alt+n` | new window | tmux |  |
+| `alt+,` | previous window | tmux |  |
+| `alt+.` | next window | tmux |  |
+| `alt+1` | window 1 | tmux |  |
+| `alt+2` | window 2 | tmux |  |
+| `alt+3` | window 3 | tmux |  |
+| `alt+4` | window 4 | tmux |  |
+| `alt+5` | window 5 | tmux |  |
+| `alt+6` | window 6 | tmux |  |
+| `alt+7` | window 7 | tmux |  |
+| `alt+8` | window 8 | tmux |  |
+| `alt+9` | window 9 | tmux |  |
+| `alt+h` | focus left | tmux |  |
+| `alt+j` | focus down | tmux |  |
+| `alt+k` | focus up | tmux |  |
+| `alt+l` | focus right | tmux |  |
+| `alt+left` | focus left | tmux |  |
+| `alt+down` | focus down | tmux |  |
+| `alt+up` | focus up | tmux |  |
+| `alt+right` | focus right | tmux |  |
+| `alt+tab` | next pane, never forwarded (the guaranteed way out) | tmux |  |
+| `alt+shift+tab` | previous pane, never forwarded | tmux | rendered as both M-BTab and M-S-Tab, the two encodings terminals send |
+| `alt+shift+h` | narrow | tmux |  |
+| `alt+shift+j` | lengthen | tmux |  |
+| `alt+shift+k` | shorten | tmux |  |
+| `alt+shift+l` | widen | tmux |  |
+| `alt+shift+left` | narrow | tmux |  |
+| `alt+shift+down` | lengthen | tmux |  |
+| `alt+shift+up` | shorten | tmux |  |
+| `alt+shift+right` | widen | tmux |  |
+| `pageup` | enter scrollback in a shell pane; passed through to pagers and vim | tmux | pagedown is left unbound so it always reaches the program |
+| `ctrl+home` | scrollback top | tmux |  |
+| `ctrl+end` | scrollback bottom | tmux |  |
+| `ctrl+left` | previous word | tmux |  |
+| `ctrl+right` | next word | tmux |  |
+| `]` | paste tmux's own copy-mode buffer (prefix) | tmux |  |
 
-At the edge of vim's split layout, **both** focus and resize hand back to tmux rather than
-stopping. `Alt-l` in vim's rightmost split moves to the tmux pane on the right, and
-`Alt-Shift-L` in a vim with no split beside it widens the tmux pane. Without the handoff
-the keystroke is swallowed by vim and does nothing — for focus that means being stuck in
-the pane; for resize it means a key that quietly no-ops.
+## Shell line editing (bash readline, zsh zle)
 
-## Alt-Tab — cycle panes, the guaranteed way out
+Rendered to / applied by: .shell/.common.d/keys.sh
 
-`Cmd-Tab` switches applications; `Alt-Tab` is the same gesture one layer in.
+| key | action | apps | note |
+| --- | --- | --- | --- |
+| `home` | start of line | zsh, bash |  |
+| `end` | end of line | zsh, bash |  |
+| `delete` | delete char forward | zsh, bash |  |
+| `ctrl+delete` | delete word forward | zsh, bash |  |
+| `ctrl+left` | previous word start | zsh, bash |  |
+| `ctrl+right` | next word start | zsh, bash | bash vi-fword, because readline's forward-word stops at the END of the word |
 
-| Key             | Does                        |
-| --------------- | --------------------------- |
-| `Alt-Tab`       | next tmux pane, wrapping    |
-| `Alt-Shift-Tab` | previous tmux pane, wrapping|
+## vim
 
-Unlike `Alt-h/j/k/l`, this is **never** forwarded to the program in the pane. It always
-moves the tmux pane, whatever is running — so focus can never be trapped, even in a vim
-that predates this config or a program that eats Alt keys.
+Rendered to / applied by: .vim/keys.vim, sourced by .vimrc
 
-On Linux this needs `terminal.sh`, which pins GNOME's application switcher to `Super-Tab`
-alone; GNOME ships it on `Super-Tab` **and** `Alt-Tab`, and the second one shadows tmux.
-macOS needs nothing: `Cmd-Tab` is already the switcher and `Option-Tab` is already free.
-
-## Copy and paste
-
-**One gesture, one modifier, one clipboard, three desktops.**
-
-| Key | Does | Where |
-| --- | ---- | ----- |
-| `Cmd-C` / `Super-C` | copy the selection | every terminal, all three desktops |
-| `Cmd-V` / `Super-V` | paste | every terminal, all three desktops |
-| drag with the mouse | make the selection | shell pane |
-| `Alt-m` | toggle tmux mouse reporting | tmux |
-
-`Cmd` on macOS and `Super` on Linux are the **same physical key** — the one left of the
-space bar. Same finger, same result, on GNOME/Wayland, fluxbox/X11 and macOS.
-
-Firefox, Nautilus and other desktop applications are untouched and keep `Ctrl-C` / `Ctrl-V`.
-Nothing rebinds Control; `Super` is *added* inside terminals, not substituted for anything.
-
-**The mouse is off in tmux by default, and that is what makes copy work.** `Cmd-C` copies
-the *terminal's* selection. If tmux owns the mouse, a drag makes a tmux selection instead,
-the terminal's stays empty, and `Cmd-C` silently copies nothing. With mouse reporting off,
-a plain drag is a terminal selection and the tier-1 gesture just works.
-
-`Alt-m` turns mouse reporting back on when you want wheel scrollback, click-to-focus or
-drag-to-resize, and off again. While it is on, hold `Shift` (`Option` in iTerm2) to select.
-`PageUp` reaches scrollback either way.
-
-Inside a vim pane vim owns the mouse, so `Shift`-drag there.
-
-`yy` in vim also reaches the clipboard when `pbcopy`, `wl-copy` or `xclip` is installed —
-a convenience, not part of the standard. It is local-only and silent when no tool is there;
-`Cmd-C` is the path that always works.
-
-## Line editing — identical in bash, zsh, tmux copy-mode and vim
-
-| Key           | Does                 | shell               | tmux copy-mode   | vim  |
-| ------------- | -------------------- | ------------------- | ---------------- | ---- |
-| `Home`        | beginning of line    | `beginning-of-line` | `start-of-line`  | `0`  |
-| `End`         | end of line          | `end-of-line`       | `end-of-line`    | `$`  |
-| `Ctrl-Left`   | back one word        | `backward-word`     | `previous-word`  | `b`  |
-| `Ctrl-Right`  | forward one word     | `forward-word`      | `next-word`      | `w`  |
-| `Delete`      | delete char forward  | `delete-char`       | — read-only      | `x`  |
-| `Ctrl-Delete` | delete word forward  | `kill-word`         | — read-only      | `dw` |
-| `PageUp`      | page up              | enters scrollback   | `page-up`        | page up |
-| `PageDown`    | page down            | —                   | `page-down`      | page down |
-| `Ctrl-Home`   | top of buffer        | —                   | `history-top`    | `gg` |
-| `Ctrl-End`    | bottom of buffer     | —                   | `history-bottom` | `G`  |
-
-Word motion stops at the **start of the next word** in all four layers.
-
-`PageUp` in a plain shell pane enters tmux scrollback; in anything that pages its own
-content (`vim`, `less`, `man`, `top`) the key is passed straight through.
-
-## vim, beyond the shared set
-
-| Key                    | Does              |
-| ---------------------- | ----------------- |
-| `Ctrl-Up` / `Ctrl-Down`| half-page scroll  |
-
-## tmux prefix — `C-x`, for the rare operations
-
-| Key         | Does             |
-| ----------- | ---------------- |
-| `C-x` `\`   | split vertical   |
-| `C-x` `-`   | split horizontal |
-| `C-x` `]`   | paste tmux's own copy-mode buffer |
-
-## Where each binding is implemented
-
-| Binding group                | File                                  |
-| ---------------------------- | ------------------------------------- |
-| Caps→Control, Alt/Super swap | `scripts/keyboard/linux/apply.sh`, `scripts/keyboard/macos/apply.sh` |
-| Command (Super) shortcuts    | `scripts/keyboard/linux/terminal.sh`; iTerm2 native on macOS |
-| Alt — tmux, focus, resize, paging | `.tmux.conf`                     |
-| `Alt-Tab` pane cycling       | `.tmux.conf`; GNOME released in `scripts/keyboard/linux/terminal.sh` |
-| Home/End/Ctrl-arrow in copy-mode | `.tmux.conf`                      |
-| Alt — vim splits             | `.vimrc`                              |
-| `Super-C` / `Super-V` copy/paste | `scripts/keyboard/linux/terminal.sh`; iTerm2 native |
-| tmux mouse off + `Alt-m` toggle | `.tmux.conf`                          |
-| Selection highlight          | `.tmux.conf` `mode-style`, `.vimrc` `Visual` |
-| vim edge handoff back to tmux| `.vimrc` (`s:VimIdeFocus`, `s:VimIdeResize`) |
-| vim yank → clipboard         | `.vimrc` (`s:VimIdeClip`)             |
-| Line editing in the shells   | `.shell/.common.d/keys.sh`            |
-| Prompt width (readline)      | `.shell/.bashrc`                      |
-
-## Applying it
-
-```sh
-scripts/keyboard/linux/apply.sh    # modifier remap, then terminal.sh for the emulator shortcuts
-scripts/keyboard/macos/apply.sh    # Caps → Control, kept across reboots by a LaunchAgent
-tmux kill-server                   # .tmux.conf is read at server start
-```
-
-`install.sh` runs the platform's `apply.sh` for you; the lines above re-apply it.
-
-## Two settings no script can set
-
- - **iTerm2** — Profiles → Keys → Left/Right Option key → `Esc+`. Without this, Option never
-   reaches tmux or vim and half this sheet is dead.
- - **Touch Bar MBP** — Settings → Keyboard → Touch Bar shows **F1–F12**, `fn` for media.
+| key | action | apps | note |
+| --- | --- | --- | --- |
+| `enter` | clear search highlight | vim |  |
+| `ctrl+up` | half page up | vim |  |
+| `ctrl+down` | half page down | vim |  |
+| `ctrl+a` | start of line | vim |  |
+| `ctrl+e` | end of line | vim |  |
+| `ctrl+t` | toggle NERDTree | vim |  |
+| `alt+h` | split left (else tmux pane) | vim |  |
+| `alt+j` | split down (else tmux pane) | vim |  |
+| `alt+k` | split up (else tmux pane) | vim |  |
+| `alt+l` | split right (else tmux pane) | vim |  |
+| `alt+left` | split left (else tmux pane) | vim |  |
+| `alt+down` | split down (else tmux pane) | vim |  |
+| `alt+up` | split up (else tmux pane) | vim |  |
+| `alt+right` | split right (else tmux pane) | vim |  |
+| `alt+shift+h` | narrow (else tmux pane) | vim |  |
+| `alt+shift+j` | lengthen (else tmux pane) | vim |  |
+| `alt+shift+k` | shorten (else tmux pane) | vim |  |
+| `alt+shift+l` | widen (else tmux pane) | vim |  |
+| `alt+shift+left` | narrow (else tmux pane) | vim |  |
+| `alt+shift+down` | lengthen (else tmux pane) | vim |  |
+| `alt+shift+up` | shorten (else tmux pane) | vim |  |
+| `alt+shift+right` | widen (else tmux pane) | vim |  |
