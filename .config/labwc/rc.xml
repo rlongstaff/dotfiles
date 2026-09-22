@@ -1,52 +1,64 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <labwc_config>
- <keyboard>
+  <keyboard>
     <!-- The W- prefix refers to the Super key -->
     <!-- <default /> -->
     <keybind key="W-Tab">
       <action name="NextWindow"/>
     </keybind>
     <keybind key="W-S-Tab">
-      <action name="PreviousWindow" workspace="current" output="all" identifier="all" />
+      <action name="PreviousWindow" workspace="current" output="all" identifier="all"/>
     </keybind>
     <keybind key="W-a">
-      <action name="ToggleMaximize" />
+      <action name="ToggleMaximize"/>
     </keybind>
     <keybind key="W-t">
-      <action name="Execute" command="kitty" />
+      <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="W-l">
-      <action name="Execute" command="swaylock -f -c 000000" />
+      <action name="Execute" command="swaylock -f -c 000000"/>
     </keybind>
-
+    <keybind key="XF86MonBrightnessUp">
+      <action name="Execute" command="brightnessctl set +10%"/>
+    </keybind>
+    <keybind key="XF86MonBrightnessDown">
+      <action name="Execute" command="brightnessctl set 10%-"/>
+    </keybind>
+    <keybind key="XF86AudioRaiseVolume">
+      <action name="Execute" command="pactl set-sink-volume @DEFAULT_SINK@ +5%"/>
+    </keybind>
+    <keybind key="XF86AudioLowerVolume">
+      <action name="Execute" command="pactl set-sink-volume @DEFAULT_SINK@ -5%"/>
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute" command="pactl set-sink-mute @DEFAULT_SINK@ toggle"/>
+    </keybind>
   </keyboard>
-
   <mouse>
-    <default />
+    <default/>
     <context name="Root">
       <mousebind direction="W-Up" action="Scroll">
-        <action name="ZoomIn" />
+        <action name="ZoomIn"/>
       </mousebind>
       <mousebind direction="W-Down" action="Scroll">
-        <action name="ZoomOut" />
+        <action name="ZoomOut"/>
       </mousebind>
     </context>
     <context name="Frame">
       <mousebind button="A-Left" action="Drag">
-        <action name="Move" />
+        <action name="Move"/>
       </mousebind>
       <mousebind button="A-Right" action="Drag">
-        <action name="Resize" />
+        <action name="Resize"/>
       </mousebind>
       <mousebind direction="W-Up" action="Scroll">
-        <action name="ZoomIn" />
+        <action name="ZoomIn"/>
       </mousebind>
       <mousebind direction="W-Down" action="Scroll">
-        <action name="ZoomOut" />
+        <action name="ZoomOut"/>
       </mousebind>
     </context>
   </mouse>
-
   <magnifier>
     <width>-1</width>
     <height>-1</height>
@@ -54,5 +66,11 @@
     <increment>0.2</increment>
     <useFilter>true</useFilter>
   </magnifier>
-
+  <theme>
+    <name>Adwaita</name>
+    <dropShadows>yes</dropShadows>
+    <dropShadowsOnTiled>yes</dropShadowsOnTiled>
+    <icon>Adwaita</icon>
+    <maximizedDecoration>none</maximizedDecoration>
+  </theme>
 </labwc_config>

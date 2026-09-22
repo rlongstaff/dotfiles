@@ -16,3 +16,6 @@
 	defaultBranch = main
 [pull]
 	ff = only
+
+# git clone -b <remoteBranch> --single-branch --depth 1 ssh://username@servername.net:serverport/PathToProject <FolderName>
+# git clone -b <remoteBranch> --single-branch --depth 1 https://github.com/mozilla-firefox/firefox.git <FolderName>

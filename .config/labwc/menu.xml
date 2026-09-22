@@ -21,6 +21,7 @@
     </menu>
   </menu>
    <separator/>
+  <item label="labwc Tweaks"><action name="Execute" command="labwc-tweaks"/></item>
   <item label="Reconfigure"><action name="Reconfigure"/></item>
   <item label="Exit"><action name="Exit"/></item>
 </menu>

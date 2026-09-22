@@ -2,6 +2,7 @@ kanshi &
 waybar &
 #swaybg -c '#333333' &
 swaybg -i ~/.config/labwc/kali-neon.png &
+rot8 &
 
 swayidle -w \
   timeout 300 'swaylock -f -c 000000' \
