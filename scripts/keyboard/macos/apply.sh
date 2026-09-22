@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Apply the keyboard standard on macOS.  See ../README.md for the standard itself.
+# Apply the keyboard standard on macOS.  See docs/keyboard.md for the standard itself.
 # Run by scripts/install.d/30-keyboard.sh, or by hand at any time.
 #
 #   Caps Lock      -> Control

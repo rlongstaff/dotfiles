@@ -15,7 +15,7 @@
 #   .shell/.common.d/keys.sh             picked up by the .common.d loader, both shells
 #   .config/labwc/rc.xml                 only the block between the GENERATED markers
 #   scripts/keyboard/linux/gnome-keys.sh sourced by linux/terminal.sh (gsettings)
-#   scripts/keyboard/CHEATSHEET.md       capture-chain table, per-layer tables, shadows
+#   docs/keyboard-cheatsheet.md       capture-chain table, per-layer tables, shadows
 #
 # Idempotent: each target is rendered to a temp file and replaced only when it differs.
 # Writes only inside the checkout (SCRIPT_DIR), never into $HOME -- see scripts/check.sh.
@@ -38,7 +38,7 @@ OUT_VIM="${SCRIPT_DIR}/.vim/keys.vim"
 OUT_SHELL="${SCRIPT_DIR}/.shell/.common.d/keys.sh"
 OUT_LABWC="${SCRIPT_DIR}/.config/labwc/rc.xml"
 OUT_GNOME="${SCRIPT_DIR}/scripts/keyboard/linux/gnome-keys.sh"
-OUT_DOCS="${SCRIPT_DIR}/scripts/keyboard/CHEATSHEET.md"
+OUT_DOCS="${SCRIPT_DIR}/docs/keyboard-cheatsheet.md"
 
 LABWC_BEGIN='<!-- BEGIN GENERATED from scripts/keyboard/keys.yaml by render.sh; edit the yaml -->'
 LABWC_END='<!-- END GENERATED -->'
@@ -306,7 +306,7 @@ render_tmux() {
   {
     echo "# ${GEN_NOTE}"
     cat <<'EOF'
-# Sourced by .tmux.conf.  Rationale for every choice here: scripts/keyboard/README.md.
+# Sourced by .tmux.conf.  Rationale for every choice here: docs/keyboard.md.
 
 # Is the pane running vim?  Deliberately backslash-free: this string is parsed by tmux,
 # then sh, then grep, and a '\S' would arrive at grep as a literal backslash.
@@ -427,7 +427,7 @@ render_shell() {
 # Line-editing keys for both shells, in every byte form a terminal might send (the form
 # depends on the emulator and on application-cursor mode).  Binding all of them removes
 # the dependency on terminfo, on /etc/inputrc, and on any zsh framework.
-# Rationale: scripts/keyboard/README.md, "Navigation keys".
+# Rationale: docs/keyboard.md, "Navigation keys".
 
 case $- in
   *i*) ;;
@@ -559,7 +559,7 @@ render_gnome() {
 }
 
 # --------------------------------------------------------------------------------------
-# CHEATSHEET.md: capture chain, per-layer tables, shadow report
+# docs/keyboard-cheatsheet.md: capture chain, per-layer tables, shadow report
 # --------------------------------------------------------------------------------------
 
 APPS='labwc|gnome|kitty|gnome-terminal|iterm2|tmux|zsh|bash|vim'
@@ -590,7 +590,7 @@ render_docs() {
 # Keyboard cheatsheet
 
 Every binding in the dotfiles, generated from \`scripts/keyboard/keys.yaml\`. Why each key
-lives where it does is in \`README.md\`; vim's own defaults are in \`vim-defaults.md\`.
+lives where it does is in \`keyboard.md\`; vim's own defaults are in \`vim-defaults.md\`.
 
 **Capture order.** A keystroke goes \`os -> compositor -> terminal -> tmux -> shell | vim\`,
 and the first layer that binds it wins. **Bold** marks that layer. \`→ vim\` / \`→ pager\`

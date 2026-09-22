@@ -1,6 +1,6 @@
 # Linked to ~/.config/alacritty/alacritty.toml by dotfiles (scripts/lib.sh LINKS).
 # Keyboard standard: Super owns copy/paste/window, Alt is left to tmux and vim.
-# See scripts/keyboard/README.md.
+# See docs/keyboard.md.
 
 [[keyboard.bindings]]
 key = "C"

@@ -48,9 +48,9 @@ dir being set up), so `./install.sh /tmp/fakehome` is a safe dry run: file chang
 fake home and live-session changes (gsettings, hidutil) are skipped.
 
 The keyboard standard (same finger positions on every machine and layer) is documented in
-`scripts/keyboard/README.md`. Every key binding for the compositor, terminal, tmux, the shells
+`docs/keyboard.md`. Every key binding for the compositor, terminal, tmux, the shells
 and vim is defined once in `scripts/keyboard/keys.yaml`; `scripts/keyboard/render.sh` (needs
-`yq`, mikefarah v4) regenerates each app's fragment and `scripts/keyboard/CHEATSHEET.md`.
+`yq`, mikefarah v4) regenerates each app's fragment and `docs/keyboard-cheatsheet.md`.
 
 ## This sucks, how do I get rid of it?
 1. Run `./uninstall.sh`

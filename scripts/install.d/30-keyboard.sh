@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Keyboard standard (scripts/keyboard/README.md): one script per platform, chosen here.
+# Keyboard standard (docs/keyboard.md): one script per platform, chosen here.
 # Both are idempotent and self-guarding, and both act on the live session, so they are
 # skipped for a throwaway TARGET and for a Linux session with no display.
 

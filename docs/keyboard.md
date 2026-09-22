@@ -2,9 +2,12 @@
 
 One physical finger position means one thing on every machine and every keyboard.
 
-`keys.yaml` is the binding list, for every layer from the compositor to vim, in the order
-those layers capture a keystroke. `CHEATSHEET.md` is generated from it. This file is the
-reasoning behind it.
+`scripts/keyboard/keys.yaml` is the binding list, for every layer from the compositor to vim,
+in the order those layers capture a keystroke. `keyboard-cheatsheet.md`, next to this file, is
+generated from it. This file is the reasoning behind it.
+
+Bare script paths below (`keys.yaml`, `render.sh`, `linux/…`, `macos/…`) are relative to
+`scripts/keyboard/`.
 
 ## Editing a binding
 
@@ -263,7 +266,7 @@ which layer owns it rather than to bind it twice and hope.
    over ssh with nothing installed on the far end.
  - **labwc takes `Super-A` and `Super-T` before the terminal.** On a labwc session they are
    maximize and launch-kitty, so gnome-terminal's select-all and new-tab never fire there.
-   `CHEATSHEET.md` lists every such case under "Shadowed keys"; kitty binds neither, so the
+   `keyboard-cheatsheet.md` lists every such case under "Shadowed keys"; kitty binds neither, so the
    tier-1 labwc + kitty pairing is unaffected.
  - **Supported terminals.** See the tiers at the top. A behaviour that cannot be made to work
    on all three tier-1 terminals does not ship — that rule is what removed OSC 52.

@@ -1,5 +1,5 @@
 ! Linked to ~/.Xresources by dotfiles (scripts/lib.sh LINKS); merged into the live server
-! by scripts/keyboard/linux/terminal.sh.  See scripts/keyboard/README.md.
+! by scripts/keyboard/linux/terminal.sh.  See docs/keyboard.md.
 !
 ! CLIPBOARD is named explicitly: xterm's defaults deal in PRIMARY, the middle-click
 ! buffer, which is not the clipboard GTK apps and Firefox use.

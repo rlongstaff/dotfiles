@@ -1,7 +1,7 @@
 # vim defaults
 
 vim's own keys, as shipped: no mapping in this repo changes them unless a row says so.
-Every key this repo *does* bind, in vim and every other layer, is in `CHEATSHEET.md`,
+Every key this repo *does* bind, in vim and every other layer, is in `keyboard-cheatsheet.md`,
 generated from `keys.yaml`.
 
 Notation: `Ctrl-x`, `Alt-x` (Option on macOS), `Shift-x`.
@@ -28,7 +28,7 @@ vim defaults; no custom buffer mappings exist yet.
 ## Windows and splits
 
 vim defaults, all under the `Ctrl-w` prefix. `Alt-h/j/k/l` and `Alt-Shift-h/j/k/l` are this
-repo's fast path for focus and resize (see `CHEATSHEET.md`); everything here is default vim.
+repo's fast path for focus and resize (see `keyboard-cheatsheet.md`); everything here is default vim.
 
 | Command | Does |
 | ------- | ---- |
@@ -49,7 +49,7 @@ repo's fast path for focus and resize (see `CHEATSHEET.md`); everything here is 
 ## Panes (tmux, hosting vim)
 
 tmux panes are not vim, but vim splits live inside them and share the Alt keys. The
-full set, including which keys tmux forwards into vim, is in `CHEATSHEET.md`.
+full set, including which keys tmux forwards into vim, is in `keyboard-cheatsheet.md`.
 
 ## Cursor movement — Normal mode
 
