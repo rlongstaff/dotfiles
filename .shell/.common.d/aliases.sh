@@ -1,10 +1,9 @@
 
 alias dud='du -d 1 -h -x'
 
-workspace() {
-  cd ~/prj/github.com/rlongstaff/$1
+gh() {
+  cd $WORKSPACE_DIR/"$@"
 }
-alias gh=workspace
 
 alias l='ls -lFh'     # size,show type,human readable
 alias la='ls -lAFh'   # long list,show almost all,show type,human readable

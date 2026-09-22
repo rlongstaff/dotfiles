@@ -1,4 +1,6 @@
 
 # export DOTFILES_REPO_USER=$USER
 export DOTFILES_REPO_USER=rlongstaff
+export GITHUB_USER=${DOTFILES_REPO_USER}
+export WORKSPACE_DIR=${HOME}/prj/github.com/${GITHUB_USER}
 
