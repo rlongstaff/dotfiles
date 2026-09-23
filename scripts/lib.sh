@@ -91,6 +91,15 @@ warn() { echo "${MODULE}: WARNING $*" >&2; }
 
 have() { which "$1" >/dev/null 2>&1; }
 
+# Ask before a host mutation (installing packages, writing a system setting). Default
+# yes on an empty answer; anything starting n/N declines. Used by scripts/pkgs/*.sh, which
+# echo exactly what they are about to run before calling this.
+confirm() {
+  printf '%s [Y/n] ' "$1"
+  read -r ans
+  case "${ans}" in [Nn]*) return 1 ;; *) return 0 ;; esac
+}
+
 # True when TARGET is the real home.  Anything that changes the *live session* rather
 # than a file (gsettings, setxkbmap, hidutil, launchctl, xrdb) is gated on this, so a
 # throwaway target never reaches the desktop.

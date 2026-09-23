@@ -93,6 +93,20 @@ done
 [ ${writes} -eq 0 ] && echo "  none"
 bad=$((bad + writes))
 
+echo "packages and settings: ${OS}"
+case "${OS}" in
+  linux)
+    "${SCRIPT_DIR}/scripts/pkgs/deb.sh" --check || bad=$((bad + 1))
+    ;;
+  darwin)
+    "${SCRIPT_DIR}/scripts/pkgs/mac.sh" --check || bad=$((bad + 1))
+    "${SCRIPT_DIR}/scripts/pkgs/mac-tweaks.sh" --check || bad=$((bad + 1))
+    ;;
+  *)
+    echo "  no package/setting check for ${OS}"
+    ;;
+esac
+
 if [ ${bad} -gt 0 ]; then
   log "${bad} problem(s)"
   exit 1

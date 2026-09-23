@@ -1,4 +1,15 @@
 #!/bin/bash
+#
+# Debian / Ubuntu / WSL2 packages.  Three modes:
+#
+#   (no args)          full run: apt-get update && upgrade && install the whole list.
+#   --check            read-only; lists missing packages, exit 1 if any.
+#   --install-missing  installs only what --check would list, after a Y/n confirm; a
+#                       no-op (no sudo call at all) when nothing is missing.  This is
+#                       what update.sh calls, so a repeat run does nothing.
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
+. "${SCRIPT_DIR}/scripts/lib.sh"
 
 PKGS=(
      bash-completion
@@ -26,6 +37,56 @@ PKGS=(
 #   go install golang.org/x/tools/gopls@latest
 #   go install github.com/go-delve/delve/cmd/dlv@latest
 
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install "${PKGS[@]}"
+have dpkg-query || { warn "dpkg-query not found; skipping"; exit 0; }
+
+installed_deb() {
+  dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q '^install ok installed'
+}
+
+missing_deb() {
+  MISSING=()
+  for p in "${PKGS[@]}"; do
+    installed_deb "${p}" || MISSING+=("${p}")
+  done
+}
+
+case "${1:-}" in
+  --check)
+    missing_deb
+    for p in "${MISSING[@]}"; do
+      echo "  MISSING  ${p}"
+    done
+    [ ${#MISSING[@]} -eq 0 ] || exit 1
+    exit 0
+    ;;
+  --install-missing)
+    missing_deb
+    if [ ${#MISSING[@]} -eq 0 ]; then
+      log "nothing to install"
+      exit 0
+    fi
+    log "missing: ${MISSING[*]}"
+    log "about to run: sudo apt-get install -y ${MISSING[*]}"
+    if confirm "Install these packages?"; then
+      sudo apt-get install -y "${MISSING[@]}"
+    else
+      warn "skipped"
+      exit 1
+    fi
+    ;;
+  "")
+    log "about to run: sudo apt-get update && sudo apt-get upgrade && sudo apt-get install ${PKGS[*]}"
+    if confirm "Update, upgrade and install the full package list?"; then
+      sudo apt-get update
+      sudo apt-get upgrade
+      sudo apt-get install "${PKGS[@]}"
+    else
+      warn "skipped"
+      exit 1
+    fi
+    ;;
+  *)
+    echo "usage: $0 [--check|--install-missing]" >&2
+    exit 2
+    ;;
+esac

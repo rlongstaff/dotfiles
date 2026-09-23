@@ -9,8 +9,12 @@ TARGET=${1:-${TARGET:-$HOME}}
 
 cat <<EOM
 
-Packages are not installed by install.sh.  One script per platform, run by hand:
+update.sh (which install.sh just ran) installs missing packages and applies missing
+macOS settings itself, prompting before anything it installs/writes.  For a full
+apt-get update && upgrade, a full brew install, or to review the package/setting list,
+run by hand:
   ${SCRIPT_DIR}/scripts/pkgs/deb.sh          Debian / Ubuntu / WSL2
+  ${SCRIPT_DIR}/scripts/pkgs/mac.sh          macOS (Homebrew)
   ${SCRIPT_DIR}/scripts/pkgs/mac-tweaks.sh   macOS defaults(1) only
 
 If a tmux server is already running it is still on the old config:
