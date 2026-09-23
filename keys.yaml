@@ -346,6 +346,22 @@ layers:
         action: paste tmux's own copy-mode buffer (prefix)
         tmux: {table: prefix, cmd: paste-buffer -p}
 
+      # Nested tmux over ssh: every alt+* binding above and the ctrl+x prefix live on the
+      # root key table, which is always live on the OUTER (local) session -- a nested
+      # remote session (its own tmux, one ssh hop in) never sees them otherwise.  alt+x
+      # flips the outer session's key table to 'off', which is unbound except for the
+      # matching key below, so every raw byte -- ctrl+x included -- passes through to the
+      # pane and reaches the nested session's own identical bindings instead.
+      - key: alt+x
+        group: remote
+        action: toggle key passthrough to a nested (remote) tmux session
+        note: shadows readline's default M-x (execute-named-command), like every other alt+<letter> binding here
+        tmux: {table: root, cmd: 'set-option -g key-table off \; set-option -g status-style "bg=#{@status-passthrough-bg}" \; refresh-client -S'}
+      - key: alt+x
+        group: remote
+        action: toggle key passthrough off, keys return to the outer (local) session
+        tmux: {table: off, cmd: 'set-option -gu key-table \; set-option -gu status-style \; refresh-client -S'}
+
   # -------------------------------------------------------------------------------------
   - id: shell
     title: Shell line editing (bash readline, zsh zle)

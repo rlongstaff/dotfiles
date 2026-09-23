@@ -21,7 +21,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 | 6 | cyan | `#0dcdcd` | shell: `ls bd` (bg), shell: `ls sg` (bg), vim: `User2` (fg) |
 | 7 | white | `#dddddd` | kitty: `foreground`, tmux: `status-style` (fg) |
 | 8 | bright-black | `#767676` | shell: `prompt at` (fg), shell: `prompt colon` (fg), shell: `prompt time` (fg), vim: `User5` (fg) |
-| 9 | bright-red | `#f2201f` | vim: `User6` (fg) |
+| 9 | bright-red | `#f2201f` | tmux: `@status-passthrough-bg`, vim: `User6` (fg) |
 | 10 | bright-green | `#23fd00` |  |
 | 11 | bright-yellow | `#fffd00` |  |
 | 12 | bright-blue | `#1a8fff` |  |
@@ -64,12 +64,13 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 .tmux/colors.conf, sourced by .tmux.conf
 
-**settings** (29 listed in the yaml)
+**settings** (30 listed in the yaml)
 
 | Setting | Value | What it colours | Why |
 | ------- | ----- | ------- | --- |
 | `status-style` | fg white bg #003366 | status line |  |
 | `@status-clock-fg` | green | clock in status-right | user option: status-right in .tmux.conf reads #{@status-clock-fg} |
+| `@status-passthrough-bg` | bright-red | status line while alt+x passthrough is active | user option: the alt+x binding in keys.yaml reads #{@status-passthrough-bg} |
 | `mode-style` | fg bright-white bg blue | copy-mode selection | matches vim's Visual |
 
 ## Shells (bash and zsh)

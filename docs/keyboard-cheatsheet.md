@@ -101,6 +101,7 @@ space bar on every machine; alt is Option.
 | `ctrl+left` |  |  |  | copy-mode: previous word | **previous word start** |  |
 | `ctrl+right` |  |  |  | copy-mode: next word | **next word start** |  |
 | `]` |  |  |  | after prefix: paste tmux's own copy-mode buffer (prefix) |  |  |
+| `alt+x` |  |  |  | **toggle key passthrough to a nested (remote) tmux session; toggle key passthrough off, keys return to the outer (local) session** |  |  |
 | `home` |  |  |  |  | **start of line** |  |
 | `ctrl+a` |  |  |  |  | **start of line** | ~~start of line~~ |
 | `end` |  |  |  |  | **end of line** |  |
@@ -258,6 +259,8 @@ Rendered to / applied by: .tmux/keys.conf, sourced by .tmux.conf
 | `ctrl+left` | previous word | tmux |  |
 | `ctrl+right` | next word | tmux |  |
 | `]` | paste tmux's own copy-mode buffer (prefix) | tmux |  |
+| `alt+x` | toggle key passthrough to a nested (remote) tmux session | tmux | shadows readline's default M-x (execute-named-command), like every other alt+<letter> binding here |
+| `alt+x` | toggle key passthrough off, keys return to the outer (local) session | tmux |  |
 
 ## Shell line editing (bash readline, zsh zle)
 

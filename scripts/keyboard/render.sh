@@ -332,6 +332,7 @@ EOF
           root)   bind="bind -n ${q}";              unb="unbind -n ${q}" ;;
           prefix) bind="bind ${q}";                 unb="unbind ${q}" ;;
           copy)   bind="bind -T copy-mode-vi ${q}"; unb="unbind -T copy-mode-vi ${q}" ;;
+          off)    bind="bind -T off ${q}";          unb="unbind -T off ${q}" ;;
           *) die "tmux: ${key}: unknown table '${table}'" ;;
         esac
         if [ "${unbind}" = "true" ]; then

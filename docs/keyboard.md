@@ -100,6 +100,32 @@ an outer layer eats it first.
 | Home, End, Ctrl-arrows, Delete | shell, and tmux copy-mode | Each layer decodes its own input, so each needs its own table. |
 | yank to clipboard | vim (`.vimrc` hook, `vimide#clip`) | Convenience only, local only. `Super-C` is the path that always works. |
 
+## tmux over ssh
+
+Every shell should live in a tmux session local to the host it's actually running on.
+`.shell/.common.d/tmux.sh`'s autostart function runs identically whether the shell is local
+or arrived over ssh (dotfiles are assumed installed everywhere): an ssh session gets its own
+"main" one level in, nested inside whatever local session the pane already belongs to.
+
+That makes almost every tmux binding ambiguous, because nearly all of them (`Alt-…` panes,
+windows, focus, resize, and the `Ctrl-x` prefix itself) live on the root key table, which is
+always live on the **outer** (local) session — a nested remote session never sees them
+otherwise. `Alt-x` is the passthrough toggle: it flips the outer session's `key-table` to
+`off`, an otherwise-unbound table, so every raw byte — `Ctrl-x` included — passes straight
+through to the pane and reaches the nested session's own identical bindings instead. The
+status line changes background (`@status-passthrough-bg`, `colors.yaml`) while it's active,
+so it's always visible which session is currently listening. Pressing `Alt-x` again (now
+reaching the outer session, since passthrough is off) flips it back.
+
+**Self-loop guard.** Sshing back into the same host — directly, or through a different
+intermediate host (`laptop -> server01 -> laptop`) — would otherwise nest a session inside
+itself. `tmux.sh` guards this in two layers: a direct self-connection is caught via
+`$SSH_CONNECTION` (loopback-routed, so client and server IPs coincide); a longer chain is
+tracked in `LC_DOTFILES_TMUX_CHAIN`, forwarded across hops by piggybacking on the
+near-universal `SendEnv`/`AcceptEnv LC_*` default (no wrapper, no sshd_config edit needed).
+See the comments in `tmux.sh` for the full reasoning and the known gap (chain tracking is
+best-effort, depending on that default being present on a given hop).
+
 ## Navigation keys
 
 These mean the same thing in every layer.
@@ -185,6 +211,9 @@ These mean the same thing in every layer.
   `$EDITOR`, so a box without vim lands in `copy-mode`.
 - **Selection colours are numbers, not names.** tmux's `blue` is colour4 and vim's `Blue` is
   colour12, so matching names produce different colours.
+- **`Alt-x` shadows readline's default `M-x`** (execute-named-command) in every shell pane,
+  same as any other `Alt-<letter>` binding here: tmux's root table intercepts it before the
+  shell ever sees it.
 
 ### Copy and paste
 
