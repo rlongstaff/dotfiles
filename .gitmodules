@@ -1,3 +1,9 @@
 [submodule ".vim/bundle/nerdtree"]
 	path = .vim/bundle/nerdtree
 	url = https://github.com/preservim/nerdtree
+[submodule ".vim/bundle/lsp"]
+	path = .vim/bundle/lsp
+	url = https://github.com/yegappan/lsp
+[submodule ".vim/bundle/vimspector"]
+	path = .vim/bundle/vimspector
+	url = https://github.com/puremourning/vimspector
