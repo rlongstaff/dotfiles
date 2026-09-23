@@ -1,7 +1,8 @@
 #!/bin/sh
 #
-# Comfort layout for TARGET: ~/docs, ~/prj (+ ~/src alias), ~/bin, ~/tmp, and an ssh
-# skeleton with the right modes.  Never touches anything that already exists.
+# Comfort layout for TARGET: ~/docs, ~/prj (+ ~/src alias), ~/bin, ~/tmp, an ssh
+# skeleton with the right modes, and a ~/.gitconfig.local seed.  Never touches
+# anything that already exists.
 
 set -e
 : "${SCRIPT_DIR:=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)}"
@@ -42,5 +43,12 @@ fi
 
 # golang likes to have things this way
 mkdir -p "${TARGET}/src/github.com"
+
+# git identity: .gitconfig (repo, symlinked) includes this, but it's per-machine data,
+# not config, so it lives outside the repo and is never overwritten once it exists.
+if [ ! -e "${TARGET}/.gitconfig.local" ]; then
+  cp "${SCRIPT_DIR}/.gitconfig.local.example" "${TARGET}/.gitconfig.local"
+  log "wrote ${TARGET}/.gitconfig.local - edit it with your name and email"
+fi
 
 log "comfort dirs in place"

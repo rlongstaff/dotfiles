@@ -127,9 +127,9 @@ layers:
   # -------------------------------------------------------------------------------------
   - id: shell
     title: Shells (bash and zsh)
-    where: .shell/.common.d/colors.sh; .bashrc builds PS1 from it, the zsh theme PROMPT
+    where: .shell/.common.d/colors.sh; .bashrc builds PS1 from it, .zsh.d/prompt.zsh builds PROMPT
     # The two-line prompt.  Both shells draw the same colours: bash as SGR codes, zsh as
-    # %F{n} / %B (see .shell/.bashrc and .shell/.zsh/themes/rlongstaff.zsh-theme).
+    # %F{n} / %B (see .shell/.bashrc and .shell/.zsh.d/prompt.zsh).
     prompt:
       - {key: user,  fg: green,        about: user name}
       - {key: at,    fg: bright-black, about: the @ between user and host}

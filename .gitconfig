@@ -1,6 +1,6 @@
-[user]
-	name = rlongstaff
-	email = rob@longstaff.us
+[include]
+	# name/email live here, outside the repo: see scripts/install.d/20-home.sh
+	path = ~/.gitconfig.local
 [alias]
 	st = status
 	ci = commit

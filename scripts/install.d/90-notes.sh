@@ -16,5 +16,5 @@ Packages are not installed by install.sh.  One script per platform, run by hand:
 If a tmux server is already running it is still on the old config:
   tmux kill-server
 
-CHECK YOUR .gitconfig [USER] SECTION!!!!
+EDIT ${TARGET}/.gitconfig.local WITH YOUR NAME AND EMAIL!!!!
 EOM

@@ -35,11 +35,11 @@ and lists real files in `$HOME` that should be managed here instead.
 # How do I install this?
 
 1. Install git
-2. Clone the repo. Put this where it will live permanently. Current convention is to locate it here `~/src/github.com/rlongstaff/dotfiles`
+2. Clone the repo (or your own fork). Put this where it will live permanently. Current convention is to locate it here `~/src/github.com/<your-username>/dotfiles`
 3. Run `scripts/pkgs/deb.sh` (required). This handles debian, ubuntu, WSL2. There is currently no script to install things via homebrew for MacOS
 4. Run `scripts/pkgs/mac-tweaks.sh` if you want to stop some silly things for MacOS
-5. Run `./install.sh` from the repo dir. This will backup any configs that it replaces to `~/.dotfiles.bak.{TIMESTAMP}`, then run each step in `scripts/install.d/` in order (symlinks, comfort dirs, keyboard standard, notes)
-6. **!!!!!CHECK YOUR `.gitconfig`!!!!!** .gitconfig does not allow for shell expansion so you need to change your username and email
+5. Run `./install.sh` from the repo dir. This will backup any configs that it replaces to `~/.dotfiles.bak.{TIMESTAMP}`, then run each step in `scripts/install.d/` in order (symlinks, comfort dirs, keyboard standard, notes). This also seeds `~/.gitconfig.local` from `.gitconfig.local.example`.
+6. **Edit `~/.gitconfig.local`** with your name and email. `.gitconfig` (the tracked file) includes it, so your identity never lives in the repo.
 7. Exit your existing terminal and start a fresh one.
 
 Re-run any single step later with `scripts/install.d/<step>.sh`. Everything under `scripts/`

@@ -76,7 +76,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 ## Shells (bash and zsh)
 
-.shell/.common.d/colors.sh; .bashrc builds PS1 from it, the zsh theme PROMPT
+.shell/.common.d/colors.sh; .bashrc builds PS1 from it, .zsh.d/prompt.zsh builds PROMPT
 
 **prompt** (7 listed in the yaml)
 
