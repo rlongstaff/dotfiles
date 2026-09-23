@@ -6,7 +6,7 @@ ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto'
 alias dud='du -d 1 -h -x'
 
 gh() {
-  cd $WORKSPACE_DIR/"$@"
+  cd "${WORKSPACE_DIR}/$1"
 }
 
 alias l='ls -lFh'     # size,show type,human readable

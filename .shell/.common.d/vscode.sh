@@ -1,11 +1,12 @@
 
 export PATH="${PATH}:/Applications/Development/Visual\ Studio\ Code.app/Contents/Resources/app/bin"
 
+# VSCODE must be set elsewhere (e.g. .dotfilesrc) to the code binary path.
 function vsc {
   if (( $# )); then
-    $VSCODE $@
+    "$VSCODE" "$@"
   else
-    $VSCODE .
+    "$VSCODE" .
   fi
 }
 

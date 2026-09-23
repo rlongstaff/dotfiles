@@ -21,7 +21,7 @@ function! vimide#focus(dir) abort
   let l:from = winnr()
   execute 'wincmd ' . a:dir
   if winnr() == l:from && s:in_tmux()
-    silent call system('tmux select-pane -' . s:pane_dir[a:dir])
+    silent call system(['tmux', 'select-pane', '-' . s:pane_dir[a:dir]])
   endif
 endfunction
 
@@ -50,7 +50,7 @@ function! vimide#resize(flag) abort
   if s:has_neighbour(a:flag)
     execute 'wincmd ' . s:wincmd[a:flag]
   elseif s:in_tmux()
-    silent call system('tmux resize-pane -' . a:flag . ' 2')
+    silent call system(['tmux', 'resize-pane', '-' . a:flag, '2'])
   endif
 endfunction
 
@@ -89,6 +89,8 @@ function! vimide#clip(text) abort
   if !get(g:, 'vimide_clipboard', 1) || empty(a:text) || empty(s:clip_cmd())
     return
   endif
+  " a:text is yanked buffer content, arbitrary and untrusted: pass it as system()'s {input}
+  " so it goes over a pipe, never interpolated into a shell string.
   call system(s:clip_cmd(), a:text)
 endfunction
 
@@ -198,14 +200,14 @@ endfunction
 " in .vimrc).  Go uses the dlv on PATH through `dlv dap`.
 " ---------------------------------------------------------------------------------------
 let s:debug_actions = {
-      \ 'continue':   'vimspector#Continue()',
-      \ 'stop':       'vimspector#Reset()',
-      \ 'restart':    'vimspector#Restart()',
-      \ 'breakpoint': 'vimspector#ToggleBreakpoint()',
-      \ 'over':       'vimspector#StepOver()',
-      \ 'into':       'vimspector#StepInto()',
-      \ 'out':        'vimspector#StepOut()',
-      \ 'eval':       'vimspector#ShowEvalBalloon(0)',
+      \ 'continue':   ['vimspector#Continue', []],
+      \ 'stop':       ['vimspector#Reset', []],
+      \ 'restart':    ['vimspector#Restart', []],
+      \ 'breakpoint': ['vimspector#ToggleBreakpoint', []],
+      \ 'over':       ['vimspector#StepOver', []],
+      \ 'into':       ['vimspector#StepInto', []],
+      \ 'out':        ['vimspector#StepOut', []],
+      \ 'eval':       ['vimspector#ShowEvalBalloon', [0]],
       \ }
 
 function! vimide#debug(action) abort
@@ -213,5 +215,6 @@ function! vimide#debug(action) abort
     echo 'vim-ide: debugger not available (vimspector needs vim built with +python3)'
     return
   endif
-  execute 'call ' . s:debug_actions[a:action]
+  let [l:func, l:args] = s:debug_actions[a:action]
+  call call(l:func, l:args)
 endfunction

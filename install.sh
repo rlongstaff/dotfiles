@@ -41,7 +41,11 @@ elif [ "${TARGET}" = "help" ] || [ "${TARGET}" = "--help" ] || [ "${TARGET}" = "
   help
 else
   mkdir -p "${TARGET}"
-  TARGET=$(realpath "${TARGET}")
+  if command -v realpath >/dev/null 2>&1; then
+    TARGET=$(realpath "${TARGET}")
+  else
+    TARGET=$(cd "${TARGET}" && pwd)
+  fi
 fi
 
 INSTALL_CANARY="${TARGET}/.${REPO}_installed"
@@ -63,7 +67,11 @@ else
 fi
 
 # Do we have our friends?  SCRIPT_DIR is the repo root once this block is done.
-SCRIPT_DIR=$(realpath "$(dirname -- "$0")")
+if command -v realpath >/dev/null 2>&1; then
+  SCRIPT_DIR=$(realpath "$(dirname -- "$0")")
+else
+  SCRIPT_DIR=$(cd "$(dirname -- "$0")" && pwd)
+fi
 if [ -f "${SCRIPT_DIR}/scripts/lib.sh" ]; then
   # Yup, use this checkout as home base
   ln -sf "${SCRIPT_DIR}" "${LOCAL_REPO}"
@@ -72,9 +80,14 @@ else
   TMPDIR=$(mktemp -d)
   curl -Ls "${REPO_URL}/archive/refs/heads/main.tar.gz" \
     | tar xz -C "${TMPDIR}"
+  # tar's exit code hides a failed curl; a missing extracted dir means the download failed.
+  if [ ! -d "${TMPDIR}/${REPO}-main" ]; then
+    echo "install: download of ${REPO_URL} failed" >&2
+    exit 1
+  fi
   mv "${TMPDIR}/${REPO}-main" "${LOCAL_REPO}"
   rmdir "${TMPDIR}"
-  SCRIPT_DIR=$(realpath "${LOCAL_REPO}")
+  SCRIPT_DIR="${LOCAL_REPO}"
 fi
 
 export SCRIPT_DIR TARGET BACKUP_DIR

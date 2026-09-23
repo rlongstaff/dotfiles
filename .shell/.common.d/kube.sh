@@ -1,7 +1,6 @@
 #!/bin/sh
 
-which kubectl >& /dev/null
-if [ $? = 0 ]; then
+if command -v kubectl >/dev/null 2>&1; then
     export PATH="${HOME}/.krew/bin:${PATH}"
     export KUBECONFIG="${HOME}/.kube/config"
 
