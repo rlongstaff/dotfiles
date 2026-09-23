@@ -20,7 +20,7 @@ This repo handles your homedir across various versions of Linux, MacOS, and WSL2
 - A consistant appearance for bash and zsh. '$' for bash, '%' for zsh.
 - Confirms presence of baseline QoL packages (tmux, vim, zsh, jq, yq, tldr, etc).
 - Basic comfort directories: `$HOME`/{prj,bin,tmp}. `$HOME`/docs that will link to the OS-dependant
-  version of "~/Documents", "~/My Documents", etc
+  version of "`$HOME`/Documents", "`$HOME`/My Documents", etc
 
 # How do I install this?  
 
@@ -72,9 +72,10 @@ live-session changes (gsettings, hidutil) are skipped.
 - If you installed via curl, there is no management. Tweak away.
 
 - If you installed with git:
-  - Create a new branch `git checkout -b my_config`
-  - Make your changes and commit `git add . && git commit -m 'my changes'`
-  - Periodically fetch the main branch and merge the updates `git fetch && git merge main`
+  - Create a new branch: `git checkout -b my_config`
+  - Make your changes and commit: `git add . && git commit -m 'my changes'`
+  - Periodically fetch the main branch and merge the updates: `git fetch && git merge main`
+  - Fix any conflicts and commit
 
 - Alternatively, you can install in a non-`$HOME` target. From there you can manually symlink what
   you want into your `$HOME`.
