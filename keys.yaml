@@ -8,7 +8,7 @@
 #
 # Edit this file, then run   scripts/keyboard/render.sh   and commit the regenerated
 # fragments with it.  Never edit a file whose first line says GENERATED.
-# Why each key lives where it does: docs/keyboard.md.
+# Why each key lives where it does: docs/guide.md, "Keyboard standard".
 #
 # ---------------------------------------------------------------------------------------
 # Key spelling (the renderer rejects anything else)

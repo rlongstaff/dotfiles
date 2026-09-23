@@ -1,4 +1,5 @@
-# Pixelbook, running Linux.  Sourced by ../apply.sh (KBD_DIR set); see docs/keyboard.md.
+# Pixelbook, running Linux.  Sourced by ../apply.sh (KBD_DIR set); see docs/guide.md,
+# "Keyboard standard".
 #
 # The Pixelbook bottom row is
 #

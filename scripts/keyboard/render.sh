@@ -306,7 +306,7 @@ render_tmux() {
   {
     echo "# ${GEN_NOTE}"
     cat <<'EOF'
-# Sourced by .tmux.conf.  Rationale for every choice here: docs/keyboard.md.
+# Sourced by .tmux.conf.  Rationale for every choice here: docs/guide.md, "Keyboard standard".
 
 # Is the pane running vim?  Deliberately backslash-free: this string is parsed by tmux,
 # then sh, then grep, and a '\S' would arrive at grep as a literal backslash.
@@ -428,7 +428,7 @@ render_shell() {
 # Line-editing keys for both shells, in every byte form a terminal might send (the form
 # depends on the emulator and on application-cursor mode).  Binding all of them removes
 # the dependency on terminfo, on /etc/inputrc, and on any zsh framework.
-# Rationale: docs/keyboard.md, "Navigation keys".
+# Rationale: docs/guide.md, "Navigation keys".
 
 case $- in
   *i*) ;;
@@ -591,7 +591,7 @@ render_docs() {
 # Keyboard cheatsheet
 
 Every binding in the dotfiles, generated from \`keys.yaml\`. Why each key
-lives where it does is in \`keyboard.md\`; vim's own defaults are in \`vim-defaults.md\`.
+lives where it does is in \`guide.md\`.
 
 **Capture order.** A keystroke goes \`os -> compositor -> terminal -> tmux -> shell | vim\`,
 and the first layer that binds it wins. **Bold** marks that layer. \`→ vim\` / \`→ pager\`

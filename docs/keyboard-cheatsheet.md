@@ -3,7 +3,7 @@
 # Keyboard cheatsheet
 
 Every binding in the dotfiles, generated from `keys.yaml`. Why each key
-lives where it does is in `keyboard.md`; vim's own defaults are in `vim-defaults.md`.
+lives where it does is in `guide.md`.
 
 **Capture order.** A keystroke goes `os -> compositor -> terminal -> tmux -> shell | vim`,
 and the first layer that binds it wins. **Bold** marks that layer. `→ vim` / `→ pager`

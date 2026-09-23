@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-# Terminal-emulator half of the keyboard standard on Linux.  See docs/keyboard.md.
+# Terminal-emulator half of the keyboard standard on Linux.  See docs/guide.md,
+# "Keyboard standard".
 #
 # Applies the GNOME side of keys.yaml: GNOME Shell releases (so Super-1..9,
 # Super-A/N/V and Alt-Tab reach the terminal) and the gnome-terminal Super shortcuts.  The

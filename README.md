@@ -47,17 +47,16 @@ sources `scripts/lib.sh` and speaks only in `$SCRIPT_DIR` (the repo) and `$TARGE
 dir being set up), so `./install.sh /tmp/fakehome` is a safe dry run: file changes land in the
 fake home and live-session changes (gsettings, hidutil) are skipped.
 
-The keyboard standard (same finger positions on every machine and layer) is documented in
-`docs/keyboard.md`. Every key binding for the compositor, terminal, tmux, the shells
-and vim is defined once in `keys.yaml`; `scripts/keyboard/render.sh` (needs
-`yq`, mikefarah v4) regenerates each app's fragment and `docs/keyboard-cheatsheet.md`.
+The keyboard standard (same finger positions on every machine and layer), vim's own
+defaults, and the vim Go IDE (completion, go to definition, diagnostics, debugging via
+gopls, yegappan/lsp and vimspector) are documented in **[docs/guide.md](docs/guide.md)**.
 
-Every colour (kitty palette, tmux, prompt and `ls`, vim highlight groups) is defined once in
-`colors.yaml`; `scripts/colors/render.sh` regenerates each app's fragment and
-`docs/colors-cheatsheet.md`.
+Bindings and colours are each defined once and rendered to every app's config:
 
-vim works as a Go IDE (completion, go to definition, diagnostics, debugging) through gopls,
-yegappan/lsp and vimspector: see `docs/vim-ide.md`.
+- `keys.yaml` -> `scripts/keyboard/render.sh` (needs `yq`, mikefarah v4) ->
+  **[docs/keyboard-cheatsheet.md](docs/keyboard-cheatsheet.md)**
+- `colors.yaml` -> `scripts/colors/render.sh` ->
+  **[docs/colors-cheatsheet.md](docs/colors-cheatsheet.md)**
 
 ## This sucks, how do I get rid of it?
 1. Run `./uninstall.sh`

@@ -3,7 +3,7 @@
 # Line-editing keys for both shells, in every byte form a terminal might send (the form
 # depends on the emulator and on application-cursor mode).  Binding all of them removes
 # the dependency on terminfo, on /etc/inputrc, and on any zsh framework.
-# Rationale: docs/keyboard.md, "Navigation keys".
+# Rationale: docs/guide.md, "Navigation keys".
 
 case $- in
   *i*) ;;
