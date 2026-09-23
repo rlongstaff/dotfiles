@@ -47,7 +47,6 @@ LINKS="
 .bashrc                                     .shell/.bashrc
 .bash_profile                               .shell/.bash_profile
 .profile                                    .shell/.profile
-.zsh                                        .shell/.zsh
 .zshrc                                      .shell/.zshrc
 .zprofile                                   .shell/.zprofile
 .config/alacritty

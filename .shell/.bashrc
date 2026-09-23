@@ -47,3 +47,9 @@ else
     export PS1="╭─${DOTFILES_C_BASH_USER}\u${DOTFILES_C_BASH_AT}@${DOTFILES_C_BASH_HOST}\h\[\e[0m\]${DOTFILES_C_BASH_COLON}:${DOTFILES_C_BASH_PATH}\w${DOTFILES_C_BASH_GIT} \$(__git_ps1 \"%s\")\n\[\e[0m\]╰ \\\$ "
 
 fi
+
+# After the loader, so PATH is complete (.common.d/completion.sh).
+dotfiles_completion
+
+# Last: the shell tmux returns to is fully loaded (.common.d/tmux.sh).
+dotfiles_tmux_autostart
