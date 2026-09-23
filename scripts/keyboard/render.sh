@@ -444,7 +444,7 @@ EOF
       group_header '    #' "${group}"
       [ -z "${note}" ] || echo "    # ${note}"
       sequences_of "${key}" | while IFS= read -r seq; do
-        z=$(printf '%s' "${seq}" | sed 's/\\e/^[/g')
+        z=$(printf '%s' "${seq}" | sed -e 's/\\e/^[/g' -e 's/\\C-\(.\)/^\U\1/g')
         printf '    bindkey -M "$_kmap" %-10s %s\n' "'${z}'" "${zw}"
       done
     done < "${list}"

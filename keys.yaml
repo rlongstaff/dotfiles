@@ -56,6 +56,8 @@ sequences:
   ctrl+delete: ['\e[3;5~']
   ctrl+left:   ['\e[1;5D', '\eO5D', '\e[5D', '\eOd']
   ctrl+right:  ['\e[1;5C', '\eO5C', '\e[5C', '\eOc']
+  ctrl+a:      ['\C-a']
+  ctrl+e:      ['\C-e']
 
 layers:
 
@@ -350,7 +352,9 @@ layers:
     where: .shell/.common.d/keys.sh
     bindings:
       - {key: home,        group: line, action: start of line,       zsh: beginning-of-line, bash: beginning-of-line}
+      - {key: ctrl+a,      group: line, action: start of line,       zsh: beginning-of-line, bash: beginning-of-line}
       - {key: end,         group: line, action: end of line,         zsh: end-of-line,       bash: end-of-line}
+      - {key: ctrl+e,      group: line, action: end of line,         zsh: end-of-line,       bash: end-of-line}
       - {key: delete,      group: line, action: delete char forward, zsh: delete-char,       bash: delete-char}
       - {key: ctrl+delete, group: line, action: delete word forward, zsh: kill-word,         bash: kill-word}
       - key: ctrl+left

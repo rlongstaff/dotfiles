@@ -102,14 +102,14 @@ space bar on every machine; alt is Option.
 | `ctrl+right` |  |  |  | copy-mode: next word | **next word start** |  |
 | `]` |  |  |  | after prefix: paste tmux's own copy-mode buffer (prefix) |  |  |
 | `home` |  |  |  |  | **start of line** |  |
+| `ctrl+a` |  |  |  |  | **start of line** | ~~start of line~~ |
 | `end` |  |  |  |  | **end of line** |  |
+| `ctrl+e` |  |  |  |  | **end of line** | ~~end of line~~ |
 | `delete` |  |  |  |  | **delete char forward** |  |
 | `ctrl+delete` |  |  |  |  | **delete word forward** |  |
 | `enter` |  |  |  |  |  | **clear search highlight** |
 | `ctrl+up` |  |  |  |  |  | **half page up** |
 | `ctrl+down` |  |  |  |  |  | **half page down** |
-| `ctrl+a` |  |  |  |  |  | **start of line** |
-| `ctrl+e` |  |  |  |  |  | **end of line** |
 | `ctrl+t` |  |  |  |  |  | **toggle NERDTree** |
 | `f12` |  |  |  |  |  | **go to definition (else tag jump)** |
 | `ctrl+shift+f12` |  |  |  |  |  | **go to declaration (else gD)** |
@@ -131,6 +131,8 @@ that does not run the earlier app (labwc vs GNOME, say) there is no conflict.
 
 - `super+a`: compositor (toggle maximize (labwc); released) before terminal (select all)
 - `super+t`: compositor (launch kitty (labwc)) before terminal (new tab)
+- `ctrl+a`: shell (start of line) before vim (start of line)
+- `ctrl+e`: shell (end of line) before vim (end of line)
 
 ## OS modifier remap
 
@@ -264,7 +266,9 @@ Rendered to / applied by: .shell/.common.d/keys.sh
 | key | action | apps | note |
 | --- | --- | --- | --- |
 | `home` | start of line | zsh, bash |  |
+| `ctrl+a` | start of line | zsh, bash |  |
 | `end` | end of line | zsh, bash |  |
+| `ctrl+e` | end of line | zsh, bash |  |
 | `delete` | delete char forward | zsh, bash |  |
 | `ctrl+delete` | delete word forward | zsh, bash |  |
 | `ctrl+left` | previous word start | zsh, bash |  |

@@ -19,10 +19,12 @@ if [ -n "$ZSH_VERSION" ]; then
     bindkey -M "$_kmap" '^[OH'     beginning-of-line
     bindkey -M "$_kmap" '^[[1~'    beginning-of-line
     bindkey -M "$_kmap" '^[[7~'    beginning-of-line
+    bindkey -M "$_kmap" '^A'       beginning-of-line
     bindkey -M "$_kmap" '^[[F'     end-of-line
     bindkey -M "$_kmap" '^[OF'     end-of-line
     bindkey -M "$_kmap" '^[[4~'    end-of-line
     bindkey -M "$_kmap" '^[[8~'    end-of-line
+    bindkey -M "$_kmap" '^E'       end-of-line
     bindkey -M "$_kmap" '^[[3~'    delete-char
     bindkey -M "$_kmap" '^[[3;5~'  kill-word
 
@@ -50,10 +52,12 @@ if [ -n "$BASH_VERSION" ]; then
   bind '"\eOH": beginning-of-line'
   bind '"\e[1~": beginning-of-line'
   bind '"\e[7~": beginning-of-line'
+  bind '"\C-a": beginning-of-line'
   bind '"\e[F": end-of-line'
   bind '"\eOF": end-of-line'
   bind '"\e[4~": end-of-line'
   bind '"\e[8~": end-of-line'
+  bind '"\C-e": end-of-line'
   bind '"\e[3~": delete-char'
   bind '"\e[3;5~": kill-word'
 
