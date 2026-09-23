@@ -260,7 +260,7 @@ Rendered to / applied by: .tmux/keys.conf, sourced by .tmux.conf
 | `ctrl+right` | next word | tmux |  |
 | `]` | paste tmux's own copy-mode buffer (prefix) | tmux |  |
 | `alt+x` | toggle key passthrough to a nested (remote) tmux session | tmux | shadows readline's default M-x (execute-named-command), like every other alt+<letter> binding here |
-| `alt+x` | toggle key passthrough off, keys return to the outer (local) session | tmux |  |
+| `alt+x` | toggle key passthrough off, keys return to the outer (local) session | tmux | restores status-style explicitly rather than -gu unsetting it: colors.conf also sets it with -g, so -gu would strip that layer too and fall back to tmux's compiled-in default (green), not the configured blue |
 
 ## Shell line editing (bash readline, zsh zle)
 

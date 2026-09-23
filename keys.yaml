@@ -360,7 +360,11 @@ layers:
       - key: alt+x
         group: remote
         action: toggle key passthrough off, keys return to the outer (local) session
-        tmux: {table: off, cmd: 'set-option -gu key-table \; set-option -gu status-style \; refresh-client -S'}
+        note: >-
+          restores status-style explicitly rather than -gu unsetting it: colors.conf also
+          sets it with -g, so -gu would strip that layer too and fall back to tmux's
+          compiled-in default (green), not the configured blue
+        tmux: {table: off, cmd: 'set-option -gu key-table \; set-option -g status-style "fg=white,bg=#{@status-normal-bg}" \; refresh-client -S'}
 
   # -------------------------------------------------------------------------------------
   - id: shell

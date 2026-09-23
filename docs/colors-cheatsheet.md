@@ -64,12 +64,13 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 .tmux/colors.conf, sourced by .tmux.conf
 
-**settings** (30 listed in the yaml)
+**settings** (31 listed in the yaml)
 
 | Setting | Value | What it colours | Why |
 | ------- | ----- | ------- | --- |
 | `status-style` | fg white bg #003366 | status line |  |
 | `@status-clock-fg` | green | clock in status-right | user option: status-right in .tmux.conf reads #{@status-clock-fg} |
+| `@status-normal-bg` | #003366 | status line background | user option: matches status-style bg above; the alt+x binding in keys.yaml restores this explicitly rather than unsetting status-style, since unset would fall back to tmux's compiled-in default (green) rather than this value |
 | `@status-passthrough-bg` | bright-red | status line while alt+x passthrough is active | user option: the alt+x binding in keys.yaml reads #{@status-passthrough-bg} |
 | `mode-style` | fg bright-white bg blue | copy-mode selection | matches vim's Visual |
 

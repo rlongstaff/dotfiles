@@ -96,6 +96,7 @@ layers:
       - {key: status-left-style,                               about: status-left (host, pane)}
       - {key: status-right-style,                              about: status-right (clock)}
       - {key: '@status-clock-fg',        value: green,         about: clock in status-right, note: 'user option: status-right in .tmux.conf reads #{@status-clock-fg}'}
+      - {key: '@status-normal-bg',       value: '#003366',     about: status line background, alt+x's normal (non-passthrough) state, note: 'user option: matches status-style bg above; the alt+x binding in keys.yaml restores this explicitly rather than unsetting status-style, since unset would fall back to tmux''s compiled-in default (green) rather than this value'}
       - {key: '@status-passthrough-bg',  value: bright-red,    about: status line while alt+x passthrough is active, note: 'user option: the alt+x binding in keys.yaml reads #{@status-passthrough-bg}'}
       - {key: window-status-style,                             about: window list, other windows}
       - {key: window-status-current-style,                     about: window list, current window}
