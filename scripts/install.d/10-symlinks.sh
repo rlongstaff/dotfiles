@@ -24,11 +24,21 @@ link_one() {
     return 0
   fi
   mkdir -p "$(dirname -- "${dest}")"
-  if [ -e "${dest}" ] && [ ! -L "${dest}" ]; then
+  if [ -L "${dest}" ]; then
+    if [ "$(readlink -- "${dest}")" = "${src}" ]; then
+      status="unchanged"
+    else
+      status="relinked (was $(readlink -- "${dest}"))"
+    fi
+  elif [ -e "${dest}" ]; then
     mkdir -p "${BACKUP_DIR}/$(dirname -- "$1")"
     mv "${dest}" "${BACKUP_DIR}/$1"
+    status="linked (backed up real file)"
+  else
+    status="created"
   fi
   ln -sfn "${src}" "${dest}"
+  log "$1: ${status}"
   n=$((n + 1))
 }
 links_each link_one

@@ -82,10 +82,22 @@ export SCRIPT_DIR TARGET BACKUP_DIR
 # Run the modules.  A failing module is reported and the rest still run: the symlinks
 # are the install, and a keyboard step that cannot reach a display should not undo them.
 failed=""
+
+# update.sh does the idempotent part (symlinks, render, check); run it first, since
+# 30-keyboard.sh below depends on the symlinks it creates.
+echo "==> update.sh"
+if ! sh "${SCRIPT_DIR}/update.sh" "${TARGET}"; then
+  failed="${failed} update.sh"
+fi
+
 for module in "${SCRIPT_DIR}"/scripts/install.d/*.sh; do
-  echo "==> $(basename -- "${module}")"
+  name=$(basename -- "${module}")
+  case "${name}" in
+    10-symlinks.sh | 95-check.sh) continue ;;
+  esac
+  echo "==> ${name}"
   if ! sh "${module}"; then
-    failed="${failed} $(basename -- "${module}")"
+    failed="${failed} ${name}"
   fi
 done
 
