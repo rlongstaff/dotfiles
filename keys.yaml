@@ -350,13 +350,18 @@ layers:
       # root key table, which is always live on the OUTER (local) session -- a nested
       # remote session (its own tmux, one ssh hop in) never sees them otherwise.  alt+x
       # flips the outer session's key table to 'off', which is unbound except for the
-      # matching key below, so every raw byte -- ctrl+x included -- passes through to the
-      # pane and reaches the nested session's own identical bindings instead.
+      # matching key below, so every raw byte -- alt+* included -- passes through to the
+      # pane and reaches the nested session's own identical bindings instead.  The prefix
+      # key is a separate, table-independent check in tmux (it fires even while key-table
+      # is 'off'), so key-table alone would still swallow ctrl+x locally and hand the next
+      # key to the OUTER prefix table -- 'd' would detach the local session, not the remote
+      # one.  prefix is therefore nulled out alongside key-table, and restored on the way
+      # back.
       - key: alt+x
         group: remote
         action: toggle key passthrough to a nested (remote) tmux session
         note: shadows readline's default M-x (execute-named-command), like every other alt+<letter> binding here
-        tmux: {table: root, cmd: 'set-option -g key-table off \; set-option -g status-style "bg=#{@status-passthrough-bg}" \; refresh-client -S'}
+        tmux: {table: root, cmd: 'set-option -g prefix None \; set-option -g key-table off \; set-option -g status-style "bg=#{@status-passthrough-bg}" \; refresh-client -S'}
       - key: alt+x
         group: remote
         action: toggle key passthrough off, keys return to the outer (local) session
@@ -364,7 +369,7 @@ layers:
           restores status-style explicitly rather than -gu unsetting it: colors.conf also
           sets it with -g, so -gu would strip that layer too and fall back to tmux's
           compiled-in default (green), not the configured blue
-        tmux: {table: off, cmd: 'set-option -gu key-table \; set-option -g status-style "fg=white,bg=#{@status-normal-bg}" \; refresh-client -S'}
+        tmux: {table: off, cmd: 'set-option -g prefix C-x \; set-option -gu key-table \; set-option -g status-style "fg=white,bg=#{@status-normal-bg}" \; refresh-client -S'}
 
   # -------------------------------------------------------------------------------------
   - id: shell
