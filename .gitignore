@@ -40,7 +40,6 @@ depcomp
 .idea
 .netrwhist
 sampledata/*
-vendor/*
 .vscode
 
 ## Catchall

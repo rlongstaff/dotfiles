@@ -1,9 +1,9 @@
-[submodule ".vim/bundle/nerdtree"]
-	path = .vim/bundle/nerdtree
+[submodule "vendor/nerdtree"]
+	path = vendor/nerdtree
 	url = https://github.com/preservim/nerdtree
-[submodule ".vim/bundle/lsp"]
-	path = .vim/bundle/lsp
+[submodule "vendor/lsp"]
+	path = vendor/lsp
 	url = https://github.com/yegappan/lsp
-[submodule ".vim/bundle/vimspector"]
-	path = .vim/bundle/vimspector
+[submodule "vendor/vimspector"]
+	path = vendor/vimspector
 	url = https://github.com/puremourning/vimspector
