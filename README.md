@@ -85,9 +85,9 @@ live-session changes (gsettings, hidutil) are skipped.
 
 Bindings and colors are each defined once and rendered to every app's config:
 
-- `keys.yaml` -> `scripts/keyboard/render.sh`->
+- [keys.yaml](keys.yaml) -> `scripts/keyboard/render.sh`->
   **[docs/keyboard-cheatsheet.md](docs/keyboard-cheatsheet.md)**
-- `colors.yaml` -> `scripts/colors/render.sh` ->
+- [colors.yaml](colors.yaml) -> `scripts/colors/render.sh` ->
   **[docs/colors-cheatsheet.md](docs/colors-cheatsheet.md)**
 
 *needs `yq`, mikefarah v4
