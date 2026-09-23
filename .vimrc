@@ -7,6 +7,11 @@
 " 'compatible' on, and pathogen.vim then silently defines nothing (it bails on &cp).
 set nocompatible
 
+" Modelines are a known code-execution vector, and keys.yaml has literal "vim: {...}" text
+" near its end (the per-key vim binding field) that vim's modeline scanner misreads as a
+" `vim:` modeline, erroring on "{modes" as an unknown option.
+set nomodeline
+
 " The .vim directory next to this file, wherever it was loaded from.  Installed, ~/.vim
 " already is that directory (a symlink); `vim -u .vimrc` in the checkout, or a different
 " $HOME, would otherwise never see keys.vim or the autoload functions.
