@@ -1,4 +1,8 @@
 
+# GNU ls (Linux) needs --color=auto explicitly; BSD/macOS ls uses CLICOLOR from
+# colors.sh instead and errors on --color, so only alias it where the flag is supported.
+ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto'
+
 alias dud='du -d 1 -h -x'
 
 gh() {
