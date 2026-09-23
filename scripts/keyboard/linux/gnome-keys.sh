@@ -1,4 +1,4 @@
-# GENERATED from scripts/keyboard/keys.yaml by render.sh. Edit the yaml, not this file.
+# GENERATED from keys.yaml by render.sh. Edit the yaml, not this file.
 # Sourced by linux/terminal.sh, which defines gset() and gates it on a live GNOME
 # session.  gset SCHEMA KEY VALUE.  Order matters: outermost layer released first.
 
@@ -56,3 +56,4 @@ gset "$GT" switch-to-tab-18 "'disabled'"
 gset "$GT" switch-to-tab-19 "'disabled'"
 gset "$GT" switch-to-tab-20 "'disabled'"
 gset org.gnome.Terminal.Legacy.Settings menu-accelerator-enabled false
+gset "$GT" full-screen "'disabled'"

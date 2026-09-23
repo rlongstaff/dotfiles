@@ -2,7 +2,7 @@
 <labwc_config>
   <keyboard>
     <!-- <default /> -->
-    <!-- BEGIN GENERATED from scripts/keyboard/keys.yaml by render.sh; edit the yaml -->
+    <!-- BEGIN GENERATED from keys.yaml by render.sh; edit the yaml -->
 
     <!-- == windows =========================================================== -->
     <!-- GNOME ships this on alt+tab too; pinning it to super+tab frees alt+tab for tmux -->

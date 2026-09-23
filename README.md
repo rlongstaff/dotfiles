@@ -49,8 +49,15 @@ fake home and live-session changes (gsettings, hidutil) are skipped.
 
 The keyboard standard (same finger positions on every machine and layer) is documented in
 `docs/keyboard.md`. Every key binding for the compositor, terminal, tmux, the shells
-and vim is defined once in `scripts/keyboard/keys.yaml`; `scripts/keyboard/render.sh` (needs
+and vim is defined once in `keys.yaml`; `scripts/keyboard/render.sh` (needs
 `yq`, mikefarah v4) regenerates each app's fragment and `docs/keyboard-cheatsheet.md`.
+
+Every colour (kitty palette, tmux, prompt and `ls`, vim highlight groups) is defined once in
+`colors.yaml`; `scripts/colors/render.sh` regenerates each app's fragment and
+`docs/colors-cheatsheet.md`.
+
+vim works as a Go IDE (completion, go to definition, diagnostics, debugging) through gopls,
+yegappan/lsp and vimspector: see `docs/vim-ide.md`.
 
 ## This sucks, how do I get rid of it?
 1. Run `./uninstall.sh`

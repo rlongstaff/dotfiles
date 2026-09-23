@@ -216,6 +216,10 @@ layers:
         group: tabs
         action: gnome-terminal menu accelerator off, so F10 reaches the program
         gnome-terminal: {schema: org.gnome.Terminal.Legacy.Settings, name: menu-accelerator-enabled, value: 'false'}
+      - key: f11
+        group: tabs
+        action: gnome-terminal full screen unbound, so F11 reaches vim (debugger step into)
+        gnome-terminal: {name: full-screen, unbind: true}
 
   # -------------------------------------------------------------------------------------
   - id: tmux
@@ -396,3 +400,27 @@ layers:
       - {key: alt+shift+down,  group: resize, action: lengthen (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#resize('D')", silent: true}}
       - {key: alt+shift+up,    group: resize, action: shorten (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#resize('U')", silent: true}}
       - {key: alt+shift+right, group: resize, action: widen (else tmux pane),    vim: {modes: [n, i, v], cmd: "call vimide#resize('R')", silent: true}}
+
+      # Code navigation, VS Code layout.  The language server when the buffer has one
+      # (yegappan/lsp), else the nearest plain-vim command; see vimide#lsp.
+      - {key: f12,            group: code, action: go to definition (else tag jump),   vim: {modes: [n, i], cmd: "call vimide#lsp('definition')", silent: true}}
+      - {key: ctrl+shift+f12, group: code, action: go to declaration (else gD),        vim: {modes: [n, i], cmd: "call vimide#lsp('declaration')", silent: true}}
+      - {key: ctrl+f12,       group: code, action: go to implementation,               vim: {modes: [n, i], cmd: "call vimide#lsp('implementation')", silent: true}}
+      - {key: shift+f12,      group: code, action: list references,                    vim: {modes: [n, i], cmd: "call vimide#lsp('references')", silent: true}}
+      - {key: alt+f12,        group: code, action: hover docs (else K),                vim: {modes: [n, i], cmd: "call vimide#lsp('hover')", silent: true}}
+      - {key: f2,             group: code, action: rename symbol,                      vim: {modes: [n], cmd: "call vimide#lsp('rename')"}}
+      # Next / previous diagnostic (wraps at the ends of the buffer), not bound yet: pick a key
+      # that no earlier layer takes (see docs/keyboard-cheatsheet.md), then uncomment.
+      # - {key: KEY,          group: code, action: next error or warning,              vim: {modes: [n], cmd: "call vimide#lsp('diag_next')", silent: true}}
+      # - {key: KEY,          group: code, action: previous error or warning,          vim: {modes: [n], cmd: "call vimide#lsp('diag_prev')", silent: true}}
+
+      # Debugger, VS Code layout (vimspector; Go through dlv).  See vimide#debug.  Restart
+      # is ctrl+f5, not VS Code's ctrl+shift+f5: kitty's default reload_config owns that.
+      - {key: f5,             group: debug, action: start / continue,          vim: {modes: [n], cmd: "call vimide#debug('continue')", silent: true}}
+      - {key: shift+f5,       group: debug, action: stop and close debugger,   vim: {modes: [n], cmd: "call vimide#debug('stop')", silent: true}}
+      - {key: ctrl+f5,        group: debug, action: restart,                   vim: {modes: [n], cmd: "call vimide#debug('restart')", silent: true}}
+      - {key: f9,             group: debug, action: toggle breakpoint,         vim: {modes: [n], cmd: "call vimide#debug('breakpoint')", silent: true}}
+      - {key: f10,            group: debug, action: step over,                 vim: {modes: [n], cmd: "call vimide#debug('over')", silent: true}}
+      - {key: f11,            group: debug, action: step into,                 vim: {modes: [n], cmd: "call vimide#debug('into')", silent: true}}
+      - {key: shift+f11,      group: debug, action: step out,                  vim: {modes: [n], cmd: "call vimide#debug('out')", silent: true}}
+      - {key: f8,             group: debug, action: evaluate under cursor,     vim: {modes: [n], cmd: "call vimide#debug('eval')", silent: true}}

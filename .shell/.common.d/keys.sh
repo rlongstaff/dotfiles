@@ -1,4 +1,4 @@
-# GENERATED from scripts/keyboard/keys.yaml by render.sh. Edit the yaml, not this file.
+# GENERATED from keys.yaml by render.sh. Edit the yaml, not this file.
 #
 # Line-editing keys for both shells, in every byte form a terminal might send (the form
 # depends on the emulator and on application-cursor mode).  Binding all of them removes

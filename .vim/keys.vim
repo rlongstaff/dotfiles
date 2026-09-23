@@ -1,4 +1,4 @@
-" GENERATED from scripts/keyboard/keys.yaml by render.sh. Edit the yaml, not this file.
+" GENERATED from keys.yaml by render.sh. Edit the yaml, not this file.
 " Sourced by .vimrc (runtime keys.vim).  Functions live in autoload/vimide.vim.
 
 " Terminal vim sees Alt+letter as ESC + letter and does not decode it, so each one is
@@ -77,3 +77,26 @@ vnoremap <silent> <M-S-Up> <Esc>:call vimide#resize('U')<CR>
 nnoremap <silent> <M-S-Right> :call vimide#resize('R')<CR>
 inoremap <silent> <M-S-Right> <C-o>:call vimide#resize('R')<CR>
 vnoremap <silent> <M-S-Right> <Esc>:call vimide#resize('R')<CR>
+
+" -- code -------------------------------------------------------------------------
+nnoremap <silent> <F12> :call vimide#lsp('definition')<CR>
+inoremap <silent> <F12> <C-o>:call vimide#lsp('definition')<CR>
+nnoremap <silent> <C-S-F12> :call vimide#lsp('declaration')<CR>
+inoremap <silent> <C-S-F12> <C-o>:call vimide#lsp('declaration')<CR>
+nnoremap <silent> <C-F12> :call vimide#lsp('implementation')<CR>
+inoremap <silent> <C-F12> <C-o>:call vimide#lsp('implementation')<CR>
+nnoremap <silent> <S-F12> :call vimide#lsp('references')<CR>
+inoremap <silent> <S-F12> <C-o>:call vimide#lsp('references')<CR>
+nnoremap <silent> <M-F12> :call vimide#lsp('hover')<CR>
+inoremap <silent> <M-F12> <C-o>:call vimide#lsp('hover')<CR>
+nnoremap <F2> :call vimide#lsp('rename')<CR>
+
+" -- debug ------------------------------------------------------------------------
+nnoremap <silent> <F5> :call vimide#debug('continue')<CR>
+nnoremap <silent> <S-F5> :call vimide#debug('stop')<CR>
+nnoremap <silent> <C-F5> :call vimide#debug('restart')<CR>
+nnoremap <silent> <F9> :call vimide#debug('breakpoint')<CR>
+nnoremap <silent> <F10> :call vimide#debug('over')<CR>
+nnoremap <silent> <F11> :call vimide#debug('into')<CR>
+nnoremap <silent> <S-F11> :call vimide#debug('out')<CR>
+nnoremap <silent> <F8> :call vimide#debug('eval')<CR>

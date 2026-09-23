@@ -1,0 +1,5 @@
+# :VimspectorInstall downloads gadgets and writes its manifests here.  Only the
+# hand-written adapters in .gadgets.d/ are part of the dotfiles.
+/*
+!/.gadgets.d/
+!/.gitignore

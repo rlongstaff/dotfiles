@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Render scripts/keyboard/keys.yaml into every app's own config syntax.
+# Render keys.yaml into every app's own config syntax.
 #
 #   scripts/keyboard/render.sh           write whatever changed, report each file
 #   scripts/keyboard/render.sh --check   write nothing; exit 1 if anything is stale
@@ -30,7 +30,7 @@ set -f          # no globbing: keys like M-[ and * must stay literal
 MODULE=render
 . "${SCRIPT_DIR}/scripts/lib.sh"
 
-YAML="${SCRIPT_DIR}/scripts/keyboard/keys.yaml"
+YAML="${SCRIPT_DIR}/keys.yaml"
 
 OUT_KITTY="${SCRIPT_DIR}/.config/kitty/keys.conf"
 OUT_TMUX="${SCRIPT_DIR}/.tmux/keys.conf"
@@ -40,7 +40,7 @@ OUT_LABWC="${SCRIPT_DIR}/.config/labwc/rc.xml"
 OUT_GNOME="${SCRIPT_DIR}/scripts/keyboard/linux/gnome-keys.sh"
 OUT_DOCS="${SCRIPT_DIR}/docs/keyboard-cheatsheet.md"
 
-LABWC_BEGIN='<!-- BEGIN GENERATED from scripts/keyboard/keys.yaml by render.sh; edit the yaml -->'
+LABWC_BEGIN='<!-- BEGIN GENERATED from keys.yaml by render.sh; edit the yaml -->'
 LABWC_END='<!-- END GENERATED -->'
 
 CHECK=""
@@ -226,7 +226,7 @@ xml_esc() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&
 # Output plumbing
 # --------------------------------------------------------------------------------------
 
-GEN_NOTE="GENERATED from scripts/keyboard/keys.yaml by render.sh. Edit the yaml, not this file."
+GEN_NOTE="GENERATED from keys.yaml by render.sh. Edit the yaml, not this file."
 
 # finish TMPFILE DEST -- install TMPFILE as DEST if it differs; in --check, only report.
 finish() {
@@ -589,7 +589,7 @@ render_docs() {
 
 # Keyboard cheatsheet
 
-Every binding in the dotfiles, generated from \`scripts/keyboard/keys.yaml\`. Why each key
+Every binding in the dotfiles, generated from \`keys.yaml\`. Why each key
 lives where it does is in \`keyboard.md\`; vim's own defaults are in \`vim-defaults.md\`.
 
 **Capture order.** A keystroke goes \`os -> compositor -> terminal -> tmux -> shell | vim\`,

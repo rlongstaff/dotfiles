@@ -1,0 +1,343 @@
+# Every colour in the dotfiles, for every layer that draws one: the terminal (kitty),
+# tmux, the shells (prompt, ls) and vim (core, syntax, syntastic, LSP, vimspector).
+#
+# Edit this file, then run   scripts/colors/render.sh   and commit the regenerated
+# fragments with it.  Never edit a file whose first line says GENERATED.
+# Overview and palette usage: docs/colors-cheatsheet.md (generated).
+#
+# ---------------------------------------------------------------------------------------
+# Colour values (the renderer rejects anything else)
+#
+#   palette name    black red green yellow blue magenta cyan white, and bright-<each>.
+#                   The only names used anywhere below: vim and tmux disagree about the
+#                   bare ones (vim's 'Blue' is colour 12, tmux's 'blue' is colour 4), so
+#                   every app is handed a number, never a name.
+#   0-255           an xterm-256 colour number (16-255 are fixed, 0-15 are the palette)
+#   '#rrggbb'       truecolour: kitty and tmux only.  vim runs without 'termguicolors'
+#                   and the shells use SGR codes, so both reject it.
+#   keyword         passed through as written where the app has one (none, default,
+#                   system, background).
+#
+# Entry fields
+#
+#   key / group     the app's own name for the setting
+#   about           what it colours (docs only)
+#   note            why it has the value it has; carried into the rendered fragment
+#   fg, bg, attrs   a style: foreground, background, [bold, underline, reverse, ...]
+#   value           a single colour (kitty, tmux *-colour and @user options)
+#   link            vim only: follow another highlight group
+#
+# An entry with no value is documentation: the app's own default applies and nothing is
+# rendered.  Give it a value to override the default.
+# ---------------------------------------------------------------------------------------
+
+version: 1
+
+# The 16 terminal colours, pinned to kitty's built-in defaults (declaring them changed
+# nothing on screen).  Position is the colour number: black is 0, bright-white is 15.
+palette:
+  - {name: black,          hex: '#000000'}
+  - {name: red,            hex: '#cc0403'}
+  - {name: green,          hex: '#19cb00'}
+  - {name: yellow,         hex: '#cecb00'}
+  - {name: blue,           hex: '#0d73cc'}
+  - {name: magenta,        hex: '#cb1ed1'}
+  - {name: cyan,           hex: '#0dcdcd'}
+  - {name: white,          hex: '#dddddd'}
+  - {name: bright-black,   hex: '#767676'}
+  - {name: bright-red,     hex: '#f2201f'}
+  - {name: bright-green,   hex: '#23fd00'}
+  - {name: bright-yellow,  hex: '#fffd00'}
+  - {name: bright-blue,    hex: '#1a8fff'}
+  - {name: bright-magenta, hex: '#fd28ff'}
+  - {name: bright-cyan,    hex: '#14ffff'}
+  - {name: bright-white,   hex: '#ffffff'}
+
+layers:
+
+  # -------------------------------------------------------------------------------------
+  - id: kitty
+    title: Terminal (kitty)
+    where: .config/kitty/colors.conf, included by kitty.conf (the palette renders there too)
+    settings:
+      - {key: foreground,              value: white,     about: default text}
+      - {key: background,              value: black,     about: default background}
+      - {key: selection_foreground,    value: black,     about: text of a mouse selection}
+      - {key: selection_background,    value: '#fffacd', about: background of a mouse selection}
+      - {key: cursor,                  value: '#cccccc', about: cursor block}
+      - {key: cursor_text_color,       value: '#111111', about: text under the cursor block}
+      - {key: cursor_trail_color,                        about: cursor trail (default follows the cursor colour)}
+      - {key: url_color,               value: '#0087bd', about: underline of a hovered URL}
+      - {key: visual_bell_color,       value: '#606060', about: flash for the visual bell, note: 'dimmer than kitty''s default flash'}
+      - {key: active_border_color,     value: '#00ff00', about: border of the focused kitty window}
+      - {key: inactive_border_color,   value: '#cccccc', about: border of other kitty windows}
+      - {key: bell_border_color,       value: '#ff5a00', about: border of a window that rang the bell}
+      - {key: wayland_titlebar_color,  value: system,    about: Wayland title bar, note: follow the desktop theme}
+      - {key: macos_titlebar_color,                      about: macOS title bar}
+      - {key: active_tab_foreground,   value: black,     about: text of the current tab}
+      - {key: active_tab_background,   value: '#eeeeee', about: current tab}
+      - {key: inactive_tab_foreground, value: '#444444', about: text of other tabs}
+      - {key: inactive_tab_background, value: '#999999', about: other tabs}
+      - {key: tab_bar_background,                        about: tab bar behind the tabs (default the window background)}
+      - {key: tab_bar_margin_color,                      about: tab bar margins}
+      - {key: mark1_foreground,        value: black,     about: text of mark 1 (marker highlighting)}
+      - {key: mark1_background,        value: '#98d3cb', about: mark 1}
+      - {key: mark2_foreground,        value: black,     about: text of mark 2}
+      - {key: mark2_background,        value: '#f2dcd3', about: mark 2}
+      - {key: mark3_foreground,        value: black,     about: text of mark 3}
+      - {key: mark3_background,        value: '#f274bc', about: mark 3}
+
+  # -------------------------------------------------------------------------------------
+  - id: tmux
+    title: tmux
+    where: .tmux/colors.conf, sourced by .tmux.conf
+    settings:
+      - {key: status-style,              fg: white, bg: '#003366', about: status line}
+      - {key: status-left-style,                               about: status-left (host, pane)}
+      - {key: status-right-style,                              about: status-right (clock)}
+      - {key: '@status-clock-fg',        value: green,         about: clock in status-right, note: 'user option: status-right in .tmux.conf reads #{@status-clock-fg}'}
+      - {key: window-status-style,                             about: window list, other windows}
+      - {key: window-status-current-style,                     about: window list, current window}
+      - {key: window-status-last-style,                        about: window list, previous window}
+      - {key: window-status-activity-style,                    about: window list, window with activity}
+      - {key: window-status-bell-style,                        about: window list, window that rang the bell}
+      - {key: message-style,                                   about: messages and the command prompt}
+      - {key: message-command-style,                           about: command prompt in vi command mode}
+      - {key: mode-style,                fg: bright-white, bg: blue, about: copy-mode selection, choose-tree highlight, note: 'matches vim''s Visual'}
+      - {key: copy-mode-match-style,                           about: copy-mode search matches}
+      - {key: copy-mode-current-match-style,                   about: copy-mode current search match}
+      - {key: copy-mode-mark-style,                            about: copy-mode marked line}
+      - {key: pane-border-style,                               about: borders of other panes}
+      - {key: pane-active-border-style,                        about: border of the focused pane}
+      - {key: pane-scrollbars-style,                           about: pane scrollbars}
+      - {key: window-style,                                    about: pane contents, other panes}
+      - {key: window-active-style,                             about: pane contents, focused pane}
+      - {key: popup-style,                                     about: popup contents}
+      - {key: popup-border-style,                              about: popup border}
+      - {key: menu-style,                                      about: menu contents}
+      - {key: menu-selected-style,                             about: menu selected item}
+      - {key: menu-border-style,                               about: menu border}
+      - {key: clock-mode-colour,                               about: clock mode (C-x t)}
+      - {key: display-panes-colour,                            about: display-panes numbers, other panes}
+      - {key: display-panes-active-colour,                     about: display-panes number, focused pane}
+      - {key: cursor-colour,                                   about: cursor, where the terminal supports setting it}
+
+  # -------------------------------------------------------------------------------------
+  - id: shell
+    title: Shells (bash and zsh)
+    where: .shell/.common.d/colors.sh; .bashrc builds PS1 from it, the zsh theme PROMPT
+    # The two-line prompt.  Both shells draw the same colours: bash as SGR codes, zsh as
+    # %F{n} / %B (see .shell/.bashrc and .shell/.zsh/themes/rlongstaff.zsh-theme).
+    prompt:
+      - {key: user,  fg: green,        about: user name}
+      - {key: at,    fg: bright-black, about: the @ between user and host}
+      - {key: host,  fg: blue, attrs: [bold], about: host name (WSL on WSL)}
+      - {key: colon, fg: bright-black, about: the colon before the path}
+      - {key: path,  fg: yellow,       about: working directory}
+      - {key: git,   fg: magenta,      about: git branch and state}
+      - {key: time,  fg: bright-black, about: 'right-side clock (zsh only: timeshow / timehide)'}
+    # ls file-type colours: LS_COLORS (GNU ls) and LSCOLORS (BSD/macOS ls).  LSCOLORS has
+    # exactly these eleven slots, in this order, and only the eight base colours; bold
+    # stands in for bright there.
+    ls:
+      - {key: di, fg: blue, attrs: [bold], about: directory}
+      - {key: ln, fg: magenta,          about: symbolic link}
+      - {key: so, fg: yellow,           about: socket}
+      - {key: pi, fg: yellow,           about: named pipe}
+      - {key: ex, fg: green,            about: executable}
+      - {key: bd, fg: blue, bg: cyan,   about: block device}
+      - {key: cd, fg: blue, bg: yellow, about: character device}
+      - {key: su, fg: black, bg: red,   about: setuid executable}
+      - {key: sg, fg: black, bg: cyan,  about: setgid executable}
+      - {key: tw, fg: black, bg: green, about: sticky, other-writable directory}
+      - {key: ow, fg: black, bg: yellow, about: other-writable directory}
+
+  # -------------------------------------------------------------------------------------
+  - id: vim
+    title: vim
+    where: .vim/colors.vim, sourced by .vimrc (after 'background' and syntax enable)
+    # Every highlight group vim 9.2 defines, then the groups of each plugin.  vimspector
+    # also colours its signs with core groups: breakpoints WarningMsg (conditional also
+    # WarningMsg, log SpellRare, disabled LineNr), program counter MatchParen on a
+    # CursorLine line, current frame Special.
+    groups:
+      core:
+        - {group: ColorColumn,       about: 'used for the columns set with ''colorcolumn'''}
+        - {group: Conceal,           about: 'placeholder characters substituted for concealed text (see ''conceallevel'')'}
+        - {group: Cursor,            about: 'character under the cursor'}
+        - {group: lCursor,           about: 'character under the cursor when language-mapping is used (see ''guicursor'')'}
+        - {group: CursorIM,          about: 'like Cursor, but used when in IME mode'}
+        - {group: CursorColumn,      about: 'screen column that the cursor is in when ''cursorcolumn'' is set'}
+        - {group: CursorLine,        about: 'screen line that the cursor is in when ''cursorline'' is set'}
+        - {group: Directory,         about: 'directory names (and other special names in listings)'}
+        - {group: DiffAdd,           about: 'diff mode: Added line'}
+        - {group: DiffChange,        about: 'diff mode: Changed line'}
+        - {group: DiffDelete,        about: 'diff mode: Deleted line'}
+        - {group: DiffText,          about: 'diff mode: Changed text within a changed line'}
+        - {group: DiffTextAdd,       about: 'diff mode: Added text within a changed line'}
+        - {group: EndOfBuffer,       about: 'filler lines (~) after the last line in the buffer'}
+        - {group: ErrorMsg,          about: 'error messages on the command line'}
+        - {group: VertSplit,         about: 'column separating vertically split windows that is adjacent to the current window'}
+        - {group: VertSplitNC,       about: 'column separating vertically split windows where neither adjacent window is the current...'}
+        - {group: Folded,            about: 'line used for closed folds'}
+        - {group: FoldColumn,        about: '''foldcolumn'''}
+        - {group: SignColumn,        about: 'column where signs are displayed'}
+        - {group: IncSearch,         about: '''incsearch'' highlighting; also used for the text replaced with '':s///c'''}
+        - {group: LineNr,            fg: blue, bg: black, about: 'line number for '':number'' and '':#'' commands, and when ''number'' or ''relativenumber'' option...'}
+        - {group: LineNrAbove,       about: 'line number for when the ''relativenumber'' option is set, above the cursor line'}
+        - {group: LineNrBelow,       about: 'line number for when the ''relativenumber'' option is set, below the cursor line'}
+        - {group: CursorLineNr,      about: 'like LineNr when ''cursorline'' is set and ''cursorlineopt'' contains ''number'' or is ''both'',...'}
+        - {group: CursorLineFold,    about: 'like FoldColumn when ''cursorline'' is set for the cursor line'}
+        - {group: CursorLineSign,    about: 'like SignColumn when ''cursorline'' is set for the cursor line'}
+        - {group: MatchParen,        about: 'character under the cursor or just before it, if it is a paired bracket, and its match'}
+        - {group: MessageWindow,     about: 'messages popup window used by `:echowindow`'}
+        - {group: ModeMsg,           about: '''showmode'' message (e.g., ''-- INSERT --'')'}
+        - {group: MsgArea,           about: 'command-line area, also used for outputting messages, see also ''cmdheight'''}
+        - {group: MoreMsg,           about: 'more-prompt'}
+        - {group: NonText,           about: '''@'' at the end of the window, ''<<<'' at the start of the window for ''smoothscroll'',...'}
+        - {group: Normal,            about: 'normal text'}
+        - {group: Pmenu,             about: 'popup menu: Normal item'}
+        - {group: PmenuSel,          about: 'popup menu: Selected item'}
+        - {group: PmenuKind,         about: 'popup menu: Normal item ''kind'''}
+        - {group: PmenuKindSel,      about: 'popup menu: Selected item ''kind'''}
+        - {group: PmenuExtra,        about: 'popup menu: Normal item ''extra text'''}
+        - {group: PmenuExtraSel,     about: 'popup menu: Selected item ''extra text'''}
+        - {group: PmenuSbar,         about: 'popup menu: Scrollbar'}
+        - {group: PmenuThumb,        about: 'popup menu: Thumb of the scrollbar'}
+        - {group: PmenuMatch,        about: 'popup menu: Matched text in normal item'}
+        - {group: PmenuMatchSel,     about: 'popup menu: Matched text in selected item'}
+        - {group: PmenuBorder,       about: 'popup menu: Border characters'}
+        - {group: PmenuShadow,       about: 'popup menu: Used for shadow'}
+        - {group: ComplMatchIns,     about: 'matched text of the currently inserted completion'}
+        - {group: PreInsert,         about: 'text inserted when ''preinsert'' is in ''completeopt'''}
+        - {group: Popup,             about: 'popup window body, used when neither the popup''s ''wincolor'' nor explicit ''highlight''...'}
+        - {group: PopupBorder,       about: 'popup window border characters, used when ''borderhighlight'' is not set and the popup''s...'}
+        - {group: PopupTitle,        about: 'popup window title, used when ''borderhighlight'' is not set and the popup''s ''wincolor'' is...'}
+        - {group: PopupSelected,     about: 'popup window created with popup_menu()'}
+        - {group: PopupNotification, about: 'popup window created with popup_notification()'}
+        - {group: Question,          about: 'hit-enter prompt and yes/no questions'}
+        - {group: QuickFixLine,      about: 'current quickfix item in the quickfix window'}
+        - {group: Search,            about: 'last search pattern highlighting (see ''hlsearch'')'}
+        - {group: CurSearch,         about: 'current match for the last search pattern (see ''hlsearch'')'}
+        - {group: SpecialKey,        about: 'meta and special keys listed with '':map'''}
+        - {group: SpellBad,          about: 'word that is not recognized by the spellchecker'}
+        - {group: SpellCap,          about: 'word that should start with a capital'}
+        - {group: SpellLocal,        about: 'word that is recognized by the spellchecker as one that is used in another region'}
+        - {group: SpellRare,         about: 'word that is recognized by the spellchecker as one that is hardly ever used'}
+        - {group: StatusLine,        about: 'status line of current window'}
+        - {group: StatusLineNC,      about: 'status lines of not-current windows'}
+        - {group: StatusLineTerm,    about: 'status line of current window, if it is a terminal window'}
+        - {group: StatusLineTermNC,  about: 'status lines of not-current windows that are terminal windows'}
+        - {group: TabLine,           about: 'tab pages line, not active tab page label'}
+        - {group: TabLineFill,       about: 'tab pages line, where there are no labels'}
+        - {group: TabLineSel,        about: 'tab pages line, active tab page label'}
+        - {group: TabPanel,          about: 'tabPanel, not active tab page label'}
+        - {group: TabPanelFill,      about: 'tabPanel, where there are no labels'}
+        - {group: TabPanelSel,       about: 'tabPanel, active tab page label'}
+        - {group: Terminal,          about: 'terminal window (see terminal-size-color)'}
+        - {group: Title,             about: 'titles for output from '':set all'', '':autocmd'' etc'}
+        - {group: TitleBar,          about: 'title bar for the active Gui''s window'}
+        - {group: TitleBarNC,        about: 'title bar for inactive Gui''s window'}
+        - {group: Visual,            fg: bright-white, bg: blue, note: 'matches tmux''s mode-style', about: 'visual mode selection'}
+        - {group: VisualNOS,         about: 'visual mode selection when vim is ''Not Owning the Selection'''}
+        - {group: WarningMsg,        about: 'warning messages'}
+        - {group: WildMenu,          about: 'current match in ''wildmenu'' completion'}
+        - {group: User1,             fg: bright-white, bg: 236, attrs: [bold], note: 'line, column and the %= fill: the main readout', about: 'statusline %1*'}
+        - {group: User2,             fg: cyan, bg: 236, note: 'modified [+], /total, 0xchar: [+] has to stand out', about: 'statusline %2*'}
+        - {group: User3,             fg: green, bg: 236, note: 'filetype', about: 'statusline %3*'}
+        - {group: User4,             fg: yellow, bg: 236, attrs: [bold], note: 'full path; yellow like the prompt''s path', about: 'statusline %4*'}
+        - {group: User5,             fg: bright-black, bg: 236, note: 'line endings: rarely interesting, so dimmed', about: 'statusline %5*'}
+        - {group: User6,             fg: bright-red, bg: 236, attrs: [bold], note: 'diagnostics: syntastic flag and LSP [E:n W:n]',  about: 'statusline %6*'}
+        - {group: User7,             about: 'statusline %7*'}
+        - {group: User8,             about: 'statusline %8*'}
+        - {group: User9,             about: 'statusline %9*'}
+      syntax:
+        - {group: Comment,        about: 'any comment'}
+        - {group: Constant,       about: 'any constant'}
+        - {group: String,         about: 'a string constant: ''this is a string'''}
+        - {group: Character,      about: 'a character constant: ''c'', ''\n'''}
+        - {group: Number,         about: 'a number constant: 234, 0xff'}
+        - {group: Boolean,        about: 'a boolean constant: TRUE, false'}
+        - {group: Float,          about: 'a floating point constant: 2.3e10'}
+        - {group: Identifier,     about: 'any variable name'}
+        - {group: Function,       about: 'function name (also: methods for classes)'}
+        - {group: Statement,      about: 'any statement'}
+        - {group: Conditional,    about: 'if, then, else, endif, switch, etc'}
+        - {group: Repeat,         about: 'for, do, while, etc'}
+        - {group: Label,          about: 'case, default, etc'}
+        - {group: Operator,       about: '''sizeof'', ''+'', ''*'', etc'}
+        - {group: Keyword,        about: 'any other keyword'}
+        - {group: Exception,      about: 'try, catch, throw'}
+        - {group: PreProc,        about: 'generic Preprocessor'}
+        - {group: Include,        about: 'preprocessor #include'}
+        - {group: Define,         about: 'preprocessor #define'}
+        - {group: Macro,          about: 'same as Define'}
+        - {group: PreCondit,      about: 'preprocessor #if, #else, #endif, etc'}
+        - {group: Type,           about: 'int, long, char, etc'}
+        - {group: StorageClass,   about: 'static, register, volatile, etc'}
+        - {group: Structure,      about: 'struct, union, enum, etc'}
+        - {group: Typedef,        about: 'A typedef'}
+        - {group: Special,        about: 'any special symbol'}
+        - {group: SpecialChar,    about: 'special character in a constant'}
+        - {group: Tag,            about: 'you can use CTRL-] on this'}
+        - {group: Delimiter,      about: 'character that needs attention'}
+        - {group: SpecialComment, about: 'special things inside a comment'}
+        - {group: Debug,          about: 'debugging statements'}
+        - {group: Underlined,     about: 'text that stands out, HTML links'}
+        - {group: Bold,           about: 'bold text'}
+        - {group: Italic,         about: 'italic text'}
+        - {group: BoldItalic,     about: 'bold and italic text'}
+        - {group: Ignore,         about: 'left blank, hidden  hl-Ignore'}
+        - {group: Error,          about: 'any erroneous construct'}
+        - {group: Todo,           about: 'anything that needs extra attention; mostly the'}
+        - {group: Added,          about: 'added line in a diff'}
+        - {group: Changed,        about: 'changed line in a diff'}
+        - {group: Removed,        about: 'removed line in a diff'}
+      syntastic:
+        - {group: SyntasticError,            about: 'text of an error (checker highlighting); default links to SpellBad'}
+        - {group: SyntasticWarning,          about: 'text of a warning; default links to SpellCap'}
+        - {group: SyntasticStyleError,       about: 'text of a style error; default links to SyntasticError'}
+        - {group: SyntasticStyleWarning,     about: 'text of a style warning; default links to SyntasticWarning'}
+        - {group: SyntasticErrorSign,        about: 'error sign (>>); default links to Error'}
+        - {group: SyntasticWarningSign,      about: 'warning sign (>>); default links to Todo'}
+        - {group: SyntasticStyleErrorSign,   about: 'style error sign (S>); default links to SyntasticErrorSign'}
+        - {group: SyntasticStyleWarningSign, about: 'style warning sign (S>); default links to SyntasticWarningSign'}
+        - {group: SyntasticErrorLine,        about: 'whole line with an error; default cleared'}
+        - {group: SyntasticWarningLine,      about: 'whole line with a warning; default cleared'}
+        - {group: SyntasticStyleErrorLine,   about: 'whole line with a style error; default links to SyntasticErrorLine'}
+        - {group: SyntasticStyleWarningLine, about: 'whole line with a style warning; default links to SyntasticWarningLine'}
+      lsp:
+        - {group: LspDiagInlineError,        about: 'inline error diagnostics; default links to SpellBad'}
+        - {group: LspDiagInlineHint,         about: 'inline hint diagnostics; default links to SpellLocal'}
+        - {group: LspDiagInlineInfo,         about: 'inline info diagnostics; default links to SpellRare'}
+        - {group: LspDiagInlineWarning,      about: 'inline warning diagnostics; default links to SpellCap'}
+        - {group: LspDiagLine,               about: 'whole line with one or more diagnostics; default cleared'}
+        - {group: LspDiagSignErrorText,      about: 'the sign text for error diags; default links to linked'}
+        - {group: LspDiagSignHintText,       about: 'the sign text for hint diags; default links to linked'}
+        - {group: LspDiagSignInfoText,       about: 'the sign text for info diags; default links to linked'}
+        - {group: LspDiagSignWarningText,    about: 'the sign text for warning diags; default links to linked'}
+        - {group: LspDiagVirtualText,        about: 'diagnostic virtual text; default links to LineNr'}
+        - {group: LspDiagVirtualTextError,   about: 'virtual text for error diags; default links to SpellBad'}
+        - {group: LspDiagVirtualTextHint,    about: 'virtual text for hint diags; default links to SpellLocal'}
+        - {group: LspDiagVirtualTextInfo,    about: 'virtual text for info diags; default links to SpellRare'}
+        - {group: LspDiagVirtualTextWarning, about: 'virtual text for warning diags; default links to SpellCap'}
+        - {group: LspInlayHintsParam,        about: 'inlay hints of kind ''parameter''; default links to Conceal'}
+        - {group: LspInlayHintsType,         about: 'inlay hints of kind ''type''; default links to Label'}
+        - {group: LspPopup,                  about: 'popup contents; default links to Pmenu'}
+        - {group: LspPopupBorder,            about: 'popup borders; default links to Pmenu'}
+        - {group: LspSigActiveParameter,     about: 'the active signature parameter; default links to LineNr'}
+        - {group: LspSymbolName,             about: 'symbol name in :LspDocumentSymbol; default links to Search'}
+        - {group: LspSymbolRange,            about: 'lines of the symbol picked in :LspDocumentSymbol; default links to Visual'}
+        - {group: LspTextRef,                about: 'text references to the symbol under the cursor (:LspHighlight); default links to Search'}
+        - {group: LspReadRef,                about: 'read references (:LspHighlight); default links to DiffChange'}
+        - {group: LspWriteRef,               about: 'write references (:LspHighlight); default links to DiffDelete'}
+      vimspector:
+        - {group: VimspectorBPEnabled,     about: 'enabled breakpoint in the breakpoints window; default links to WarningMsg'}
+        - {group: VimspectorBPDisabled,    about: 'disabled breakpoint in the breakpoints window; default links to LineNr'}
+        - {group: VimspectorBPFileLine,    about: 'file:line in the breakpoints window; default links to CursorLineNr'}
+        - {group: VimspectorInstalling,    about: ':VimspectorInstall, gadget being installed; default links to Constant'}
+        - {group: VimspectorDone,          about: ':VimspectorInstall, gadget done; default links to DiffAdd'}
+        - {group: VimspectorSkip,          about: ':VimspectorInstall, gadget skipped; default links to DiffAdd'}
+        - {group: VimspectorError,         about: ':VimspectorInstall, gadget failed; default links to WarningMsg'}
+        - {group: VimspectorGadget,        about: ':VimspectorInstall, gadget name; default links to String'}
+        - {group: VimspectorGadgetVersion, about: ':VimspectorInstall, gadget version; default links to Identifier'}

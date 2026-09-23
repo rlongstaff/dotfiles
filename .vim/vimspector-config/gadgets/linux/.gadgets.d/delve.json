@@ -1,0 +1,14 @@
+{
+  "adapters": {
+    "delve": {
+      "variables": {
+        "port": "${unusedLocalPort}",
+        "dlvFlags": "",
+        "listenOn": "127.0.0.1"
+      },
+      "command": [ "dlv", "dap", "--listen", "${listenOn}:${port}", "*${dlvFlags}" ],
+      "tty": true,
+      "port": "${port}"
+    }
+  }
+}

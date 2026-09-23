@@ -36,10 +36,14 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true
 # after the newline), so Home, End and Ctrl-Left/Right land in visibly wrong columns and
 # long lines redraw over the prompt.  zsh needs no equivalent: %F{}/%f are zero-width to it
 # by definition, which is why only the bash half had the defect.
+#
+# The colours are DOTFILES_C_BASH_* from .common.d/colors.sh, GENERATED from colors.yaml
+# and already \[ \] wrapped.  Double quotes splice them in now; \$( and \\\$ keep the git
+# call and the $/# prompt character for prompt time.
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
     # WSL
-    export PS1='╭─\[\e[32m\]\u\[\e[90m\]@\[\e[1;34m\]WSL\[\e[0m\]\[\e[90m\]:\[\e[33m\]\W\[\e[35m\] $(__git_ps1 "%s")\n\[\e[0m\]╰ \$ '
+    export PS1="╭─${DOTFILES_C_BASH_USER}\u${DOTFILES_C_BASH_AT}@${DOTFILES_C_BASH_HOST}WSL\[\e[0m\]${DOTFILES_C_BASH_COLON}:${DOTFILES_C_BASH_PATH}\W${DOTFILES_C_BASH_GIT} \$(__git_ps1 \"%s\")\n\[\e[0m\]╰ \\\$ "
 else 
-    export PS1='╭─\[\e[32m\]\u\[\e[90m\]@\[\e[1;34m\]\h\[\e[0m\]\[\e[90m\]:\[\e[33m\]\w\[\e[35m\] $(__git_ps1 "%s")\n\[\e[0m\]╰ \$ '
+    export PS1="╭─${DOTFILES_C_BASH_USER}\u${DOTFILES_C_BASH_AT}@${DOTFILES_C_BASH_HOST}\h\[\e[0m\]${DOTFILES_C_BASH_COLON}:${DOTFILES_C_BASH_PATH}\w${DOTFILES_C_BASH_GIT} \$(__git_ps1 \"%s\")\n\[\e[0m\]╰ \\\$ "
 
 fi

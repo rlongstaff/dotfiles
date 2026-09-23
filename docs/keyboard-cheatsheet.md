@@ -1,8 +1,8 @@
-<!-- GENERATED from scripts/keyboard/keys.yaml by render.sh. Edit the yaml, not this file. -->
+<!-- GENERATED from keys.yaml by render.sh. Edit the yaml, not this file. -->
 
 # Keyboard cheatsheet
 
-Every binding in the dotfiles, generated from `scripts/keyboard/keys.yaml`. Why each key
+Every binding in the dotfiles, generated from `keys.yaml`. Why each key
 lives where it does is in `keyboard.md`; vim's own defaults are in `vim-defaults.md`.
 
 **Capture order.** A keystroke goes `os -> compositor -> terminal -> tmux -> shell | vim`,
@@ -50,7 +50,8 @@ space bar on every machine; alt is Option.
 | `super+left` |  |  | **previous tab** |  |  |  |
 | `super+right` |  |  | **next tab** |  |  |  |
 | `alt+0` |  |  | released |  |  |  |
-| `f10` |  |  | released |  |  |  |
+| `f10` |  |  | released |  |  | **step over** |
+| `f11` |  |  | released |  |  | **step into** |
 | `ctrl+x` |  |  |  | **tmux prefix** |  |  |
 | `alt+m` |  |  |  | **toggle mouse reporting (on by default; shift+drag selects for the terminal)** |  |  |
 | `alt+\` |  |  |  | **split right** |  |  |
@@ -110,6 +111,18 @@ space bar on every machine; alt is Option.
 | `ctrl+a` |  |  |  |  |  | **start of line** |
 | `ctrl+e` |  |  |  |  |  | **end of line** |
 | `ctrl+t` |  |  |  |  |  | **toggle NERDTree** |
+| `f12` |  |  |  |  |  | **go to definition (else tag jump)** |
+| `ctrl+shift+f12` |  |  |  |  |  | **go to declaration (else gD)** |
+| `ctrl+f12` |  |  |  |  |  | **go to implementation** |
+| `shift+f12` |  |  |  |  |  | **list references** |
+| `alt+f12` |  |  |  |  |  | **hover docs (else K)** |
+| `f2` |  |  |  |  |  | **rename symbol** |
+| `f5` |  |  |  |  |  | **start / continue** |
+| `shift+f5` |  |  |  |  |  | **stop and close debugger** |
+| `ctrl+f5` |  |  |  |  |  | **restart** |
+| `f9` |  |  |  |  |  | **toggle breakpoint** |
+| `shift+f11` |  |  |  |  |  | **step out** |
+| `f8` |  |  |  |  |  | **evaluate under cursor** |
 
 ## Shadowed keys
 
@@ -186,6 +199,7 @@ Rendered to / applied by: kitty .config/kitty/keys.conf; gnome-terminal via linu
 | `super+9` | tab 9 | gnome-terminal, iterm2 |  |
 | `alt+0` | gnome-terminal tabs 10-20 unbound (no super key left for them) | gnome-terminal |  |
 | `f10` | gnome-terminal menu accelerator off, so F10 reaches the program | gnome-terminal |  |
+| `f11` | gnome-terminal full screen unbound, so F11 reaches vim (debugger step into) | gnome-terminal |  |
 
 ## tmux (alt = unprefixed, ctrl+x = prefix for rare operations)
 
@@ -284,3 +298,17 @@ Rendered to / applied by: .vim/keys.vim, sourced by .vimrc
 | `alt+shift+down` | lengthen (else tmux pane) | vim |  |
 | `alt+shift+up` | shorten (else tmux pane) | vim |  |
 | `alt+shift+right` | widen (else tmux pane) | vim |  |
+| `f12` | go to definition (else tag jump) | vim |  |
+| `ctrl+shift+f12` | go to declaration (else gD) | vim |  |
+| `ctrl+f12` | go to implementation | vim |  |
+| `shift+f12` | list references | vim |  |
+| `alt+f12` | hover docs (else K) | vim |  |
+| `f2` | rename symbol | vim |  |
+| `f5` | start / continue | vim |  |
+| `shift+f5` | stop and close debugger | vim |  |
+| `ctrl+f5` | restart | vim |  |
+| `f9` | toggle breakpoint | vim |  |
+| `f10` | step over | vim |  |
+| `f11` | step into | vim |  |
+| `shift+f11` | step out | vim |  |
+| `f8` | evaluate under cursor | vim |  |

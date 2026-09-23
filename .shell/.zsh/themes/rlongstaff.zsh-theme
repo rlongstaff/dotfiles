@@ -1,6 +1,10 @@
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" %F{magenta}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%f "
+# Colours: DOTFILES_C_ZSH_* from .common.d/colors.sh, GENERATED from colors.yaml.  Sourced
+# here because oh-my-zsh loads this theme before .zshrc runs the .common.d loader.
+[ -r "${HOME}/.shell/.common.d/colors.sh" ] && source "${HOME}/.shell/.common.d/colors.sh"
+
+ZSH_THEME_GIT_PROMPT_PREFIX=" ${DOTFILES_C_ZSH_GIT}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="${DOTFILES_C_ZSH_GIT_OFF} "
 # ZSH_THEME_GIT_PROMPT_CLEAN="✔"
 # ZSH_THEME_GIT_PROMPT_DIRTY="✗"
 
@@ -13,15 +17,15 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true
 
 NEWLINE=$'\n'
 
-alias timeshow="RPROMPT='%F{8}%D/%*%f'"
+alias timeshow="RPROMPT='${DOTFILES_C_ZSH_TIME}%D/%*${DOTFILES_C_ZSH_TIME_OFF}'"
 alias timehide="unset RPROMPT"
 
 PROMPT="\
-╭─%F{green}%n%f\
-%F{8}@%f\
-%B%F{blue}%m%f%b\
-%F{8}:%f\
-%F{yellow}%3~%f\
+╭─${DOTFILES_C_ZSH_USER}%n${DOTFILES_C_ZSH_USER_OFF}\
+${DOTFILES_C_ZSH_AT}@${DOTFILES_C_ZSH_AT_OFF}\
+${DOTFILES_C_ZSH_HOST}%m${DOTFILES_C_ZSH_HOST_OFF}\
+${DOTFILES_C_ZSH_COLON}:${DOTFILES_C_ZSH_COLON_OFF}\
+${DOTFILES_C_ZSH_PATH}%3~${DOTFILES_C_ZSH_PATH_OFF}\
 \$(git_prompt_info)\
 ${NEWLINE}\
 ╰ %# "

@@ -3,18 +3,18 @@
 One physical finger position means one thing on every machine, in every layer: compositor,
 terminal, tmux, shell and vim.
 
-- **Bindings:** `scripts/keyboard/keys.yaml`, the single source for every layer.
+- **Bindings:** `keys.yaml`, the single source for every layer.
 - **Cheatsheet:** `keyboard-cheatsheet.md`, generated. It has the capture-chain table and the
   list of shadowed keys.
 - **vim's own keys:** `vim-defaults.md`.
 
-Bare script paths below (`keys.yaml`, `render.sh`, `linux/…`, `macos/…`) are relative to
-`scripts/keyboard/`.
+`keys.yaml` sits at the repo root. Bare script paths below (`render.sh`, `linux/…`,
+`macos/…`) are relative to `scripts/keyboard/`.
 
 ## Change a binding
 
 ```sh
-$EDITOR scripts/keyboard/keys.yaml     # add, change or remove a binding
+$EDITOR keys.yaml                       # add, change or remove a binding
 scripts/keyboard/render.sh              # regenerate every fragment that changed
 scripts/keyboard/render.sh --check      # exit 1 if a committed fragment is stale
 git add -A && git commit                # the yaml and its fragments, together

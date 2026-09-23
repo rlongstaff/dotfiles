@@ -1,0 +1,42 @@
+{
+  "configurations": {
+    "Launch package": {
+      "adapter": "delve",
+      "configuration": {
+        "request": "launch",
+        "mode": "debug",
+        "program": "${fileDirname}",
+        "dlvCwd": "${fileDirname}"
+      },
+      "breakpoints": {
+        "exception": {
+          "unrecovered-panic": "Y",
+          "runtime-fatal-throw": "Y"
+        }
+      }
+    },
+    "Launch test": {
+      "adapter": "delve",
+      "configuration": {
+        "request": "launch",
+        "mode": "test",
+        "program": "${fileDirname}",
+        "dlvCwd": "${fileDirname}"
+      },
+      "breakpoints": {
+        "exception": {
+          "unrecovered-panic": "Y",
+          "runtime-fatal-throw": "Y"
+        }
+      }
+    },
+    "Attach to process": {
+      "adapter": "delve",
+      "configuration": {
+        "request": "attach",
+        "mode": "local",
+        "processId": "${PID}"
+      }
+    }
+  }
+}
