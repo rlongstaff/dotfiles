@@ -1,5 +1,4 @@
-
 export DOTFILES_REPO_USER=${DOTFILES_REPO_USER:-$USER}
-export GITHUB_USER=${DOTFILES_REPO_USER}
+export GITHUB_USER=${$(git config get credentials.username):-$USER}
 export WORKSPACE_DIR=${HOME}/prj/github.com/${GITHUB_USER}
 
