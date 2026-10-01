@@ -7,3 +7,6 @@
 [submodule "vendor/vimspector"]
 	path = vendor/vimspector
 	url = https://github.com/puremourning/vimspector
+[submodule "vendor/vim-airline"]
+	path = vendor/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git

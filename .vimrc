@@ -139,23 +139,25 @@ augroup vimide_nerdtree
         \ | call feedkeys(":quit\<CR>:\<BS>") | endif
 augroup END
 
+let g:airline#extensions#tabline#enabled = 1
+
 " -- statusline ------------------------------------------------------------------------
-set laststatus=2
-set statusline=
-set statusline +=%5*[%{&ff}]%*          "file format
-set statusline +=%3*%y%*                "file type
-set statusline +=%4*\ %<%F%*            "full path
-" Guarded inline: the statusline is re-evaluated on every redraw, so an unguarded
-" SyntasticStatuslineFlag() without syntastic is an E117 per keystroke.
-set statusline +=%6*                    "diagnostics: syntastic flag, then LSP [E:n W:n]
-set statusline +=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
-set statusline +=%{exists('g:loaded_lsp')?vimide#lsp_status():''}
-set statusline +=%*
-set statusline +=%2*%m%*                "modified flag
-set statusline +=%1*%=%5l%*             "current line
-set statusline +=%2*/%L%*               "total lines
-set statusline +=%1*%4c\ %*             "column number
-set statusline +=%2*0x%04B\ %*          "character under cursor
+" set laststatus=2
+" set statusline=
+" set statusline +=%5*[%{&ff}]%*          "file format
+" set statusline +=%3*%y%*                "file type
+" set statusline +=%4*\ %<%F%*            "full path
+" " Guarded inline: the statusline is re-evaluated on every redraw, so an unguarded
+" " SyntasticStatuslineFlag() without syntastic is an E117 per keystroke.
+" set statusline +=%6*                    "diagnostics: syntastic flag, then LSP [E:n W:n]
+" set statusline +=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
+" set statusline +=%{exists('g:loaded_lsp')?vimide#lsp_status():''}
+" set statusline +=%*
+" set statusline +=%2*%m%*                "modified flag
+" set statusline +=%1*%=%5l%*             "current line
+" set statusline +=%2*/%L%*               "total lines
+" set statusline +=%1*%4c\ %*             "column number
+" set statusline +=%2*0x%04B\ %*          "character under cursor
 
 " -- keys ------------------------------------------------------------------------------
 runtime keys.vim
