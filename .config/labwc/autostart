@@ -5,8 +5,8 @@ swaybg -i ~/.config/labwc/kali-neon.png &
 rot8 &
 
 swayidle -w \
-  timeout 300 'swaylock -f -c 000000' \
-  timeout 600 'wlopm --off "*"' \
+  timeout 7200 'swaylock -f -c 000000' \
+  timeout 1800 'wlopm --off "*"' \
   resume 'wlopm --on "*"' \
   before-sleep 'swaylock -f -c 000000' &
 

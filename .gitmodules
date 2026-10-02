@@ -10,3 +10,6 @@
 [submodule "vendor/vim-airline"]
 	path = vendor/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
+[submodule "vendor/vim-commentary"]
+	path = vendor/vim-commentary
+	url = https://tpope.io/vim/commentary.git
