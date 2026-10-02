@@ -6,7 +6,7 @@ rot8 &
 
 swayidle -w \
   timeout 7200 'swaylock -f -c 000000' \
-  timeout 1800 'wlopm --off "*"' \
+  timeout 900 'wlopm --off "*"' \
   resume 'wlopm --on "*"' \
   before-sleep 'swaylock -f -c 000000' &
 
