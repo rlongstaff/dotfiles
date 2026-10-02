@@ -4,7 +4,7 @@
 " Terminal vim sees Alt+letter as ESC + letter and does not decode it, so each one is
 " declared first.  Alt+arrow needs no declaration (and set <M-Up>= is E518).
 if !has('gui_running')
-  for s:k in ['h', 'j', 'k', 'l', 'H', 'J', 'K', 'L']
+  for s:k in ['f', 'h', 'j', 'k', 'l', 'H', 'J', 'K', 'L']
     execute 'set <M-' . s:k . ">=\<Esc>" . s:k
   endfor
   unlet s:k
@@ -24,6 +24,9 @@ vnoremap <C-a> <Home>
 nnoremap <C-e> <End>
 inoremap <C-e> <End>
 vnoremap <C-e> <End>
+nnoremap <silent> <M-f> :Commentary<CR>
+inoremap <silent> <M-f> <C-o>:Commentary<CR>
+vnoremap <M-f> :Commentary<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 
 " -- focus ------------------------------------------------------------------------

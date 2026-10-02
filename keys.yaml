@@ -407,6 +407,10 @@ layers:
       - {key: ctrl+down, group: editing, action: half page down, vim: {modes: [n, i, v], rhs: '<C-d>'}}
       - {key: ctrl+a,    group: editing, action: start of line,  vim: {modes: [n, i, v], rhs: '<Home>'}}
       - {key: ctrl+e,    group: editing, action: end of line,    vim: {modes: [n, i, v], rhs: '<End>'}}
+      # Commentary's :Commentary command, not `gcc`: gc is an nmap onto a <Plug>, which a
+      # noremap rhs cannot reach.  Visual keeps its range, so it takes the rhs form.
+      - {key: alt+f,     group: editing, action: comment line,   vim: {modes: [n, i], cmd: 'Commentary', silent: true}}
+      - {key: alt+f,     group: editing, action: comment selection, vim: {modes: [v], rhs: ':Commentary<CR>'}}
       - key: ctrl+t
         group: editing
         action: toggle NERDTree

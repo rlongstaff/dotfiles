@@ -111,6 +111,7 @@ space bar on every machine; alt is Option.
 | `enter` |  |  |  |  |  | **clear search highlight** |
 | `ctrl+up` |  |  |  |  |  | **half page up** |
 | `ctrl+down` |  |  |  |  |  | **half page down** |
+| `alt+f` |  |  |  |  |  | **comment line; comment selection** |
 | `ctrl+t` |  |  |  |  |  | **toggle NERDTree** |
 | `f12` |  |  |  |  |  | **go to definition (else tag jump)** |
 | `ctrl+shift+f12` |  |  |  |  |  | **go to declaration (else gD)** |
@@ -288,6 +289,8 @@ Rendered to / applied by: .vim/keys.vim, sourced by .vimrc
 | `ctrl+down` | half page down | vim |  |
 | `ctrl+a` | start of line | vim |  |
 | `ctrl+e` | end of line | vim |  |
+| `alt+f` | comment line | vim |  |
+| `alt+f` | comment selection | vim |  |
 | `ctrl+t` | toggle NERDTree | vim |  |
 | `alt+h` | split left (else tmux pane) | vim |  |
 | `alt+j` | split down (else tmux pane) | vim |  |

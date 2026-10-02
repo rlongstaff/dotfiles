@@ -133,7 +133,8 @@ let g:vimspector_base_dir = s:vimdir . '/vimspector-config'
 let g:NERDTreeShowHidden = 1
 augroup vimide_nerdtree
   autocmd!
-  autocmd VimEnter * if exists(':NERDTree') | NERDTree | wincmd p | endif
+  " autocmd VimEnter * if exists(':NERDTree') | NERDTree | wincmd p | endif
+   autocmd VimEnter * if argc() == 0 && exists(':NERDTree') | NERDTree | wincmd p | endif
   " Close the tab if NERDTree is the only window left in it.
   autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
         \ | call feedkeys(":quit\<CR>:\<BS>") | endif
