@@ -22,6 +22,7 @@ alias lsr='ls -lARFh' # Recursive list of files and directories
 alias lsn='ls -1'     # A column contains name of files and directories
 alias rsc='rsync -avz --progress -h' # Clobber remote files
 alias rsu='rsync -avzu --progress -h' # Keep remote files if newer
+alias sql='sqlite3'
 alias vi=vim
 alias tf=tofu
 
