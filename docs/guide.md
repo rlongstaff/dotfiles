@@ -15,6 +15,7 @@ elsewhere and kept in their own cheatsheets, not duplicated here:
 
 - [Keyboard standard](#keyboard-standard)
   - [Change a binding](#change-a-binding)
+  - [Capture live bindings](#capture-live-bindings)
   - [Set up a machine](#set-up-a-machine)
   - [Terminals](#terminals)
   - [Modifiers](#modifiers)
@@ -73,6 +74,37 @@ Never edit a file whose first line says GENERATED: the next render overwrites it
 renderer needs mikefarah's Go `yq` v4. Nothing else does, because the fragments are
 committed. Bare script paths in this section (`render.sh`, `linux/…`, `macos/…`) are
 relative to `scripts/keyboard/`.
+
+## Capture live bindings
+
+`capture.sh` is the inverse of `render.sh`: it reads an app's live, effective key bindings
+and prints a `keys.yaml`-compatible snippet, handy for adopting a binding you made by hand in
+an app.
+
+```sh
+scripts/keyboard/capture.sh                # every app render.sh knows, your own bindings only
+scripts/keyboard/capture.sh --all          # built-in bindings too
+scripts/keyboard/capture.sh tmux vim       # just these apps
+```
+
+By default each app's built-in bindings are dropped, so only what you set is printed. An app
+that is not installed, or has no live session to ask, prints one `INFO` line on stderr and is
+skipped. The output is a snippet to paste by hand and is never written into `keys.yaml`: review
+each `action`, add `group` and `note`, then run `render.sh`. The `os` layer has no live
+binding list and is not captured; a run over every app says so on stderr. The iTerm2 reader
+has only been verified against fixtures, not on a Mac.
+
+Things to know before you trust a capture:
+
+- mikefarah `yq` v4 is required for the bash and zsh readers (they map byte sequences to key
+  names, and warn on stderr when `yq` is missing) and for any check of the output.
+- The bash, zsh and vim readers start a throwaway instance, so your own rc files run (with
+  tmux autostart off). Nothing is written to your home directory.
+- A binding the schema cannot express is not guessed: it comes out as a `# UNMAPPED` comment.
+  That covers defaults you unbound in GNOME or gnome-terminal, kitty key sequences and
+  non-ASCII keys, tmux tables other than root, prefix, copy-mode-vi and `off`, and vim maps for
+  modes other than normal, insert and visual. GNOME custom keybindings are not followed: they
+  live in per-binding dconf paths the reader does not read.
 
 ## Set up a machine
 
@@ -414,7 +446,7 @@ keys and what you see on screen. Every key is defined in `keys.yaml` and listed 
 [vim defaults](#vim-defaults) above.
 
 Go is the only language wired up so far. Other languages use the same pieces and are on the
-backlog (see the repo's `CLAUDE.md`, "Future sprint").
+backlog.
 
 ## Try it in 60 seconds
 
