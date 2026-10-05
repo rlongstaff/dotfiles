@@ -25,6 +25,8 @@ if [ -n "$ZSH_VERSION" ]; then
     bindkey -M "$_kmap" '^[[4~'    end-of-line
     bindkey -M "$_kmap" '^[[8~'    end-of-line
     bindkey -M "$_kmap" '^E'       end-of-line
+    # zsh vi-insert maps it to redisplay
+    bindkey -M "$_kmap" '^R'       history-incremental-search-backward
     bindkey -M "$_kmap" '^[[3~'    delete-char
     bindkey -M "$_kmap" '^[[3;5~'  kill-word
 
@@ -58,6 +60,8 @@ if [ -n "$BASH_VERSION" ]; then
   bind '"\e[4~": end-of-line'
   bind '"\e[8~": end-of-line'
   bind '"\C-e": end-of-line'
+  # zsh vi-insert maps it to redisplay
+  bind '"\C-r": reverse-search-history'
   bind '"\e[3~": delete-char'
   bind '"\e[3;5~": kill-word'
 

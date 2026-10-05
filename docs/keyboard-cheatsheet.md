@@ -45,6 +45,8 @@ space bar on every machine; alt is Option.
 | `super+wheel` |  | **zoom in / out (labwc magnifier)** |  |  |  |  |
 | `super+c` |  |  | **copy** |  |  |  |
 | `super+v` |  |  | **paste** |  |  |  |
+| `ctrl+=` |  |  | **next buffer (vim); CSI-u so the modifier survives** |  |  | ~~Next buffer~~ |
+| `ctrl+-` |  |  | **previous buffer (vim); CSI-u so the modifier survives** |  |  | ~~Previous buffer~~ |
 | `super+f` |  |  | **find** |  |  |  |
 | `super+w` |  |  | **close tab** |  |  |  |
 | `super+left` |  |  | **previous tab** |  |  |  |
@@ -60,7 +62,7 @@ space bar on every machine; alt is Option.
 | `alt+enter` |  |  |  | **zoom pane** |  |  |
 | `alt+[` |  |  |  | **swap pane up** |  |  |
 | `alt+]` |  |  |  | **swap pane down** |  |  |
-| `alt+w` |  |  |  | **kill pane** |  |  |
+| `alt+w` |  |  |  | **→ vim: kill pane** |  | Close current buffer |
 | `\` |  |  |  | after prefix: split right (prefix, old habit) |  |  |
 | `-` |  |  |  | after prefix: split below (prefix, old habit) |  |  |
 | `"` |  |  |  | released |  |  |
@@ -106,13 +108,17 @@ space bar on every machine; alt is Option.
 | `ctrl+a` |  |  |  |  | **start of line** | ~~start of line~~ |
 | `end` |  |  |  |  | **end of line** |  |
 | `ctrl+e` |  |  |  |  | **end of line** | ~~end of line~~ |
+| `ctrl+r` |  |  |  |  | **search history backward** |  |
 | `delete` |  |  |  |  | **delete char forward** |  |
 | `ctrl+delete` |  |  |  |  | **delete word forward** |  |
 | `enter` |  |  |  |  |  | **clear search highlight** |
 | `ctrl+up` |  |  |  |  |  | **half page up** |
 | `ctrl+down` |  |  |  |  |  | **half page down** |
 | `alt+f` |  |  |  |  |  | **comment line; comment selection** |
-| `ctrl+t` |  |  |  |  |  | **toggle NERDTree** |
+| `ctrl+t` |  |  |  |  |  | **Open a blank buffer** |
+| `ctrl+w` |  |  |  |  |  | **Close current buffer** |
+| `ctrl+d` |  |  |  |  |  | **toggle NERDTree** |
+| `ctrl+_` |  |  |  |  |  | **Previous buffer (Ctrl+- as vim sees it)** |
 | `f12` |  |  |  |  |  | **go to definition (else tag jump)** |
 | `ctrl+shift+f12` |  |  |  |  |  | **go to declaration (else gD)** |
 | `ctrl+f12` |  |  |  |  |  | **go to implementation** |
@@ -133,6 +139,8 @@ that does not run the earlier app (labwc vs GNOME, say) there is no conflict.
 
 - `super+a`: compositor (toggle maximize (labwc); released) before terminal (select all)
 - `super+t`: compositor (launch kitty (labwc)) before terminal (new tab)
+- `ctrl+=`: terminal (next buffer (vim); CSI-u so the modifier survives) before vim (Next buffer)
+- `ctrl+-`: terminal (previous buffer (vim); CSI-u so the modifier survives) before vim (Previous buffer)
 - `ctrl+a`: shell (start of line) before vim (start of line)
 - `ctrl+e`: shell (end of line) before vim (end of line)
 
@@ -185,6 +193,8 @@ Rendered to / applied by: kitty .config/kitty/keys.conf; gnome-terminal via linu
 | --- | --- | --- | --- |
 | `super+c` | copy | kitty, gnome-terminal, iterm2 |  |
 | `super+v` | paste | kitty, gnome-terminal, iterm2 |  |
+| `ctrl+=` | next buffer (vim); CSI-u so the modifier survives | kitty |  |
+| `ctrl+-` | previous buffer (vim); CSI-u so the modifier survives | kitty |  |
 | `super+a` | select all | gnome-terminal, iterm2 |  |
 | `super+f` | find | gnome-terminal, iterm2 |  |
 | `super+t` | new tab | gnome-terminal, iterm2 |  |
@@ -273,6 +283,7 @@ Rendered to / applied by: .shell/.common.d/keys.sh
 | `ctrl+a` | start of line | zsh, bash |  |
 | `end` | end of line | zsh, bash |  |
 | `ctrl+e` | end of line | zsh, bash |  |
+| `ctrl+r` | search history backward | zsh, bash | zsh vi-insert maps it to redisplay |
 | `delete` | delete char forward | zsh, bash |  |
 | `ctrl+delete` | delete word forward | zsh, bash |  |
 | `ctrl+left` | previous word start | zsh, bash |  |
@@ -291,7 +302,10 @@ Rendered to / applied by: .vim/keys.vim, sourced by .vimrc
 | `ctrl+e` | end of line | vim |  |
 | `alt+f` | comment line | vim |  |
 | `alt+f` | comment selection | vim |  |
-| `ctrl+t` | toggle NERDTree | vim |  |
+| `ctrl+t` | Open a blank buffer | vim |  |
+| `alt+w` | Close current buffer | vim |  |
+| `ctrl+w` | Close current buffer | vim |  |
+| `ctrl+d` | toggle NERDTree | vim |  |
 | `alt+h` | split left (else tmux pane) | vim |  |
 | `alt+j` | split down (else tmux pane) | vim |  |
 | `alt+k` | split up (else tmux pane) | vim |  |
@@ -300,6 +314,9 @@ Rendered to / applied by: .vim/keys.vim, sourced by .vimrc
 | `alt+down` | split down (else tmux pane) | vim |  |
 | `alt+up` | split up (else tmux pane) | vim |  |
 | `alt+right` | split right (else tmux pane) | vim |  |
+| `ctrl+=` | Next buffer | vim |  |
+| `ctrl+-` | Previous buffer | vim |  |
+| `ctrl+_` | Previous buffer (Ctrl+- as vim sees it) | vim |  |
 | `alt+shift+h` | narrow (else tmux pane) | vim |  |
 | `alt+shift+j` | lengthen (else tmux pane) | vim |  |
 | `alt+shift+k` | shorten (else tmux pane) | vim |  |

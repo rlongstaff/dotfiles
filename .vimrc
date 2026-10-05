@@ -86,6 +86,13 @@ endif
 if !has('gui_running')
   set ttimeout
   set ttimeoutlen=25
+  " Ask the terminal (or tmux, extended-keys on) for modifyOtherKeys, so Ctrl+= and friends
+  " arrive as distinct keys instead of a bare '='.  Under tmux, vim's own terminfo
+  " lookup does not request it.
+  if empty(&t_TI)
+    let &t_TI = "\<Esc>[>4;2m"
+    let &t_TE = "\<Esc>[>4;m"
+  endif
 endif
 
 " -- clipboard -------------------------------------------------------------------------

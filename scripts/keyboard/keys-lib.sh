@@ -66,6 +66,7 @@ gtk_name() {
 kitty_name() {
   case "$1" in
     pageup) echo page_up ;; pagedown) echo page_down ;; esc) echo escape ;;
+    =) echo equal ;; -) echo minus ;;
     *) printf '%s\n' "$1" ;;
   esac
 }
@@ -228,6 +229,7 @@ from_kitty() {
     case "${m}" in ctrl|control) mods="${mods} ctrl" ;; alt|opt|option) mods="${mods} alt" ;;
       shift) mods="${mods} shift" ;; super|cmd|command) mods="${mods} super" ;; *) return 1 ;; esac
   done
+  case "${b}" in equal|EQUAL) b="=" ;; minus|MINUS) b="-" ;; esac
   b=$(_base_from "$(printf '%s' "${b}" | tr '[:upper:]' '[:lower:]')") || return 1
   canon "${mods}" "${b}"
 }

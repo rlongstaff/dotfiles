@@ -324,7 +324,30 @@ Notation: `Ctrl-x`, `Alt-x` (Option on macOS), `Shift-x`.
 
 ## Buffers
 
-No mapping in this repo changes these.
+This repo adds the keys in the first table below (normal mode, all rendered from `keys.yaml`).
+Everything after it is vim as shipped.
+
+| Key | Does |
+| --- | ---- |
+| `Ctrl-=` | next buffer (`:bn`) |
+| `Ctrl--` | previous buffer (`:bp`) |
+| `Ctrl-t` | new blank buffer (`:enew`) |
+| `Alt-w` | close current buffer (`:bd`) |
+| `Ctrl-w` | close current buffer (`:bd`), see the warning below |
+
+- **`Ctrl-=` and `Ctrl--` need two things upstream of vim.** A terminal sends a bare `=` or
+  `-` for them unless told otherwise. kitty ignores tmux's extended-keys request, so
+  `keys.yaml`'s terminal layer maps both to the CSI-u form (`ESC [ 61 ; 5 u`, `ESC [ 45 ; 5 u`).
+  tmux decodes that (`extended-keys on` plus `terminal-features 'xterm*:extkeys'`) and
+  `.vimrc` sets `t_TI` so vim asks for modifyOtherKeys. Vim also reads `Ctrl--` as `Ctrl-_`
+  (0x1f), so both are bound. Test inside vim, not with `cat -v`: tmux flattens the key to
+  `=` / `^_` for a program that has not asked for extended keys.
+- **`Alt-w` is passed through to vim.** tmux binds `Alt-w` to kill-pane; the binding has
+  `pass: vim`, so inside vim the key reaches vim and closes the buffer, elsewhere it kills
+  the pane.
+- **`Ctrl-w` shadows vim's window prefix.** In normal mode `Ctrl-w` now runs `:bd`, so
+  `Ctrl-w h/j/k/l/s/v/o...` no longer work; use `:sp`, `:vs`, `:close` and `Alt-h/j/k/l`
+  instead. The shells are unaffected: `Ctrl-w` still deletes a word before the cursor there.
 
 | Command | Does |
 | ------- | ---- |
@@ -346,6 +369,9 @@ No mapping in this repo changes these.
 vim defaults, all under the `Ctrl-w` prefix. `Alt-h/j/k/l` and `Alt-Shift-h/j/k/l` are this
 repo's fast path for focus and resize (see [keyboard-cheatsheet.md](keyboard-cheatsheet.md));
 everything here is default vim.
+
+**The `Ctrl-w` rows do not work while `Ctrl-w` is mapped to close-buffer** (see "Buffers"):
+use the `:` command form, or remove that binding from `keys.yaml`.
 
 | Command | Does |
 | ------- | ---- |

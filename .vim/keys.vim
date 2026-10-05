@@ -4,7 +4,7 @@
 " Terminal vim sees Alt+letter as ESC + letter and does not decode it, so each one is
 " declared first.  Alt+arrow needs no declaration (and set <M-Up>= is E518).
 if !has('gui_running')
-  for s:k in ['f', 'h', 'j', 'k', 'l', 'H', 'J', 'K', 'L']
+  for s:k in ['f', 'w', 'h', 'j', 'k', 'l', 'H', 'J', 'K', 'L']
     execute 'set <M-' . s:k . ">=\<Esc>" . s:k
   endfor
   unlet s:k
@@ -27,7 +27,10 @@ vnoremap <C-e> <End>
 nnoremap <silent> <M-f> :Commentary<CR>
 inoremap <silent> <M-f> <C-o>:Commentary<CR>
 vnoremap <M-f> :Commentary<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-t> :enew<CR>
+nnoremap <M-w> :bd<CR>
+nnoremap <C-w> :bd<CR>
+nnoremap <C-d> :NERDTreeToggle<CR>
 
 " -- focus ------------------------------------------------------------------------
 nnoremap <silent> <M-h> :call vimide#focus('h')<CR>
@@ -54,6 +57,11 @@ vnoremap <silent> <M-Up> <Esc>:call vimide#focus('k')<CR>
 nnoremap <silent> <M-Right> :call vimide#focus('l')<CR>
 inoremap <silent> <M-Right> <C-o>:call vimide#focus('l')<CR>
 vnoremap <silent> <M-Right> <Esc>:call vimide#focus('l')<CR>
+
+" -- editing ----------------------------------------------------------------------
+nnoremap <C-=> :bn<CR>
+nnoremap <C--> :bp<CR>
+nnoremap <C-_> :bp<CR>
 
 " -- resize -----------------------------------------------------------------------
 nnoremap <silent> <M-H> :call vimide#resize('L')<CR>

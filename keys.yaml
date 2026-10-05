@@ -58,6 +58,7 @@ sequences:
   ctrl+right:  ['\e[1;5C', '\eO5C', '\e[5C', '\eOc']
   ctrl+a:      ['\C-a']
   ctrl+e:      ['\C-e']
+  ctrl+r:      ['\C-r']
 
 layers:
 
@@ -169,6 +170,16 @@ layers:
         kitty: paste_from_clipboard
         gnome-terminal: paste
         iterm2: native
+      # kitty ignores tmux's modifyOtherKeys request and sends these as a bare '=' / '-'.
+      # Send the CSI-u form, which tmux decodes and hands to vim as <C-=> / <C-->.
+      - key: ctrl+=
+        group: editing
+        action: next buffer (vim); CSI-u so the modifier survives
+        kitty: 'send_text all \x1b[61;5u'
+      - key: ctrl+-
+        group: editing
+        action: previous buffer (vim); CSI-u so the modifier survives
+        kitty: 'send_text all \x1b[45;5u'
       - key: super+a
         group: clipboard
         action: select all
@@ -267,7 +278,7 @@ layers:
       - key: alt+w
         group: panes
         action: kill pane
-        tmux: {cmd: kill-pane}
+        tmux: {cmd: kill-pane, pass: vim}
       - key: '\'
         group: panes
         action: split right (prefix, old habit)
@@ -380,6 +391,7 @@ layers:
       - {key: ctrl+a,      group: line, action: start of line,       zsh: beginning-of-line, bash: beginning-of-line}
       - {key: end,         group: line, action: end of line,         zsh: end-of-line,       bash: end-of-line}
       - {key: ctrl+e,      group: line, action: end of line,         zsh: end-of-line,       bash: end-of-line}
+      - {key: ctrl+r,      group: line, action: search history backward, note: 'zsh vi-insert maps it to redisplay', zsh: history-incremental-search-backward, bash: reverse-search-history}
       - {key: delete,      group: line, action: delete char forward, zsh: delete-char,       bash: delete-char}
       - {key: ctrl+delete, group: line, action: delete word forward, zsh: kill-word,         bash: kill-word}
       - key: ctrl+left
@@ -411,7 +423,10 @@ layers:
       # noremap rhs cannot reach.  Visual keeps its range, so it takes the rhs form.
       - {key: alt+f,     group: editing, action: comment line,   vim: {modes: [n, i], cmd: 'Commentary', silent: true}}
       - {key: alt+f,     group: editing, action: comment selection, vim: {modes: [v], rhs: ':Commentary<CR>'}}
-      - key: ctrl+t
+      - {key: ctrl+t,    group: editing, action: Open a blank buffer, vim: {modes: [n], rhs: ':enew<CR>'}}
+      - {key: alt+w,     group: editing, action: Close current buffer, vim: {modes: [n], rhs: ':bd<CR>'}}
+      - {key: ctrl+w,    group: editing, action: Close current buffer, vim: {modes: [n], rhs: ':bd<CR>'}}
+      - key: ctrl+d
         group: editing
         action: toggle NERDTree
         vim: {modes: [n], rhs: ':NERDTreeToggle<CR>'}
@@ -424,6 +439,10 @@ layers:
       - {key: alt+down,  group: focus, action: split down (else tmux pane),  vim: {modes: [n, i, v], cmd: "call vimide#focus('j')", silent: true}}
       - {key: alt+up,    group: focus, action: split up (else tmux pane),    vim: {modes: [n, i, v], cmd: "call vimide#focus('k')", silent: true}}
       - {key: alt+right, group: focus, action: split right (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#focus('l')", silent: true}}
+      - {key: ctrl+=,  group: editing, action: Next buffer, vim: {modes: [n], rhs: ':bn<CR>'}}
+      - {key: ctrl+-,  group: editing, action: Previous buffer, vim: {modes: [n], rhs: ':bp<CR>'}}
+      # Vim reads Ctrl+- as Ctrl+_ (0x1f) even with modifyOtherKeys on, so <C--> never fires.
+      - {key: ctrl+_,  group: editing, action: Previous buffer (Ctrl+- as vim sees it), vim: {modes: [n], rhs: ':bp<CR>'}}
 
       - {key: alt+shift+h,     group: resize, action: narrow (else tmux pane),   vim: {modes: [n, i, v], cmd: "call vimide#resize('L')", silent: true}}
       - {key: alt+shift+j,     group: resize, action: lengthen (else tmux pane), vim: {modes: [n, i, v], cmd: "call vimide#resize('D')", silent: true}}
