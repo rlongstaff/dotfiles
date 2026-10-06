@@ -55,7 +55,7 @@ set number
 set numberwidth=5
 set hlsearch
 set showmatch
-" Every terminal here runs a dark theme.  Inside tmux vim cannot read the background colour
+" Every terminal here runs a dark theme.  Inside tmux vim cannot read the background color
 " and falls back to 'light', whose defaults set a background but no foreground (Search,
 " SpellBad, SpellCap): light-gray text on bright yellow, pink or cyan.  Before `syntax
 " enable`, because changing 'background' reloads the default highlight groups.
@@ -110,7 +110,7 @@ if exists('##TextYankPost') && !empty(globpath(&runtimepath, 'autoload/vimide.vi
   augroup END
 endif
 
-" -- colours ---------------------------------------------------------------------------
+" -- colors ---------------------------------------------------------------------------
 " Highlight groups are in .vim/colors.vim, GENERATED from colors.yaml by
 " scripts/colors/render.sh (like keys.vim: plain vim, no plugin needed).
 runtime colors.vim

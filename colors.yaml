@@ -1,4 +1,4 @@
-# Every colour in the dotfiles, for every layer that draws one: the terminal (kitty),
+# Every color in the dotfiles, for every layer that draws one: the terminal (kitty),
 # tmux, the shells (prompt, ls) and vim (core, syntax, syntastic, LSP, vimspector).
 #
 # Edit this file, then run   scripts/colors/render.sh   and commit the regenerated
@@ -6,14 +6,14 @@
 # Overview and palette usage: docs/colors-cheatsheet.md (generated).
 #
 # ---------------------------------------------------------------------------------------
-# Colour values (the renderer rejects anything else)
+# Color values (the renderer rejects anything else)
 #
 #   palette name    black red green yellow blue magenta cyan white, and bright-<each>.
 #                   The only names used anywhere below: vim and tmux disagree about the
-#                   bare ones (vim's 'Blue' is colour 12, tmux's 'blue' is colour 4), so
+#                   bare ones (vim's 'Blue' is color 12, tmux's 'blue' is color 4), so
 #                   every app is handed a number, never a name.
-#   0-255           an xterm-256 colour number (16-255 are fixed, 0-15 are the palette)
-#   '#rrggbb'       truecolour: kitty and tmux only.  vim runs without 'termguicolors'
+#   0-255           an xterm-256 color number (16-255 are fixed, 0-15 are the palette)
+#   '#rrggbb'       truecolor: kitty and tmux only.  vim runs without 'termguicolors'
 #                   and the shells use SGR codes, so both reject it.
 #   keyword         passed through as written where the app has one (none, default,
 #                   system, background).
@@ -21,10 +21,10 @@
 # Entry fields
 #
 #   key / group     the app's own name for the setting
-#   about           what it colours (docs only)
+#   about           what it colors (docs only)
 #   note            why it has the value it has; carried into the rendered fragment
 #   fg, bg, attrs   a style: foreground, background, [bold, underline, reverse, ...]
-#   value           a single colour (kitty, tmux *-colour and @user options)
+#   value           a single color (kitty, tmux *-color and @user options)
 #   link            vim only: follow another highlight group
 #
 # An entry with no value is documentation: the app's own default applies and nothing is
@@ -33,8 +33,8 @@
 
 version: 1
 
-# The 16 terminal colours, pinned to kitty's built-in defaults (declaring them changed
-# nothing on screen).  Position is the colour number: black is 0, bright-white is 15.
+# The 16 terminal colors, pinned to kitty's built-in defaults (declaring them changed
+# nothing on screen).  Position is the color number: black is 0, bright-white is 15.
 palette:
   - {name: black,          hex: '#000000'}
   - {name: red,            hex: '#cc0403'}
@@ -66,7 +66,7 @@ layers:
       - {key: selection_background,    value: '#fffacd', about: background of a mouse selection}
       - {key: cursor,                  value: '#cccccc', about: cursor block}
       - {key: cursor_text_color,       value: '#111111', about: text under the cursor block}
-      - {key: cursor_trail_color,                        about: cursor trail (default follows the cursor colour)}
+      - {key: cursor_trail_color,                        about: cursor trail (default follows the cursor color)}
       - {key: url_color,               value: '#0087bd', about: underline of a hovered URL}
       - {key: visual_bell_color,       value: '#606060', about: flash for the visual bell, note: 'dimmer than kitty''s default flash'}
       - {key: active_border_color,     value: '#00ff00', about: border of the focused kitty window}
@@ -119,16 +119,16 @@ layers:
       - {key: menu-style,                                      about: menu contents}
       - {key: menu-selected-style,                             about: menu selected item}
       - {key: menu-border-style,                               about: menu border}
-      - {key: clock-mode-colour,                               about: clock mode (C-x t)}
-      - {key: display-panes-colour,                            about: display-panes numbers, other panes}
-      - {key: display-panes-active-colour,                     about: display-panes number, focused pane}
-      - {key: cursor-colour,                                   about: cursor, where the terminal supports setting it}
+      - {key: clock-mode-color,                               about: clock mode (C-x t)}
+      - {key: display-panes-color,                            about: display-panes numbers, other panes}
+      - {key: display-panes-active-color,                     about: display-panes number, focused pane}
+      - {key: cursor-color,                                   about: cursor, where the terminal supports setting it}
 
   # -------------------------------------------------------------------------------------
   - id: shell
     title: Shells (bash and zsh)
     where: .shell/.common.d/colors.sh; .bashrc builds PS1 from it, .zsh.d/prompt.zsh builds PROMPT
-    # The two-line prompt.  Both shells draw the same colours: bash as SGR codes, zsh as
+    # The two-line prompt.  Both shells draw the same colors: bash as SGR codes, zsh as
     # %F{n} / %B (see .shell/.bashrc and .shell/.zsh.d/prompt.zsh).
     prompt:
       - {key: user,  fg: green,        about: user name}
@@ -138,8 +138,8 @@ layers:
       - {key: path,  fg: yellow,       about: working directory}
       - {key: git,   fg: magenta,      about: git branch and state}
       - {key: time,  fg: bright-black, about: 'right-side clock (zsh only: timeshow / timehide)'}
-    # ls file-type colours: LS_COLORS (GNU ls) and LSCOLORS (BSD/macOS ls).  LSCOLORS has
-    # exactly these eleven slots, in this order, and only the eight base colours; bold
+    # ls file-type colors: LS_COLORS (GNU ls) and LSCOLORS (BSD/macOS ls).  LSCOLORS has
+    # exactly these eleven slots, in this order, and only the eight base colors; bold
     # stands in for bright there.
     ls:
       - {key: di, fg: blue, attrs: [bold], about: directory}
@@ -159,7 +159,7 @@ layers:
     title: vim
     where: .vim/colors.vim, sourced by .vimrc (after 'background' and syntax enable)
     # Every highlight group vim 9.2 defines, then the groups of each plugin.  vimspector
-    # also colours its signs with core groups: breakpoints WarningMsg (conditional also
+    # also colors its signs with core groups: breakpoints WarningMsg (conditional also
     # WarningMsg, log SpellRare, disabled LineNr), program counter MatchParen on a
     # CursorLine line, current frame Special.
     groups:

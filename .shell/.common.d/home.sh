@@ -6,7 +6,7 @@ export PATH="$PATH:$HOME/.cargo/bin"
 export MANPATH="/usr/local/man:$MANPATH"
 export LESS="-EXFR"
 
-# ls colours (CLICOLOR, LS_COLORS, LSCOLORS) are in colors.sh, GENERATED from colors.yaml.
+# ls colors (CLICOLOR, LS_COLORS, LSCOLORS) are in colors.sh, GENERATED from colors.yaml.
 
 export EDITOR=vim
 

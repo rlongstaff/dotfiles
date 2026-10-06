@@ -4,8 +4,9 @@
 #
 #   scripts/colors/render.sh           write whatever changed, report each file
 #   scripts/colors/render.sh --check   write nothing; exit 1 if anything is stale
+#   scripts/colors/render.sh --force   rewrite every file even when it is unchanged
 #
-# colors.yaml is the single source of truth for colours.  The fragments below are
+# colors.yaml is the single source of truth for colors.  The fragments below are
 # GENERATED and committed, so a machine without yq still has working configs; yq is only
 # needed here, to re-render after editing the yaml.
 #
@@ -14,9 +15,9 @@
 #   .shell/.common.d/colors.sh       .common.d loader; .bashrc and the zsh theme build
 #                                    the prompt from it
 #   .vim/colors.vim                  .vimrc:      runtime colors.vim
-#   docs/colors-cheatsheet.md        palette, where each colour is used, per-layer tables
+#   docs/colors-cheatsheet.md        palette, where each color is used, per-layer tables
 #
-# Every app is handed a colour NUMBER (or hex), never a name: vim's 'Blue' is 12 and
+# Every app is handed a color NUMBER (or hex), never a name: vim's 'Blue' is 12 and
 # tmux's 'blue' is 4, so names in the yaml are resolved against its own palette here.
 #
 # Idempotent: each target is rendered to a temp file and replaced only when it differs.
@@ -41,17 +42,19 @@ OUT_VIM="${SCRIPT_DIR}/.vim/colors.vim"
 OUT_DOCS="${SCRIPT_DIR}/docs/colors-cheatsheet.md"
 
 CHECK=""
+FORCE=""
 case "${1:-}" in
   --check) CHECK=1 ;;
+  --force) FORCE=1 ;;
   "") ;;
-  *) echo "usage: $0 [--check]" >&2; exit 2 ;;
+  *) echo "usage: $0 [--check | --force]" >&2; exit 2 ;;
 esac
 
 US=$(printf '\037')     # field separator: non-whitespace, so empty fields survive `read`
 STALE=0
 TMPD=$(mktemp -d)
 trap 'rm -rf "${TMPD}"' EXIT
-USES="${TMPD}/uses"     # "index<US>layer<US>key<US>role" per palette colour used
+USES="${TMPD}/uses"     # "index<US>layer<US>key<US>role" per palette color used
 : > "${USES}"
 
 die() { echo "render: $*" >&2; exit 1; }
@@ -63,12 +66,12 @@ yq --version 2>/dev/null | grep -q 'mikefarah.* v4' \
 GEN_NOTE="GENERATED from colors.yaml by scripts/colors/render.sh. Edit the yaml, not this file."
 
 # --------------------------------------------------------------------------------------
-# Palette and colour values
+# Palette and color values
 # --------------------------------------------------------------------------------------
 
 PALETTE_NAMES=$(yq -r '.palette[].name' "${YAML}" | tr '\n' ' ')
 PALETTE_HEX=$(yq -r '.palette[].hex' "${YAML}" | tr '\n' ' ')
-[ "$(echo ${PALETTE_NAMES} | wc -w)" -eq 16 ] || die "palette: needs exactly 16 colours"
+[ "$(echo ${PALETTE_NAMES} | wc -w)" -eq 16 ] || die "palette: needs exactly 16 colors"
 
 # nth N LIST -> the Nth (0-based) word of LIST
 nth() { local n=$1; shift; set -- $1; shift "${n}"; printf '%s\n' "$1"; }
@@ -84,7 +87,7 @@ resolve() {
   done
   case "${rv}" in
     ''|*[!0-9]*) ;;
-    *) [ "${rv}" -le 255 ] || die "$1: colour number ${rv} is out of range 0-255"
+    *) [ "${rv}" -le 255 ] || die "$1: color number ${rv} is out of range 0-255"
        KIND=idx; IDX=${rv}; return 0 ;;
   esac
   if printf '%s' "${rv}" | grep -qiE '^#[0-9a-f]{6}$'; then KIND=hex; HEX=${rv}; return 0; fi
@@ -92,7 +95,7 @@ resolve() {
   die "$1: '${rv}' is not a palette name, 0-255, #rrggbb or keyword"
 }
 
-# use LAYER KEY ROLE -- record that the last resolved colour is used here (for the docs)
+# use LAYER KEY ROLE -- record that the last resolved color is used here (for the docs)
 use() { [ "${KIND}" != idx ] || printf '%s%s%s%s%s%s%s\n' "${IDX}" "${US}" "$1" "${US}" "$2" "${US}" "$3" >> "${USES}"; }
 
 # xterm-256 index -> #rrggbb (0-15 from the palette)
@@ -105,16 +108,16 @@ idx_hex() {
 }
 
 kitty_col() { resolve "$1" "$2"; case "${KIND}" in idx) idx_hex "${IDX}" ;; hex) echo "${HEX}" ;; kw) echo "$2" ;; esac; }
-tmux_col()  { resolve "$1" "$2"; case "${KIND}" in idx) echo "colour${IDX}" ;; hex) echo "${HEX}" ;; kw) echo "$2" ;; esac; }
+tmux_col()  { resolve "$1" "$2"; case "${KIND}" in idx) echo "color${IDX}" ;; hex) echo "${HEX}" ;; kw) echo "$2" ;; esac; }
 vim_col() {
   resolve "$1" "$2"
   case "${KIND}" in
     idx) echo "${IDX}" ;;
-    kw)  case "$2" in none) echo NONE ;; *) die "$1: vim has no colour '$2'" ;; esac ;;
+    kw)  case "$2" in none) echo NONE ;; *) die "$1: vim has no color '$2'" ;; esac ;;
     hex) die "$1: vim runs without 'termguicolors'; use a palette name or 0-255, not $2" ;;
   esac
 }
-# SGR parameter for a foreground (fg) or background (bg) colour
+# SGR parameter for a foreground (fg) or background (bg) color
 sgr_col() {
   resolve "$1" "$3"
   [ "${KIND}" = idx ] || die "$1: the shells take a palette name or 0-255, not $3"
@@ -140,7 +143,7 @@ sgr_attr() {
 
 finish() {
   rel=${2#"${SCRIPT_DIR}/"}
-  if [ -f "$2" ] && cmp -s "$1" "$2"; then
+  if [ -z "${FORCE}" ] && [ -f "$2" ] && cmp -s "$1" "$2"; then
     log "unchanged ${rel}"
   elif [ -n "${CHECK}" ]; then
     log "STALE     ${rel}"
@@ -230,12 +233,12 @@ render_tmux() {
 # shells
 # --------------------------------------------------------------------------------------
 
-# BSD LSCOLORS letter for a colour: a..h for the eight base colours, x for none
+# BSD LSCOLORS letter for a color: a..h for the eight base colors, x for none
 bsd_letter() {
   [ -n "$2" ] || { echo x; return; }
   resolve "$1" "$2"
   [ "${KIND}" = idx ] && [ "${IDX}" -lt 8 ] \
-    || die "$1: LSCOLORS (BSD ls) has only the eight base colours, not $2"
+    || die "$1: LSCOLORS (BSD ls) has only the eight base colors, not $2"
   nth "${IDX}" "a b c d e f g h"
 }
 
@@ -368,15 +371,15 @@ render_docs() {
   {
     echo "<!-- ${GEN_NOTE} -->"
     echo
-    echo "# Colour cheatsheet"
+    echo "# Color cheatsheet"
     echo
-    echo "Every colour in the dotfiles, generated from \`colors.yaml\` (repo root). Edit the yaml,"
+    echo "Every color in the dotfiles, generated from \`colors.yaml\` (repo root). Edit the yaml,"
     echo "run \`scripts/colors/render.sh\`, commit both. Only the settings that have a value are"
     echo "listed here; the yaml also lists every setting left at the app's default."
     echo
     echo "## Palette"
     echo
-    echo "The 16 terminal colours (kitty's defaults, pinned) and everything that uses each one."
+    echo "The 16 terminal colors (kitty's defaults, pinned) and everything that uses each one."
     echo
     echo "| # | Name | Hex | Used by |"
     echo "| - | ---- | --- | ------- |"
@@ -400,7 +403,7 @@ render_docs() {
         echo
         echo "**${list}** (${total} listed in the yaml)"
         echo
-        echo "| Setting | Value | What it colours | Why |"
+        echo "| Setting | Value | What it colors | Why |"
         echo "| ------- | ----- | ------- | --- |"
         md_rows "${layer}" "${list}"
       done

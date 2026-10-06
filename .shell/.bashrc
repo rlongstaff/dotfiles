@@ -31,13 +31,13 @@ export GIT_PS1_SHOWSTASHSTATE=true
 export GIT_PS1_SHOWDIRTYSTATE=true
 # shows % if there are any untracked files
 export GIT_PS1_SHOWUNTRACKEDFILES=true
-# Colour escapes are wrapped in \[ \] so readline does not count them as printable width.
+# Color escapes are wrapped in \[ \] so readline does not count them as printable width.
 # Without the wrapping readline thinks the prompt is 4 columns wider than it is (the \e[0m
 # after the newline), so Home, End and Ctrl-Left/Right land in visibly wrong columns and
 # long lines redraw over the prompt.  zsh needs no equivalent: %F{}/%f are zero-width to it
 # by definition, which is why only the bash half had the defect.
 #
-# The colours are DOTFILES_C_BASH_* from .common.d/colors.sh, GENERATED from colors.yaml
+# The colors are DOTFILES_C_BASH_* from .common.d/colors.sh, GENERATED from colors.yaml
 # and already \[ \] wrapped.  Double quotes splice them in now; \$( and \\\$ keep the git
 # call and the $/# prompt character for prompt time.
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then

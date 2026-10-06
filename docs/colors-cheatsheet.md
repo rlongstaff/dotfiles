@@ -1,14 +1,14 @@
 <!-- GENERATED from colors.yaml by scripts/colors/render.sh. Edit the yaml, not this file. -->
 
-# Colour cheatsheet
+# Color cheatsheet
 
-Every colour in the dotfiles, generated from `colors.yaml` (repo root). Edit the yaml,
+Every color in the dotfiles, generated from `colors.yaml` (repo root). Edit the yaml,
 run `scripts/colors/render.sh`, commit both. Only the settings that have a value are
 listed here; the yaml also lists every setting left at the app's default.
 
 ## Palette
 
-The 16 terminal colours (kitty's defaults, pinned) and everything that uses each one.
+The 16 terminal colors (kitty's defaults, pinned) and everything that uses each one.
 
 | # | Name | Hex | Used by |
 | - | ---- | --- | ------- |
@@ -35,7 +35,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 **settings** (26 listed in the yaml)
 
-| Setting | Value | What it colours | Why |
+| Setting | Value | What it colors | Why |
 | ------- | ----- | ------- | --- |
 | `foreground` | white | default text |  |
 | `background` | black | default background |  |
@@ -66,7 +66,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 **settings** (31 listed in the yaml)
 
-| Setting | Value | What it colours | Why |
+| Setting | Value | What it colors | Why |
 | ------- | ----- | ------- | --- |
 | `status-style` | fg white bg #003366 | status line |  |
 | `@status-clock-fg` | green | clock in status-right | user option: status-right in .tmux.conf reads #{@status-clock-fg} |
@@ -80,7 +80,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 **prompt** (7 listed in the yaml)
 
-| Setting | Value | What it colours | Why |
+| Setting | Value | What it colors | Why |
 | ------- | ----- | ------- | --- |
 | `user` | fg green | user name |  |
 | `at` | fg bright-black | the @ between user and host |  |
@@ -92,7 +92,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 **ls** (11 listed in the yaml)
 
-| Setting | Value | What it colours | Why |
+| Setting | Value | What it colors | Why |
 | ------- | ----- | ------- | --- |
 | `di` | fg blue bold | directory |  |
 | `ln` | fg magenta | symbolic link |  |
@@ -112,7 +112,7 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 
 **groups** (175 listed in the yaml)
 
-| Setting | Value | What it colours | Why |
+| Setting | Value | What it colors | Why |
 | ------- | ----- | ------- | --- |
 | `LineNr` | fg blue bg black | line number for ':number' and ':#' commands, and when 'number' or 'relativenumber' option... |  |
 | `Visual` | fg bright-white bg blue | visual mode selection | matches tmux's mode-style |

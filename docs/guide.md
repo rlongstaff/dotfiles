@@ -3,12 +3,12 @@
 # Dotfiles guide
 
 Everything below is hand-written reference for how the keyboard standard, vim's shipped
-defaults and the vim Go IDE fit together. Bindings and colours themselves are generated
+defaults and the vim Go IDE fit together. Bindings and colors themselves are generated
 elsewhere and kept in their own cheatsheets, not duplicated here:
 
 - [Keyboard cheatsheet](keyboard-cheatsheet.md) - every binding, all layers, generated from
   `keys.yaml`.
-- [Colour cheatsheet](colors-cheatsheet.md) - every colour, all layers, generated from
+- [Color cheatsheet](colors-cheatsheet.md) - every color, all layers, generated from
   `colors.yaml`.
 
 ## Table of contents
@@ -238,7 +238,7 @@ These mean the same thing in every layer.
 - **bash word motion uses `vi-fword` / `vi-bword`.** readline's `forward-word` stops at the
   end of a word, while zsh, tmux and vim stop at the start of the next one. zsh pins
   `WORDCHARS=''` so a word ends where bash's does.
-- **The bash prompt wraps every colour escape in `\[ \]`.** Unwrapped, readline counts them
+- **The bash prompt wraps every color escape in `\[ \]`.** Unwrapped, readline counts them
   as printable columns and draws the cursor in the wrong place after Home, End or
   Ctrl-arrows.
 
@@ -280,8 +280,8 @@ These mean the same thing in every layer.
   would send PageUp into tmux scrollback instead of less.
 - **Copy-mode keys are bound in both `copy-mode` and `copy-mode-vi`.** `mode-keys` follows
   `$EDITOR`, so a box without vim lands in `copy-mode`.
-- **Selection colours are numbers, not names.** tmux's `blue` is colour4 and vim's `Blue` is
-  colour12, so matching names produce different colours.
+- **Selection colors are numbers, not names.** tmux's `blue` is color4 and vim's `Blue` is
+  color12, so matching names produce different colors.
 - **`Alt-x` shadows readline's default `M-x`** (execute-named-command) in every shell pane,
   same as any other `Alt-<letter>` binding here: tmux's root table intercepts it before the
   shell ever sees it.
@@ -557,7 +557,7 @@ More commands without keys: `:LspGotoTypeDef`, `:LspPeekDefinition` (opens in a 
 gopls checks the file as you type and again on save. syntastic is turned off for Go so the
 same errors don't show up twice.
 
-**In the text.** The code with the problem is highlighted with vim's spell-check colours:
+**In the text.** The code with the problem is highlighted with vim's spell-check colors:
 
 | Severity | Highlight group | Linked to (default look) |
 | -------- | --------------- | ------------------------ |
@@ -585,9 +585,22 @@ There are no keys for next / previous yet: `vimide#lsp('diag_next')` and `('diag
 exist and are listed, commented out, in `keys.yaml` (group `code`). Pick a key, uncomment,
 run `scripts/keyboard/render.sh`.
 
-To change the colours, link the groups above in `.vimrc`, for example
-`highlight link LspDiagInlineError ErrorMsg`. Upstream: [`:help lsp-diagnostics`][lsp-doc]
-and [`:help lsp-highlight-groups`][lsp-doc].
+**Changing the colors.** Every group above (and the sign groups `LspDiagSignErrorText`,
+`LspDiagSignWarningText`, `LspDiagSignInfoText`, `LspDiagSignHintText`) is already listed
+under the `lsp` section of the vim layer in `colors.yaml`, with no value, so vim uses its
+default. That default is why hints are cyan: `LspDiagInlineHint` links to `SpellLocal`, whose
+built-in background is cyan. To set one, give its entry a color, or a link:
+
+```yaml
+- {group: LspDiagInlineHint,   fg: bright-black, attrs: [underline], about: '...'}
+- {group: LspDiagSignHintText, link: Comment, about: '...'}
+```
+
+Then run `scripts/colors/render.sh` and restart vim (`.vim/colors.vim` re-applies on
+`ColorScheme` and `VimEnter`). An entry needs at least one of `fg`, `bg`, `attrs` or `link`
+to render. If the output does not change when you expect it to, `scripts/colors/render.sh
+--force` rewrites every generated file even when it looks unchanged. Upstream:
+[`:help lsp-diagnostics`][lsp-doc] and [`:help lsp-highlight-groups`][lsp-doc].
 
 ## Status bar
 

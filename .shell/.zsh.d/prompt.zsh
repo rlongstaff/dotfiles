@@ -1,7 +1,7 @@
 # Two-line prompt.  Must match the bash PS1 in .shell/.bashrc; the only intended
 # difference is the final % vs $.  The git segment is __git_ps1 from the vendored
 # .common.d/git-prompt.sh, same as bash.  Its argument is a printf format, hence the
-# colours' % doubled to %%.  Colours are DOTFILES_C_ZSH_* from
+# colors' % doubled to %%.  Colors are DOTFILES_C_ZSH_* from
 # .common.d/colors.sh (GENERATED from colors.yaml), already loaded by the .common.d loader.
 
 setopt PROMPT_SUBST
