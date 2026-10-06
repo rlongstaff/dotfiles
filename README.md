@@ -1,110 +1,95 @@
 # Dotfiles
 
-This repo handles your homedir across various versions of Linux, MacOS, and WSL2.
+Shell, tmux, vim and terminal configs for Linux, macOS and WSL2. bash is the baseline; zsh,
+tmux and the vim IDE layer on top and fall back quietly when missing.
 
-# Features
-- Manages all changes to your shell across all of your boxes with git.
-- Minimal dependencies with safe fallbacks.
-- Tmux and vim itegration: Tmux panes and vim buffers/windows are all handled seamlessly with
-  keyboard and mouse navigation / resizing.
-- vim IDE tools (NerdTree, LSPs, prediction, debugging).
-- Keyboard / Color management system: Tired of a vim keybinding not working only to find you have
-  the same keybind in your muxer? This handles the layering of terminal, muxer, shell, and
-  application configuration. All keys, actions, and their respective layers are in a single
-  location. It does the same for colors. Rendering the individual configs also updates cheatsheets
-  and documentation.
-- Unified copy/paste buffer for system, muxer, vim.
-- A resilient ssh-agent wrapper that integrates with the system (MacOS: Keychain, Linuxs: GNOME
-  Keychain, systemd) if available. If there is no managed ssh-agent, it will start one and share it
-  across all terminals / sessions.
-- A consistant appearance for bash and zsh. '$' for bash, '%' for zsh.
-- Confirms presence of baseline QoL packages (tmux, vim, zsh, jq, yq, tldr, etc).
-- Basic comfort directories: `$HOME`/{prj,bin,tmp}. `$HOME`/docs that will link to the OS-dependant
-  version of "`$HOME`/Documents", "`$HOME`/My Documents", etc
+## Quick start
 
-# How do I install this?  
+Review the script before running it.
 
-Install in your home directory:
+curl, production cowboy mode
+```sh
+curl -fsSL https://raw.githubusercontent.com/rlongstaff/dotfiles/main/install.sh | sh
+```
 
-Review the code before running !
-- Option 1) `curl -Ls https://github.com/rlongstaff/dotfiles/install.sh | sh`
-- Option 2) `curl -LOs https://github.com/rlongstaff/dotfiles/install.sh &&
-    ./install.sh`
-- Option 3) `git clone https://github.com/rlongstaff/dotfiles &&
-    dotfiles/install.sh`
+curl, review code first
+```
+curl -fsSLO https://raw.githubusercontent.com/rlongstaff/dotfiles/main/install.sh
+less install.sh && sh install.sh
+```
 
-Install in a non-`$HOME` directory:
-- `./install.sh /tmp/fakehome`
+git
+```
+git clone https://github.com/rlongstaff/dotfiles && dotfiles/install.sh
+```
 
-## .gitconfig Management
-**Edit `~/.gitconfig.local`** with your name and email. `.gitconfig` (the tracked file) includes it,
-so your identity never lives in the repo.
+Dry run against a throwaway home
+```
+./install.sh /tmp/fakehome
+```
 
-# Warning!  Installing this to `$HOME` will symlink files to the dotfiles install location.
-Files linked this way will first be backed up to `$HOME`/.dotfiles.bak-`$TIMESTAMP`/.  These files
-include, but are not limited to:
+- Files already in `$HOME` are backed up to `~/.dotfiles.bak.<timestamp>` before linking.
+- Put your name and email in `~/.gitconfig.local`; the tracked `.gitconfig` includes it.
+- Undo with `./uninstall.sh`, then copy back the backup you want.
 
-- .gitconfig
-- .gitignore
-- .tmux, .tmux.conf
-- .vim
-- .vimrc
-- .bashrc
-- .bash_profile
-- .profile
-- .zsh
-- .zshrc
-- .zprofile
-- .config/kitty, .config/alacritty, .config/labwc
-- .Xresources, Library/LaunchAgents/us.dotfiles.keyboard.plist (macOS)
+## What you get
 
-The full list is `LINKS` in `scripts/lib.sh`. Every link is absolute into the install location.
-`scripts/check.sh` audits the links and lists real files in `$HOME` that should be managed here
-instead.
+**Bare minimum**
 
-Re-run any single step later with `scripts/install.d/<step>.sh`. Everything under `scripts/` sources
-`scripts/lib.sh` and speaks only in `$SCRIPT_DIR` (the repo) and `$TARGET` (the home dir being set
-up), so `./install.sh /tmp/fakehome` is a safe dry run: file changes land in the fake home and
-live-session changes (gsettings, hidutil) are skipped.
+- Same shell config, prompt and aliases on every box (bash or zsh).
+- vim core settings: indent, mouse, statusline, clipboard yank.
+- Symlink installer with backups, an audit (`scripts/check.sh`) and an uninstaller.
+- One shared ssh-agent per host, and OS-aware comfort dirs (`~/prj`, `~/bin`, `~/tmp`, `~/docs`).
 
+**With enhancements**
 
-# How do I get my preferences / tweaks working with this?
-- If you installed via curl, there is no management. Tweak away.
+- tmux autostart, including a nested, remote session per ssh login.
+- vim IDE: file tree, LSP, completion, go-to, diagnostics and a debugger.
+- Every key binding in `keys.yaml` and every color in `colors.yaml`, rendered to kitty,
+  gnome-terminal, tmux, the shells and vim, with generated cheatsheets.
+- Unified copy and paste across system, tmux and vim.
 
-- If you installed with git:
-  - Create a new branch: `git checkout -b my_config`
-  - Make your changes and commit: `git add . && git commit -m 'my changes'`
-  - Periodically fetch the main branch and merge the updates: `git fetch && git merge main`
-  - Fix any conflicts and commit
+## Software and minimum versions
 
-- Alternatively, you can install in a non-`$HOME` target. From there you can manually symlink what
-  you want into your `$HOME`.
+| Software | Minimum | For |
+| -------- | ------- | --- |
+| bash | 3.2 | required |
+| vim | 8.x | required |
+| git | any | required |
+| curl, tar | any | curl install only |
+| zsh | 5.x | optional |
+| tmux | 3.2 | optional |
+| vim | 9.0 | LSP |
+| vim with `+python3` | 8.x | debugger |
+| gopls, delve | any recent | Go LSP and debugger |
+| yq (mikefarah) | v4 | re-rendering keys and colors |
+| kitty, gnome-terminal, iTerm2 | any recent | terminal configs |
 
+Packages, install commands and what happens without each item:
+[guide, Requirements](docs/guide.md#requirements).
 
-# Keyboard and Color Management
+## Docs
 
-Bindings and colors are each defined once and rendered to every app's config:
+- [Guide](docs/guide.md): requirements, keyboard standard, vim defaults, vim Go IDE.
+- [Keyboard cheatsheet](docs/keyboard-cheatsheet.md): every binding, generated from `keys.yaml`.
+- [Color cheatsheet](docs/colors-cheatsheet.md): every color, generated from `colors.yaml`.
 
-- [keys.yaml](keys.yaml) -> `scripts/keyboard/render.sh`->
-  **[docs/keyboard-cheatsheet.md](docs/keyboard-cheatsheet.md)**
-- [colors.yaml](colors.yaml) -> `scripts/colors/render.sh` ->
-  **[docs/colors-cheatsheet.md](docs/colors-cheatsheet.md)**
+## Notes
 
-*needs `yq`, mikefarah v4
+- Installing to `$HOME` symlinks files into the checkout, so edits to `~/.vimrc` and friends
+  edit the repo. The full list is `LINKS` in `scripts/lib.sh`.
+- Re-run one step with `scripts/install.d/<step>.sh`.
+- Edit `keys.yaml` or `colors.yaml`, then run `scripts/keyboard/render.sh` or
+  `scripts/colors/render.sh`. Never hand-edit a file that starts with GENERATED.
 
-The keyboard standard (same finger positions on every machine and layer), vim's own defaults, and
-the vim Go IDE (completion, go to definition, diagnostics, debugging via gopls, yegappan/lsp and
-vimspector) are documented in **[docs/guide.md](docs/guide.md)**.
+## Making it yours
 
-## What's with all the extra/comfort dirs?
+- curl install: nothing tracks it, edit freely.
+- git install: `git checkout -b my_config`, commit your changes, then periodically
+  `git fetch && git merge main`.
+- Or install to another directory and symlink only what you want.
 
-Opinion: source and projects should not be muddled with ~/docs. Projects should be in ~/prj, with
-~/src -> ~/prj.  This convention originated with Mac OS X to get a case-sensitive volume for code;
-The volume would be symlinked to ~/prj.
+## Comfort dirs
 
-~/src/github.com/: Put all your github repos in one place.
-
-## How do I restore my previous configs?
-1. Run `./uninstall.sh`
-2. Copy the .dotfiles.bak.`$TIMESTAMP` you want back to `$HOME`.
-
+`~/prj` holds projects and `~/src` links to it, so repos live at `~/src/github.com/<user>/<repo>`.
+`~/docs` links to the OS's Documents folder.
