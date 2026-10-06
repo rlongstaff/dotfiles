@@ -309,8 +309,8 @@ layers:
         - {group: SyntasticStyleErrorLine,   about: 'whole line with a style error; default links to SyntasticErrorLine'}
         - {group: SyntasticStyleWarningLine, about: 'whole line with a style warning; default links to SyntasticWarningLine'}
       lsp:
-        - {group: LspDiagInlineError,        about: 'inline error diagnostics; default links to SpellBad'}
-        - {group: LspDiagInlineHint,         about: 'inline hint diagnostics; default links to SpellLocal'}
+        - {group: LspDiagInlineError, fg: white, bg: red, about: 'inline error diagnostics; default links to SpellBad'}
+        - {group: LspDiagInlineHint, fg: white, bg: blue, about: 'inline hint diagnostics; default links to SpellLocal'}
         - {group: LspDiagInlineInfo,         about: 'inline info diagnostics; default links to SpellRare'}
         - {group: LspDiagInlineWarning,      about: 'inline warning diagnostics; default links to SpellCap'}
         - {group: LspDiagLine,               about: 'whole line with one or more diagnostics; default cleared'}

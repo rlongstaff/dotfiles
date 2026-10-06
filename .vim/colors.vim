@@ -19,6 +19,9 @@ function! s:apply() abort
   highlight User5 ctermfg=8 ctermbg=236
   " diagnostics: syntastic flag and LSP [E:n W:n]
   highlight User6 ctermfg=9 ctermbg=236 cterm=bold
+  " -- lsp
+  highlight LspDiagInlineError ctermfg=7 ctermbg=1
+  highlight LspDiagInlineHint ctermfg=7 ctermbg=4
 endfunction
 
 call s:apply()

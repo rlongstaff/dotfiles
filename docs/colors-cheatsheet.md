@@ -13,13 +13,13 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 | # | Name | Hex | Used by |
 | - | ---- | --- | ------- |
 | 0 | black | `#000000` | kitty: `background`, kitty: `selection_foreground`, kitty: `active_tab_foreground`, kitty: `mark1_foreground`, kitty: `mark2_foreground`, kitty: `mark3_foreground`, shell: `ls su` (fg), shell: `ls sg` (fg), shell: `ls tw` (fg), shell: `ls ow` (fg), vim: `LineNr` (bg) |
-| 1 | red | `#cc0403` | shell: `ls su` (bg) |
+| 1 | red | `#cc0403` | shell: `ls su` (bg), vim: `LspDiagInlineError` (bg) |
 | 2 | green | `#19cb00` | tmux: `@status-clock-fg`, shell: `ls ex` (fg), shell: `ls tw` (bg), shell: `prompt user` (fg), vim: `User3` (fg) |
 | 3 | yellow | `#cecb00` | shell: `ls so` (fg), shell: `ls pi` (fg), shell: `ls cd` (bg), shell: `ls ow` (bg), shell: `prompt path` (fg), vim: `User4` (fg) |
-| 4 | blue | `#0d73cc` | tmux: `mode-style` (bg), shell: `ls di` (fg), shell: `ls bd` (fg), shell: `ls cd` (fg), shell: `prompt host` (fg), vim: `LineNr` (fg), vim: `Visual` (bg) |
+| 4 | blue | `#0d73cc` | tmux: `mode-style` (bg), shell: `ls di` (fg), shell: `ls bd` (fg), shell: `ls cd` (fg), shell: `prompt host` (fg), vim: `LineNr` (fg), vim: `Visual` (bg), vim: `LspDiagInlineHint` (bg) |
 | 5 | magenta | `#cb1ed1` | shell: `ls ln` (fg), shell: `prompt git` (fg) |
 | 6 | cyan | `#0dcdcd` | shell: `ls bd` (bg), shell: `ls sg` (bg), vim: `User2` (fg) |
-| 7 | white | `#dddddd` | kitty: `foreground`, tmux: `status-style` (fg) |
+| 7 | white | `#dddddd` | kitty: `foreground`, tmux: `status-style` (fg), vim: `LspDiagInlineError` (fg), vim: `LspDiagInlineHint` (fg) |
 | 8 | bright-black | `#767676` | shell: `prompt at` (fg), shell: `prompt colon` (fg), shell: `prompt time` (fg), vim: `User5` (fg) |
 | 9 | bright-red | `#f2201f` | tmux: `@status-passthrough-bg`, vim: `User6` (fg) |
 | 10 | bright-green | `#23fd00` |  |
@@ -122,3 +122,5 @@ The 16 terminal colours (kitty's defaults, pinned) and everything that uses each
 | `User4` | fg yellow bg 236 bold | statusline %4* | full path; yellow like the prompt's path |
 | `User5` | fg bright-black bg 236 | statusline %5* | line endings: rarely interesting, so dimmed |
 | `User6` | fg bright-red bg 236 bold | statusline %6* | diagnostics: syntastic flag and LSP [E:n W:n] |
+| `LspDiagInlineError` | fg white bg red | inline error diagnostics; default links to SpellBad |  |
+| `LspDiagInlineHint` | fg white bg blue | inline hint diagnostics; default links to SpellLocal |  |
