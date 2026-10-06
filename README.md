@@ -98,13 +98,13 @@ vimspector) are documented in **[docs/guide.md](docs/guide.md)**.
 
 ## What's with all the extra/comfort dirs?
 
-Opinion: source and projects should not be muddled with ~/docs. ~/prj, ~/src -> ~/prj. Convention
-that originated with Mac OS X to get a case-sensitive volume for code; The volume would be symlinked
-to ~/prj.
+Opinion: source and projects should not be muddled with ~/docs. Projects should be in ~/prj, with
+~/src -> ~/prj.  This convention originated with Mac OS X to get a case-sensitive volume for code;
+The volume would be symlinked to ~/prj.
 
 ~/src/github.com/: Put all your github repos in one place.
 
-## This sucks, how do I get rid of it?
+## How do I restore my previous configs?
 1. Run `./uninstall.sh`
 2. Copy the .dotfiles.bak.`$TIMESTAMP` you want back to `$HOME`.
 

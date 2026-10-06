@@ -13,6 +13,10 @@ elsewhere and kept in their own cheatsheets, not duplicated here:
 
 ## Table of contents
 
+- [Requirements](#requirements)
+  - [Bare minimum](#bare-minimum)
+  - [Optional enhancements](#optional-enhancements)
+  - [How the fallbacks work](#how-the-fallbacks-work)
 - [Keyboard standard](#keyboard-standard)
   - [Change a binding](#change-a-binding)
   - [Capture live bindings](#capture-live-bindings)
@@ -42,6 +46,83 @@ elsewhere and kept in their own cheatsheets, not duplicated here:
   - [Debugging](#debugging)
   - [Where it lives in the repo](#where-it-lives-in-the-repo)
   - [When something doesn't work](#when-something-doesnt-work)
+
+# Requirements
+
+Package names are for Debian, Ubuntu and Kali (`apt`). `scripts/pkgs/deb.sh --check` lists
+what is missing from the repo's package list; `scripts/pkgs/deb.sh --install-missing`
+installs it after a Y/n prompt. Packages marked "guide only" are not in that list.
+
+## Bare minimum
+
+The shell and vim config work with only these. Nothing else is needed to start a shell or
+vim with every core setting applied and no errors.
+
+| Need | Minimum | Used for | Package |
+| ---- | ------- | -------- | ------- |
+| bash | 3.2 | the guaranteed shell; 3.2 is what macOS ships, so no process substitution or associative arrays | `bash` |
+| POSIX tools: `sed`, `grep`, `awk`, `ln`, `which` | any | `.common.d/` modules and every script | `sed`, `grep`, `mawk`, `coreutils`, `debianutils` |
+| vim | 8.x, any build | `.vimrc`, `keys.vim`, `colors.vim` (plain vim, no plugin) | `vim` |
+| git | any | cloning the repo; vendored vim plugins | `git` (guide only) |
+| curl and tar | any | only `install.sh` run on its own (it downloads a tarball) | `curl`, `tar` (guide only) |
+
+zsh is **not** required. A box with only bash gets the same prompt, completion and tmux
+autostart.
+
+## Optional enhancements
+
+Each row says what you gain, the lowest version known to be needed, and what happens
+without it. "Silent" means no error and no message at shell or vim start.
+
+**Shell and multiplexer**
+
+| Enhancement | Min version | Package | Without it |
+| ----------- | ----------- | ------- | ---------- |
+| zsh | 5.x (tested on 5.9.2) | `zsh` | silent: bash path is used |
+| tmux | 3.2 (3.5 to avoid one config error; tested on 3.7c) | `tmux` | missing: silent, no autostart (`tmux.sh` checks `which tmux`). Older than 3.2: tmux prints errors for the `extended-keys` and `terminal-features` lines in `.tmux.conf`, so Alt and Ctrl combos stop reaching vim. 3.2 to 3.4: one error for `extended-keys-format`, keys still work. Either way tmux starts |
+| bash-completion | any | `bash-completion` | silent: no tab completion for commands that rely on it |
+| ssh agent (`ssh-add`) | any | `openssh-client` | silent: `ssh-agent.sh` does nothing |
+| tealdeer (`tldr`) | any | `tealdeer` | silent: command absent |
+
+**vim**
+
+| Enhancement | Min version | Package | Without it |
+| ----------- | ----------- | ------- | ---------- |
+| vim 9 | 9.0 with `+vim9script` | `vim` or `vim-nox` | silent: `.vimrc` adds `lsp` to `g:pathogen_disabled`. Go-to and hover keys fall back to tags, `gD` and `K`, or print a one-line message |
+| vim with `+python3` | 8.x | `vim-nox` (plain `vim` on Debian is not built with python) | silent: `vimspector` is disabled, F5 and the debug keys print a one-line message |
+| vim plugins (NERDTree, lsp, vimspector, airline, commentary) | pinned submodules | `git` | `install.sh` warns once and skips them (tarball install, or no git). Absent plugin directories are skipped by pathogen and every use is guarded: silent |
+| gopls (Go language server) | any recent | `go install golang.org/x/tools/gopls@latest` (needs `golang-go`; Debian's apt copy lags) | silent: server not registered, Go files get plain vim |
+| delve (Go debugger) | any recent | `go install github.com/go-delve/delve/cmd/dlv@latest` | silent: debug keys print a one-line message |
+| Clipboard tool | any | `wl-clipboard` (Wayland), `xclip` (X11); macOS uses `pbcopy` | silent: yanks stay in vim. Mouse copy through the terminal still works |
+| English word list | any | `wamerican` | in the package list, but nothing in the repo's config reads it |
+
+**Rendering and keyboard setup**
+
+| Enhancement | Min version | Package | Without it |
+| ----------- | ----------- | ------- | ---------- |
+| yq (mikefarah, Go, v4) | v4 | `yq-go` (not `yq`, which is the python wrapper) | only needed to re-render after editing `keys.yaml` or `colors.yaml`. The rendered files are committed, so everything still works. `render.sh` stops with a message naming the right yq |
+| kitty | any recent | `kitty` (guide only) | its linked config is unused. Other terminals work, with fewer keys reaching tmux and vim |
+| gnome-terminal | any | `gnome-terminal` (guide only) | `terminal.sh` logs that GNOME settings were skipped |
+| iTerm2 (macOS) | any | n/a | set Option to `Esc+` by hand or no Alt binding works |
+| Keyboard remap (Alt/Super swap, Caps to Ctrl) | X11 or GNOME | `x11-xkb-utils`, `libglib2.0-bin` (both guide only) | logged and skipped. labwc is not handled yet |
+| jq | any | `jq` | in the package list, but nothing in the repo calls it |
+
+## How the fallbacks work
+
+Three mechanisms, all fail-quiet except where noted above:
+
+1. **Self-guarding modules.** Each `.common.d/` module tests for its own tool (`which`,
+   `[ -f ... ]`) and returns. Shell start never depends on an optional package.
+2. **Guarded vim.** `.vimrc` disables a plugin this vim cannot run (`g:pathogen_disabled`)
+   and wraps every plugin call in `exists()`, `executable()` or `has()`. Keys call
+   `vimide#...` functions, which ship in the repo and fall back to plain vim commands.
+3. **Live-session gating.** Steps that change the running desktop (`gsettings`, `setxkbmap`,
+   `hidutil`) run only against the real home and only when the tool exists, so a missing
+   tool or a dry run does nothing.
+
+Acceptance test for a bare box: `vim -u .vimrc file` starts with no errors and all core
+settings. Audit commands: `scripts/pkgs/deb.sh --check`, `scripts/check.sh`,
+`scripts/colors/render.sh --check`, `scripts/keyboard/render.sh --check`.
 
 # Keyboard standard
 
