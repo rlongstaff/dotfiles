@@ -9,13 +9,14 @@ set -e
 
 REPO="dotfiles"
 REPO_URL="https://github.com/rlongstaff/${REPO}"
+RAW_URL="https://raw.githubusercontent.com/rlongstaff/${REPO}/main"
 
 help() {
   echo "Usage: $0 [target_dir]"
   echo
   echo "Install in your home directory:"
-  echo "  Option 1) curl -Ls ${REPO_URL}/install.sh | sh"
-  echo "  Option 2) curl -LOs ${REPO_URL}/install.sh \\"
+  echo "  Option 1) curl -fsSL ${RAW_URL}/install.sh | sh"
+  echo "  Option 2) curl -fsSLO ${RAW_URL}/install.sh \\"
   echo "            # Review the code! \\"
   echo "            ./install.sh"
   echo "  Option 3) git clone ${REPO_URL} \\ "
